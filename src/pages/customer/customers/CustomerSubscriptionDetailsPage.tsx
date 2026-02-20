@@ -226,12 +226,6 @@ const CustomerSubscriptionDetailsPage: FC = () => {
 				<Spacer className='!my-4' />
 
 				<div className='w-full flex justify-between items-center'>
-					<p className='text-[#71717A] text-sm'>Commitment Period</p>
-					<p className='text-[#09090B] text-sm'>{getCommitmentPeriodLabel(subscriptionDetails)}</p>
-				</div>
-				<Spacer className='!my-4' />
-        
-        <div className='w-full flex justify-between items-center'>
 					<p className='text-[#71717A] text-sm'>Payment terms</p>
 					<p className='text-[#09090B] text-sm'>{subscriptionDetails?.payment_terms ?? '--'}</p>
 				</div>
@@ -269,9 +263,10 @@ const CustomerSubscriptionDetailsPage: FC = () => {
 
 				{subscriptionDetails?.commitment_amount && (
 					<div className='w-full flex justify-between items-center'>
-						<p className='text-[#71717A] text-sm'>Commitment Amount</p>
+						<p className='text-[#71717A] text-sm'>Commitment</p>
 						<p className='text-[#09090B] text-sm'>
-							{getCurrencySymbol(subscriptionDetails?.currency || '')} {subscriptionDetails?.commitment_amount || '0'}
+							{getCurrencySymbol(subscriptionDetails?.currency || '')} {subscriptionDetails?.commitment_amount || '0'}/{' '}
+							{getCommitmentPeriodLabel(subscriptionDetails)}
 						</p>
 					</div>
 				)}
