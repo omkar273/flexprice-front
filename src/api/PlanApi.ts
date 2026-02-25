@@ -3,6 +3,7 @@ import { EXPAND, Pagination } from '@/models';
 import { generateExpandQueryParams, generateQueryParams } from '@/utils/common/api_helper';
 import {
 	CreatePlanRequest,
+	ClonePlanRequest,
 	UpdatePlanRequest,
 	PlanResponse,
 	CreatePlanResponse,
@@ -61,6 +62,10 @@ export class PlanApi {
 
 	public static async deletePlan(id: string) {
 		return await AxiosClient.delete<void>(`${this.baseUrl}/${id}`);
+	}
+
+	public static async clonePlan(id: string, data: ClonePlanRequest) {
+		return await AxiosClient.post<PlanResponse, ClonePlanRequest>(`${this.baseUrl}/${id}/clone`, data);
 	}
 
 	public static async synchronizePlanPricesWithSubscription(id: string) {

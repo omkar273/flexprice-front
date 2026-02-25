@@ -193,6 +193,7 @@ export type {
 	CreatePlanEntitlementRequest,
 	CreatePlanPriceRequest,
 	CreatePlanRequest,
+	ClonePlanRequest,
 	UpdatePlanPriceRequest,
 	UpdatePlanEntitlementRequest,
 	UpdatePlanCreditGrantRequest,

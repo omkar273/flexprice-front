@@ -54,6 +54,14 @@ export interface UpdatePlanRequest {
 	metadata?: Metadata;
 }
 
+export interface ClonePlanRequest {
+	name: string;
+	lookup_key: string;
+	description?: string;
+	display_order?: number;
+	metadata?: Metadata;
+}
+
 // ============================================
 // Plan Response Types
 // ============================================

@@ -226,6 +226,12 @@ const CustomerSubscriptionDetailsPage: FC = () => {
 				<Spacer className='!my-4' />
 
 				<div className='w-full flex justify-between items-center'>
+					<p className='text-[#71717A] text-sm'>Commitment Period</p>
+					<p className='text-[#09090B] text-sm'>{getCommitmentPeriodLabel(subscriptionDetails)}</p>
+				</div>
+				<Spacer className='!my-4' />
+
+				<div className='w-full flex justify-between items-center'>
 					<p className='text-[#71717A] text-sm'>Payment terms</p>
 					<p className='text-[#09090B] text-sm'>{subscriptionDetails?.payment_terms ?? '--'}</p>
 				</div>

@@ -4,13 +4,13 @@ import { Outlet, useNavigate, useParams, useLocation } from 'react-router';
 
 // Third-party libraries
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { EyeOff, EllipsisVertical, Pencil, RefreshCw } from 'lucide-react';
+import { Copy, EyeOff, EllipsisVertical, Pencil, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 
 // Internal components
 import { Button, CopyIdButton, Loader, Page } from '@/components/atoms';
-import { ApiDocsContent, DropdownMenu, PlanDrawer } from '@/components/molecules';
+import { ApiDocsContent, DropdownMenu, DuplicatePlanDialog, PlanDrawer } from '@/components/molecules';
 import type { DropdownMenuOption } from '@/components/molecules';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui';
 
@@ -66,6 +66,7 @@ const PlanDetailsPage = () => {
 	const queryClient = useQueryClient();
 	const [activeTab, setActiveTab] = useState<TabId>(tabs[0]?.id);
 	const [planDrawerOpen, setPlanDrawerOpen] = useState(false);
+	const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false);
 
 	const {
 		data: planData,
@@ -137,6 +138,11 @@ const PlanDetailsPage = () => {
 				label: 'Edit',
 				icon: <Pencil />,
 				onSelect: () => setPlanDrawerOpen(true),
+			},
+			{
+				label: 'Duplicate',
+				icon: <Copy />,
+				onSelect: () => setDuplicateDialogOpen(true),
 			},
 			{
 				label: 'Archive',
@@ -242,6 +248,13 @@ const PlanDetailsPage = () => {
 				</div>
 			}>
 			<PlanDrawer data={planData as Plan} open={planDrawerOpen} onOpenChange={setPlanDrawerOpen} refetchQueryKeys={['fetchPlan']} />
+			<DuplicatePlanDialog
+				planId={planId!}
+				plan={planData}
+				open={duplicateDialogOpen}
+				onOpenChange={setDuplicateDialogOpen}
+				refetchQueryKeys={['fetchPlan', 'planEntitlements']}
+			/>
 
 			<ApiDocsContent tags={['Plans']} />
 
