@@ -6,7 +6,7 @@ import CustomerPortalApi from '@/api/CustomerPortalApi';
 import { SectionConfig, TabConfig, DatePreset, UsageGraphConfig } from '@/types/dto/PortalConfig';
 import { DashboardAnalyticsRequest } from '@/types';
 import { WindowSize } from '@/models';
-import { DateRangePicker } from '@/components/atoms';
+import { DatePicker } from '@/components/atoms';
 import TabRenderer from './TabRenderer';
 
 interface SectionContentProps {
@@ -92,19 +92,24 @@ const SectionDateFilter = ({
 				</button>
 			))}
 		</div>
-		{/* Custom Date Range */}
+		{/* Custom Date Range — two separate date pickers */}
 		{usageGraphConfig.allow_custom_date_range && (
-			<DateRangePicker
-				startDate={customStart ? new Date(customStart) : undefined}
-				endDate={customEnd ? new Date(customEnd) : undefined}
-				placeholder='Select range'
-				className='w-[260px] h-9 text-xs'
-				popoverTriggerClassName='[&_button]:h-9 [&_button]:text-xs [&_button]:rounded-md'
-				onChange={({ startDate, endDate }) => {
-					onCustomStartChange(startDate ? startOfDay(startDate).toISOString() : '');
-					onCustomEndChange(endDate ? endOfDay(endDate).toISOString() : '');
-				}}
-			/>
+			<div className='flex items-center gap-2'>
+				<DatePicker
+					date={customStart ? new Date(customStart) : undefined}
+					setDate={(d) => onCustomStartChange(d ? startOfDay(d).toISOString() : '')}
+					placeholder='Start date'
+					className='w-[130px] h-9 text-xs bg-white'
+					popoverTriggerClassName='[&_button]:h-9 [&_button]:text-xs [&_button]:rounded-md'
+				/>
+				<DatePicker
+					date={customEnd ? new Date(customEnd) : undefined}
+					setDate={(d) => onCustomEndChange(d ? endOfDay(d).toISOString() : '')}
+					placeholder='End date'
+					className='w-[130px] h-9 text-xs bg-white'
+					popoverTriggerClassName='[&_button]:h-9 [&_button]:text-xs [&_button]:rounded-md'
+				/>
+			</div>
 		)}
 	</div>
 );
