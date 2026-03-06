@@ -22,7 +22,12 @@ import { Skeleton } from '@/components/ui';
 import { ENTITY_STATUS } from '@/models/base';
 import { RouteNames } from '@/core/routes/Routes';
 import { PremiumFeatureIcon } from '@/components/molecules/PremiumFeature/PremiumFeature';
-import { ChevronDown, ChevronUp, ChevronsUpDown, Minus, Plus } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';
+
+const EXPAND_ALL_SVG = '/assets/svg/expand-all-svgrepo-com.svg';
+const COLLAPSE_ALL_SVG = '/assets/svg/collapse-all-svgrepo-com.svg';
+const CHEVRON_UP_SVG = '/assets/svg/chevron-up-svgrepo-com.svg';
+const CHEVRON_DOWN_SVG = '/assets/svg/chevron-down-svgrepo-com.svg';
 import { cn } from '@/lib/utils';
 
 const CustomerAnalyticsTab = () => {
@@ -569,8 +574,12 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 			<div className='flex items-center justify-between mb-4'>
 				<h1 className='text-lg font-medium text-gray-900'>Usage Breakdown</h1>
 				{hasGroups && (
-					<button type='button' onClick={toggleExpandAll} className='text-sm text-gray-600 hover:text-gray-900'>
-						{allExpanded ? 'Collapse all' : 'Expand all'}
+					<button
+						type='button'
+						onClick={toggleExpandAll}
+						className='inline-flex items-center justify-center text-gray-600 hover:text-gray-900'
+						aria-label={allExpanded ? 'Collapse all' : 'Expand all'}>
+						<img src={allExpanded ? COLLAPSE_ALL_SVG : EXPAND_ALL_SVG} alt='' className='h-4 w-4' />
 					</button>
 				)}
 			</div>
@@ -583,7 +592,6 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 							<TableHead className='font-semibold text-gray-700 text-[13px]'>
 								{renderSortableHeader('total_usage', 'Total Usage')}
 							</TableHead>
-							<TableHead className='font-semibold text-gray-700 text-[13px]'>Events</TableHead>
 							<TableHead className='rounded-tr-md font-semibold text-gray-700 text-[13px]'>
 								{renderSortableHeader('total_cost', 'Total Cost')}
 							</TableHead>
@@ -597,32 +605,28 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 							return (
 								<React.Fragment key={bucket.groupKey}>
 									<TableRow
+										role='button'
+										tabIndex={0}
+										onClick={() => bucket.items.length > 0 && toggleGroup(bucket.groupKey)}
+										onKeyDown={(e) => {
+											if ((e.key === 'Enter' || e.key === ' ') && bucket.items.length > 0) {
+												e.preventDefault();
+												toggleGroup(bucket.groupKey);
+											}
+										}}
 										className={cn(
-											'h-10 align-middle border-b border-gray-200 bg-gray-100 hover:bg-gray-100 transition-colors',
+											'h-10 align-middle border-b border-gray-200 bg-white cursor-pointer hover:bg-gray-50/50 transition-colors',
 											bucket.items.length === 0 && 'border-b-0',
+											bucket.items.length === 0 && 'cursor-default',
 										)}>
 										<TableCell className='pl-4 py-2.5 align-middle'>
-											<button
-												type='button'
-												onClick={() => toggleGroup(bucket.groupKey)}
-												aria-expanded={isExpanded}
-												className='inline-flex items-center gap-3 text-left'>
-												{bucket.items.length > 0 ? (
-													<span
-														className={cn(
-															'inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm',
-															'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 transition-colors',
-														)}
-														aria-label={isExpanded ? 'Collapse group' : 'Expand group'}>
-														{isExpanded ? <Minus className='h-2.5 w-2.5 stroke-[2.5]' /> : <Plus className='h-2.5 w-2.5 stroke-[2.5]' />}
-													</span>
-												) : (
-													<span className='w-5' />
-												)}
+											<div className='inline-flex items-center gap-2 text-left'>
 												<span className='font-semibold text-gray-900 text-[13px]'>{bucket.groupName}</span>
-											</button>
+												{bucket.items.length > 0 ? (
+													<img src={isExpanded ? CHEVRON_UP_SVG : CHEVRON_DOWN_SVG} alt='' className='h-4 w-4 shrink-0' aria-hidden />
+												) : null}
+											</div>
 										</TableCell>
-										<TableCell className='py-2.5 font-normal text-gray-700 text-[13px]'>—</TableCell>
 										<TableCell className='py-2.5 font-normal text-gray-700 text-[13px]'>—</TableCell>
 										<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>
 											{firstCurrency ? (
@@ -636,36 +640,23 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 										</TableCell>
 									</TableRow>
 									{isExpanded &&
-										bucket.items.map((row, childIndex) => {
-											const isLastChild = childIndex === bucket.items.length - 1;
-											return (
-												<TableRow
-													key={`${bucket.groupKey}:${row.feature_id ?? row.price_id ?? row.meter_id ?? childIndex}`}
-													className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50 transition-colors'>
-													<TableCell className='py-2.5 pl-4 font-normal text-gray-700 text-[13px] align-middle relative'>
-														<span
-															className={cn('absolute left-6 w-px bg-gray-300', isLastChild ? 'top-0 h-1/2' : 'top-0 bottom-0')}
-															aria-hidden
-														/>
-														<span className='absolute left-6 top-1/2 h-px w-6 -translate-y-px bg-gray-300' aria-hidden />
-														<div className='pl-10 relative z-10'>
-															{row.feature_id ? (
-																<RedirectCell target='_blank' redirectUrl={`${RouteNames.featureDetails}/${row.feature_id}`}>
-																	{row.name}
-																</RedirectCell>
-															) : (
-																<span>{row.name || 'Unknown'}</span>
-															)}
-														</div>
-													</TableCell>
-													<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsage(row)}</TableCell>
-													<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>
-														{formatNumber(row.event_count)}
-													</TableCell>
-													<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCost(row)}</TableCell>
-												</TableRow>
-											);
-										})}
+										bucket.items.map((row, childIndex) => (
+											<TableRow
+												key={`${bucket.groupKey}:${row.feature_id ?? row.price_id ?? row.meter_id ?? childIndex}`}
+												className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50 transition-colors'>
+												<TableCell className='py-2.5 pl-4 font-normal text-gray-700 text-[13px] align-middle'>
+													{row.feature_id ? (
+														<RedirectCell target='_blank' redirectUrl={`${RouteNames.featureDetails}/${row.feature_id}`}>
+															{row.name}
+														</RedirectCell>
+													) : (
+														<span>{row.name || 'Unknown'}</span>
+													)}
+												</TableCell>
+												<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsage(row)}</TableCell>
+												<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCost(row)}</TableCell>
+											</TableRow>
+										))}
 								</React.Fragment>
 							);
 						})}
@@ -683,13 +674,12 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 									)}
 								</TableCell>
 								<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsage(row)}</TableCell>
-								<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{formatNumber(row.event_count)}</TableCell>
 								<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCost(row)}</TableCell>
 							</TableRow>
 						))}
 						{items.length === 0 && (
 							<TableRow className='bg-white'>
-								<TableCell colSpan={4} className='pl-4 py-4 font-normal text-gray-500 text-[13px]'>
+								<TableCell colSpan={3} className='pl-4 py-4 font-normal text-gray-500 text-[13px]'>
 									--
 								</TableCell>
 							</TableRow>

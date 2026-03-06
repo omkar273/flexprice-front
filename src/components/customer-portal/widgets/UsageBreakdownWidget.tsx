@@ -7,8 +7,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { UsageAnalyticItem } from '@/models';
 import { DashboardAnalyticsRequest } from '@/types';
 import { formatNumber, getCurrencySymbol } from '@/utils';
-import { ChevronDown, ChevronUp, ChevronsUpDown, Minus, Plus } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+const CHEVRON_UP_SVG = '/assets/svg/chevron-up-svgrepo-com.svg';
+const CHEVRON_DOWN_SVG = '/assets/svg/chevron-down-svgrepo-com.svg';
+const EXPAND_ALL_SVG = '/assets/svg/expand-all-svgrepo-com.svg';
+const COLLAPSE_ALL_SVG = '/assets/svg/collapse-all-svgrepo-com.svg';
 
 interface UsageBreakdownWidgetProps {
 	analyticsParams: DashboardAnalyticsRequest;
@@ -183,28 +188,30 @@ const UsageBreakdownWidget = ({ analyticsParams, label }: UsageBreakdownWidgetPr
 
 	return (
 		<Card className='bg-white border border-[#E9E9E9] rounded-xl overflow-hidden'>
-			<div className='p-6 border-b border-[#E9E9E9]'>
+			<div className='p-6'>
 				<div className='flex items-center justify-between'>
 					<h3 className='text-base font-medium text-zinc-950'>{label || 'Usage Breakdown'}</h3>
 					{hasGroups && (
-						<button type='button' onClick={toggleExpandAll} className='text-sm text-gray-600 hover:text-gray-900'>
-							{allExpanded ? 'Collapse all' : 'Expand all'}
+						<button
+							type='button'
+							onClick={toggleExpandAll}
+							className='inline-flex items-center justify-center text-gray-600 hover:text-gray-900'
+							aria-label={allExpanded ? 'Collapse all' : 'Expand all'}>
+							<img src={allExpanded ? COLLAPSE_ALL_SVG : EXPAND_ALL_SVG} alt='' className='h-4 w-4' />
 						</button>
 					)}
 				</div>
 			</div>
 
-			<div className='rounded-md border border-gray-200 bg-white overflow-hidden shadow-sm'>
+			<div className='px-6 pb-6'>
 				<Table>
-					<TableHeader className='h-10 bg-gray-50 border-b border-gray-200 rounded-t-md'>
-						<TableRow className='rounded-t-md border-b border-gray-200'>
-							<TableHead className='rounded-tl-md pl-4 font-semibold text-gray-700 text-[13px]'>Feature</TableHead>
+					<TableHeader className='h-10 border-b border-gray-200'>
+						<TableRow className='border-b border-gray-200'>
+							<TableHead className='pl-0 font-semibold text-gray-700 text-[13px]'>Feature</TableHead>
 							<TableHead className='font-semibold text-gray-700 text-[13px]'>
 								{renderSortableHeader('total_usage', 'Total Usage')}
 							</TableHead>
-							<TableHead className='rounded-tr-md font-semibold text-gray-700 text-[13px]'>
-								{renderSortableHeader('total_cost', 'Total Cost')}
-							</TableHead>
+							<TableHead className='font-semibold text-gray-700 text-[13px]'>{renderSortableHeader('total_cost', 'Total Cost')}</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -215,24 +222,32 @@ const UsageBreakdownWidget = ({ analyticsParams, label }: UsageBreakdownWidgetPr
 							return (
 								<React.Fragment key={bucket.groupKey}>
 									<TableRow
-										className={cn('h-10 align-middle border-b border-gray-200 bg-gray-100', bucket.items.length === 0 && 'border-b-0')}>
-										<TableCell className='pl-4 py-2.5 align-middle'>
-											<button
-												type='button'
-												onClick={() => toggleGroup(bucket.groupKey)}
-												className='inline-flex items-center gap-3 text-left'>
-												{bucket.items.length > 0 ? (
-													<span
-														className='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border border-gray-300 bg-white text-gray-900 hover:bg-gray-50'
-														aria-label={isExpanded ? 'Collapse group' : 'Expand group'}
-														aria-expanded={isExpanded}>
-														{isExpanded ? <Minus className='h-2.5 w-2.5 stroke-[2.5]' /> : <Plus className='h-2.5 w-2.5 stroke-[2.5]' />}
-													</span>
-												) : (
-													<span className='w-5' />
-												)}
+										role='button'
+										tabIndex={0}
+										onClick={() => bucket.items.length > 0 && toggleGroup(bucket.groupKey)}
+										onKeyDown={(e) => {
+											if ((e.key === 'Enter' || e.key === ' ') && bucket.items.length > 0) {
+												e.preventDefault();
+												toggleGroup(bucket.groupKey);
+											}
+										}}
+										className={cn(
+											'h-10 align-middle border-b border-gray-200 bg-white cursor-pointer hover:bg-gray-50/50',
+											bucket.items.length === 0 && 'border-b-0',
+											bucket.items.length === 0 && 'cursor-default',
+										)}>
+										<TableCell className='pl-0 py-2.5 align-middle'>
+											<div className='inline-flex items-center gap-2 text-left'>
 												<span className='font-semibold text-gray-900 text-[13px]'>{bucket.groupName}</span>
-											</button>
+												{bucket.items.length > 0 ? (
+													<img
+														src={isExpanded ? CHEVRON_UP_SVG : CHEVRON_DOWN_SVG}
+														alt=''
+														className='h-4 w-4 shrink-0 text-gray-600'
+														aria-hidden
+													/>
+												) : null}
+											</div>
 										</TableCell>
 										<TableCell className='py-2.5 font-normal text-gray-700 text-[13px]'>—</TableCell>
 										<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>
@@ -247,27 +262,17 @@ const UsageBreakdownWidget = ({ analyticsParams, label }: UsageBreakdownWidgetPr
 										</TableCell>
 									</TableRow>
 									{isExpanded &&
-										bucket.items.map((row, childIndex) => {
-											const isLastChild = childIndex === bucket.items.length - 1;
-											return (
-												<TableRow
-													key={`${bucket.groupKey}:${row.feature_id ?? row.price_id ?? row.meter_id ?? childIndex}`}
-													className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50'>
-													<TableCell className='py-2.5 pl-4 font-normal text-gray-700 text-[13px] align-middle relative'>
-														<span
-															className={cn('absolute left-6 w-px bg-gray-300', isLastChild ? 'top-0 h-1/2' : 'top-0 bottom-0')}
-															aria-hidden
-														/>
-														<span className='absolute left-6 top-1/2 h-px w-6 -translate-y-px bg-gray-300' aria-hidden />
-														<div className='pl-10 relative z-10'>
-															<span>{row.name || row.feature?.name || row.event_name || 'Unknown'}</span>
-														</div>
-													</TableCell>
-													<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsagePortal(row)}</TableCell>
-													<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCostPortal(row)}</TableCell>
-												</TableRow>
-											);
-										})}
+										bucket.items.map((row, childIndex) => (
+											<TableRow
+												key={`${bucket.groupKey}:${row.feature_id ?? row.price_id ?? row.meter_id ?? childIndex}`}
+												className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50'>
+												<TableCell className='py-2.5 pl-0 font-normal text-gray-700 text-[13px] align-middle'>
+													<span>{row.name || row.feature?.name || row.event_name || 'Unknown'}</span>
+												</TableCell>
+												<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsagePortal(row)}</TableCell>
+												<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCostPortal(row)}</TableCell>
+											</TableRow>
+										))}
 								</React.Fragment>
 							);
 						})}
@@ -275,7 +280,7 @@ const UsageBreakdownWidget = ({ analyticsParams, label }: UsageBreakdownWidgetPr
 							<TableRow
 								key={`ungrouped:${row.feature_id ?? row.price_id ?? row.meter_id ?? index}`}
 								className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50'>
-								<TableCell className='pl-4 py-2.5 font-normal text-gray-700 text-[13px]'>
+								<TableCell className='pl-0 py-2.5 font-normal text-gray-700 text-[13px]'>
 									<span>{row.name || row.feature?.name || row.event_name || 'Unknown'}</span>
 								</TableCell>
 								<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsagePortal(row)}</TableCell>
@@ -284,7 +289,7 @@ const UsageBreakdownWidget = ({ analyticsParams, label }: UsageBreakdownWidgetPr
 						))}
 						{items.length === 0 && (
 							<TableRow className='bg-white'>
-								<TableCell colSpan={3} className='pl-4 py-4 font-normal text-gray-500 text-[13px]'>
+								<TableCell colSpan={3} className='pl-0 py-4 font-normal text-gray-500 text-[13px]'>
 									--
 								</TableCell>
 							</TableRow>
