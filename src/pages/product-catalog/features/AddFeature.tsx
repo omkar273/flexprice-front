@@ -419,67 +419,59 @@ const FeatureDetailsSection = ({
 								) : (
 									<>
 										{formState.showUnitName && (
-											<>
-												<FormHeader variant='form-component-title' title='Unit Name' />
-												<div className='gap-4 grid grid-cols-2'>
-													<Input
-														label='Unit Singular'
-														placeholder='millisecond'
-														value={data.unit_singular || ''}
-														onChange={handleUnitSingularChange}
-													/>
-													<Input
-														label='Unit Plural'
-														placeholder='milliseconds'
-														value={data.unit_plural || ''}
-														onChange={(unit_plural) => onUpdateFeature({ unit_plural })}
-													/>
-												</div>
-												<FormHeader variant='form-component-title' />
-											</>
+											<div className='gap-4 grid grid-cols-2'>
+												<Input
+													label='Unit Singular'
+													placeholder='millisecond'
+													value={data.unit_singular || ''}
+													onChange={handleUnitSingularChange}
+												/>
+												<Input
+													label='Unit Plural'
+													placeholder='milliseconds'
+													value={data.unit_plural || ''}
+													onChange={(unit_plural) => onUpdateFeature({ unit_plural })}
+												/>
+											</div>
 										)}
 										{formState.showReportingUnitName && (
-											<>
-												<FormHeader variant='form-component-title' title='Display Unit Name' />
-												<div className='gap-4 grid grid-cols-2'>
-													<Input
-														label='Display Unit Singular'
-														placeholder='minute'
-														value={data.reporting_unit?.unit_singular ?? ''}
-														onChange={handleReportingUnitSingularChange}
-													/>
-													<Input
-														label='Display Unit Plural'
-														placeholder='minutes'
-														value={data.reporting_unit?.unit_plural ?? ''}
-														onChange={(unit_plural) =>
-															onUpdateFeature({
-																reporting_unit: {
-																	unit_singular: data.reporting_unit?.unit_singular ?? '',
-																	unit_plural,
-																	conversion_rate: data.reporting_unit?.conversion_rate ?? '',
-																},
-															})
-														}
-													/>
-													<Input
-														label='Conversion Factor'
-														placeholder='(e.g. 0.0000167)'
-														description='Display Value = Unit Value * Conversion Factor'
-														value={data.reporting_unit?.conversion_rate ?? ''}
-														onChange={(conversion_rate) =>
-															onUpdateFeature({
-																reporting_unit: {
-																	unit_singular: data.reporting_unit?.unit_singular ?? '',
-																	unit_plural: data.reporting_unit?.unit_plural ?? '',
-																	conversion_rate,
-																},
-															})
-														}
-													/>
-												</div>
-												<FormHeader variant='form-component-title' />
-											</>
+											<div className='gap-4 grid grid-cols-2'>
+												<Input
+													label='Display Unit Singular'
+													placeholder='minute'
+													value={data.reporting_unit?.unit_singular ?? ''}
+													onChange={handleReportingUnitSingularChange}
+												/>
+												<Input
+													label='Display Unit Plural'
+													placeholder='minutes'
+													value={data.reporting_unit?.unit_plural ?? ''}
+													onChange={(unit_plural) =>
+														onUpdateFeature({
+															reporting_unit: {
+																unit_singular: data.reporting_unit?.unit_singular ?? '',
+																unit_plural,
+																conversion_rate: data.reporting_unit?.conversion_rate ?? '',
+															},
+														})
+													}
+												/>
+												<Input
+													label='Unit Conversion Factor'
+													placeholder='(e.g. 60000)'
+													description='Unit Value = Display Value * Conversion Factor'
+													value={data.reporting_unit?.conversion_rate ?? ''}
+													onChange={(conversion_rate) =>
+														onUpdateFeature({
+															reporting_unit: {
+																unit_singular: data.reporting_unit?.unit_singular ?? '',
+																unit_plural: data.reporting_unit?.unit_plural ?? '',
+																conversion_rate,
+															},
+														})
+													}
+												/>
+											</div>
 										)}
 										{(!formState.showLookupKey ||
 											!formState.showUnitName ||
