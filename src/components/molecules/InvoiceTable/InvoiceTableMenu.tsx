@@ -50,11 +50,10 @@ const InvoiceTableMenu: FC<Props> = ({ data }) => {
 		mutationFn: async (invoice_id: string) => {
 			return await InvoiceApi.recalculateInvoice(invoice_id);
 		},
-		onSuccess: (newInvoice) => {
-			toast.success('Invoice recalculated successfully');
+		onSuccess: () => {
+			toast.success('Invoice recalculation has been triggered. The replacement invoice will be available once the process completes.');
 			refetchQueries(['fetchInvoice', data.id]);
 			refetchQueries(['fetchInvoices']);
-			navigate(`${RouteNames.customers}/${data.customer_id}/invoice/${newInvoice.id}`);
 		},
 		onError: (error: ServerError) => {
 			toast.error(error.error.message || 'Unable to recalculate invoice');

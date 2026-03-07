@@ -11,6 +11,7 @@ import {
 	CreateInvoicePayload,
 	GetInvoicesByFiltersPayload,
 	VoidInvoicePayload,
+	RecalculateInvoiceResponse,
 } from '@/types/dto';
 
 class InvoiceApi {
@@ -69,8 +70,8 @@ class InvoiceApi {
 		return await AxiosClient.put<Invoice>(`${this.baseurl}/${invoiceId}`, payload);
 	}
 
-	public static async recalculateInvoice(invoiceId: string): Promise<Invoice> {
-		return await AxiosClient.post<Invoice>(`${this.baseurl}/${invoiceId}/recalculate`);
+	public static async recalculateInvoice(invoiceId: string): Promise<RecalculateInvoiceResponse> {
+		return await AxiosClient.post<RecalculateInvoiceResponse>(`${this.baseurl}/${invoiceId}/recalculate`);
 	}
 
 	public static async getInvoicePdf(invoiceId: string, invoiceNo?: string) {

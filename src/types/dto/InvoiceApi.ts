@@ -169,3 +169,10 @@ export interface GetInvoicePdfPayload {
 export interface VoidInvoicePayload {
 	metadata?: Metadata;
 }
+
+/** Response for POST /invoices/:id/recalculate (202 Accepted) — async workflow started */
+export interface RecalculateInvoiceResponse {
+	message: string;
+	workflow_id: string;
+	run_id: string;
+}

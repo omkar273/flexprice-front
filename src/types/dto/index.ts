@@ -124,6 +124,7 @@ export type {
 	GetInvoicePdfPayload,
 	GetInvoicesByFiltersPayload,
 	VoidInvoicePayload,
+	RecalculateInvoiceResponse,
 } from './InvoiceApi';
 
 export type {
