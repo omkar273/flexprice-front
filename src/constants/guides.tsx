@@ -48,7 +48,7 @@ export enum DOCS_LINKS {
 	TAX_ASSOCIATIONS = 'https://docs.flexprice.io/api-reference/tax-associations/list-tax-associations',
 
 	//groups
-	GROUPS = 'https://docs.flexprice.io/docs/product-catalogue/groups',
+	GROUPS = 'https://docs.flexprice.io/docs/product-catalogue/groups/overview',
 }
 
 export enum IMAGE_URLS {
