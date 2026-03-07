@@ -8,6 +8,16 @@ import toast from 'react-hot-toast';
 import { AddChargesButton } from '@/components/organisms/PlanForm/SetupChargesSection';
 import { Trash2 } from 'lucide-react';
 import { ServerError } from '@/core/axios/types';
+import { PAYMENT_STATUS } from '@/constants';
+
+/** Payment statuses that allow voiding an invoice (matches backend allowedPaymentStatuses) */
+const ALLOWED_PAYMENT_STATUSES_FOR_VOID = [
+	PAYMENT_STATUS.PENDING,
+	PAYMENT_STATUS.FAILED,
+	PAYMENT_STATUS.SUCCEEDED,
+	PAYMENT_STATUS.PARTIALLY_REFUNDED,
+	PAYMENT_STATUS.OVERPAID,
+];
 
 interface InvoiceStatusProps {
 	isOpen: boolean;
@@ -19,15 +29,14 @@ interface InvoiceStatusProps {
  * invoice status
 
 	- for void
-		- invoice_status = draft | finalize 
-		- payment_status = failed | pending 
-	    
+		- invoice_status = draft | finalized
+		- payment_status = pending | failed | succeeded | partially_refunded | overpaid
+
 	- for finalize
 		- invoice_status = draft
 		- payment_status = pending
 
-	
- * 
+ *
  */
 
 const InvoiceStatusModal: FC<InvoiceStatusProps> = ({ isOpen, onOpenChange, invoice }) => {
@@ -38,7 +47,8 @@ const InvoiceStatusModal: FC<InvoiceStatusProps> = ({ isOpen, onOpenChange, invo
 			description: 'Cancels the invoice and prevents further changes.',
 			disabled: !(
 				(invoice?.invoice_status === 'DRAFT' || invoice?.invoice_status === 'FINALIZED') &&
-				(invoice?.payment_status === 'FAILED' || invoice?.payment_status === 'PENDING')
+				invoice?.payment_status &&
+				ALLOWED_PAYMENT_STATUSES_FOR_VOID.includes(invoice.payment_status as PAYMENT_STATUS)
 			),
 		},
 		{

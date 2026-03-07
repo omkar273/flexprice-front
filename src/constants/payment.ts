@@ -14,6 +14,7 @@ export enum PAYMENT_STATUS {
 	FAILED = 'FAILED',
 	REFUNDED = 'REFUNDED',
 	PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED',
+	OVERPAID = 'OVERPAID',
 }
 
 export enum PAYMENT_METHOD_TYPE {
@@ -48,6 +49,8 @@ export const formatPaymentStatus = (status: string): string => {
 			return 'Refunded';
 		case PAYMENT_STATUS.PARTIALLY_REFUNDED:
 			return 'Partially Refunded';
+		case PAYMENT_STATUS.OVERPAID:
+			return 'Overpaid';
 		default:
 			return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 	}
