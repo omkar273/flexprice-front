@@ -99,11 +99,7 @@ const GroupDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQuer
 
 	const entityTypeOptions = [
 		{ value: GROUP_ENTITY_TYPE.PRICE, label: 'Price' },
-		// { value: GROUP_ENTITY_TYPE.PLAN, label: 'Plan' },
-		// { value: GROUP_ENTITY_TYPE.ADDON, label: 'Addon' },
-		// { value: GROUP_ENTITY_TYPE.FEATURE, label: 'Feature' },
-		// { value: GROUP_ENTITY_TYPE.METER, label: 'Meter' },
-		// { value: GROUP_ENTITY_TYPE.CUSTOMER, label: 'Customer' },
+		{ value: GROUP_ENTITY_TYPE.FEATURE, label: 'Feature' },
 	];
 
 	return (

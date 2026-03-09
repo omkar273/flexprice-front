@@ -1,4 +1,5 @@
 import { BaseModel, Metadata } from './base';
+import { Group } from './Group';
 import { Meter } from './Meter';
 
 export enum AlertLevel {
@@ -42,6 +43,8 @@ export interface Feature extends BaseModel {
 	};
 	readonly meter?: Meter;
 	readonly alert_settings?: AlertSettings;
+	readonly group_id?: string;
+	readonly group?: Group;
 }
 
 export enum FEATURE_TYPE {

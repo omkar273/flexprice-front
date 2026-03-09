@@ -50,7 +50,9 @@ class FeatureApi {
 	 * @returns Updated feature response
 	 */
 	public static async updateFeature(id: string, data: UpdateFeatureRequest): Promise<FeatureResponse> {
-		return await AxiosClient.put<FeatureResponse, UpdateFeatureRequest>(`${this.baseUrl}/${id}`, data);
+		return await AxiosClient.put<FeatureResponse, UpdateFeatureRequest>(`${this.baseUrl}/${id}`, data, {
+			allowEmptyKeys: ['group_id'],
+		});
 	}
 
 	/**

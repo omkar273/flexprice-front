@@ -1,4 +1,5 @@
 import { Button, Input, Sheet, Spacer, Textarea } from '@/components/atoms';
+import SelectGroup from '@/components/organisms/PlanForm/SelectGroup';
 import { FC, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import FeatureApi from '@/api/FeatureApi';
@@ -6,6 +7,7 @@ import toast from 'react-hot-toast';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { UpdateFeatureRequest } from '@/types/dto/Feature';
 import Feature from '@/models/Feature';
+import { GROUP_ENTITY_TYPE } from '@/models/Group';
 
 interface Props {
 	data: Feature; // Required - update-only drawer
@@ -30,6 +32,7 @@ const FeatureDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQu
 	const [formData, setFormData] = useState<UpdateFeatureRequest>({
 		name: data?.name || '',
 		description: data?.description || '',
+		group_id: data?.group_id ?? data?.group?.id ?? '',
 		unit_singular: data?.unit_singular || '',
 		unit_plural: data?.unit_plural || '',
 		reporting_unit: getInitialReportingUnit(data),
@@ -55,6 +58,7 @@ const FeatureDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQu
 			setFormData({
 				name: data.name || '',
 				description: data.description || '',
+				group_id: data.group_id ?? data.group?.id ?? '',
 				unit_singular: data.unit_singular || '',
 				unit_plural: data.unit_plural || '',
 				reporting_unit: getInitialReportingUnit(data),
@@ -82,6 +86,7 @@ const FeatureDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQu
 		const updateDto: UpdateFeatureRequest = {
 			name: formData.name?.trim(),
 			description: formData.description?.trim() || undefined,
+			group_id: formData.group_id?.trim() === '' ? '' : formData.group_id?.trim() || undefined,
 			unit_singular: formData.unit_singular?.trim() || undefined,
 			unit_plural: formData.unit_plural?.trim() || undefined,
 			reporting_unit:
@@ -120,6 +125,15 @@ const FeatureDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQu
 						setFormData({ ...formData, description: e });
 					}}
 					className='min-h-[100px]'
+				/>
+
+				<SelectGroup
+					entityType={GROUP_ENTITY_TYPE.FEATURE}
+					label='Group'
+					placeholder='Select a group (optional)'
+					value={formData.group_id ?? ''}
+					onChange={(group) => setFormData({ ...formData, group_id: group?.id ?? '' })}
+					showLookupKey={false}
 				/>
 
 				<Input

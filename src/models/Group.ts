@@ -2,16 +2,13 @@ import { BaseModel, Metadata } from './base';
 
 export enum GROUP_ENTITY_TYPE {
 	PRICE = 'price',
-	PLAN = 'plan',
-	ADDON = 'addon',
 	FEATURE = 'feature',
-	METER = 'meter',
-	CUSTOMER = 'customer',
 }
 
 /** Display labels for group entity types. Extend when more types are supported. */
 export const GROUP_ENTITY_TYPE_LABEL: Record<string, string> = {
 	[GROUP_ENTITY_TYPE.PRICE]: 'Price',
+	[GROUP_ENTITY_TYPE.FEATURE]: 'Feature',
 	// Future: PLAN: 'Plan', ADDON: 'Addon', etc.
 };
 

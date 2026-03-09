@@ -1,7 +1,9 @@
 import { Button, Card, CodePreview, FormHeader, Input, Page, Select, SelectOption, Spacer, Textarea } from '@/components/atoms';
 import { ApiDocsContent } from '@/components/molecules';
 import EventFilter, { EventFilterData } from '@/components/molecules/EventFilter';
+import SelectGroup from '@/components/organisms/PlanForm/SelectGroup';
 import { AddChargesButton } from '@/components/organisms/PlanForm/SetupChargesSection';
+import { GROUP_ENTITY_TYPE } from '@/models/Group';
 import { RouteNames } from '@/core/routes/Routes';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { cn } from '@/lib/utils';
@@ -166,6 +168,7 @@ const FEATURE_SCHEMA = z.object({
 interface FeatureFormState {
 	showDescription: boolean;
 	showLookupKey: boolean;
+	showGroup: boolean;
 	showUnitName: boolean;
 	showReportingUnitName: boolean;
 	showEventFilters: boolean;
@@ -189,6 +192,7 @@ const useFeatureForm = () => {
 	const [formState, setFormState] = useState<FeatureFormState>({
 		showDescription: false,
 		showLookupKey: false,
+		showGroup: false,
 		showUnitName: false,
 		showReportingUnitName: false,
 		showEventFilters: false,
@@ -379,7 +383,11 @@ const FeatureDetailsSection = ({
 			{/* Optional fields: show top row only when nothing is open; otherwise buttons only below expanded sections */}
 			<div className='flex flex-col gap-4'>
 				{/* 1. Top row: either all add-buttons (when nothing open) or Lookup Key input only */}
-				{!formState.showLookupKey && !formState.showUnitName && !formState.showReportingUnitName && !formState.showDescription ? (
+				{!formState.showLookupKey &&
+				!formState.showGroup &&
+				!formState.showUnitName &&
+				!formState.showReportingUnitName &&
+				!formState.showDescription ? (
 					<div className='flex flex-wrap items-center gap-2'>
 						<AddChargesButton label='Lookup Key' onClick={() => onUpdateFormState({ showLookupKey: true })} />
 						{isMeteredType && (
@@ -389,6 +397,7 @@ const FeatureDetailsSection = ({
 							</>
 						)}
 						<AddChargesButton label='Feature Description' onClick={() => onUpdateFormState({ showDescription: true })} />
+						<AddChargesButton label='Add Group' onClick={() => onUpdateFormState({ showGroup: true })} />
 					</div>
 				) : formState.showLookupKey ? (
 					<Input
@@ -401,7 +410,11 @@ const FeatureDetailsSection = ({
 				) : null}
 
 				{/* 2. Nested optional fields — same UI whether Lookup Key was opened first or not */}
-				{(formState.showLookupKey || formState.showUnitName || formState.showReportingUnitName || formState.showDescription) && (
+				{(formState.showLookupKey ||
+					formState.showGroup ||
+					formState.showUnitName ||
+					formState.showReportingUnitName ||
+					formState.showDescription) && (
 					<>
 						{isMeteredType && (
 							<>
@@ -415,6 +428,7 @@ const FeatureDetailsSection = ({
 										{!formState.showDescription ? (
 											<AddChargesButton label='Feature description' onClick={() => onUpdateFormState({ showDescription: true })} />
 										) : null}
+										{!formState.showGroup && <AddChargesButton label='Add Group' onClick={() => onUpdateFormState({ showGroup: true })} />}
 									</div>
 								) : (
 									<>
@@ -474,6 +488,7 @@ const FeatureDetailsSection = ({
 											</div>
 										)}
 										{(!formState.showLookupKey ||
+											!formState.showGroup ||
 											!formState.showUnitName ||
 											!formState.showReportingUnitName ||
 											!formState.showDescription) && (
@@ -490,13 +505,16 @@ const FeatureDetailsSection = ({
 												{!formState.showDescription && (
 													<AddChargesButton label='Feature description' onClick={() => onUpdateFormState({ showDescription: true })} />
 												)}
+												{!formState.showGroup && (
+													<AddChargesButton label='Add Group' onClick={() => onUpdateFormState({ showGroup: true })} />
+												)}
 											</div>
 										)}
 									</>
 								)}
 							</>
 						)}
-						{!isMeteredType && (!formState.showLookupKey || !formState.showDescription) && (
+						{!isMeteredType && (!formState.showLookupKey || !formState.showGroup || !formState.showDescription) && (
 							<div className='flex flex-wrap items-center gap-2'>
 								{!formState.showLookupKey && (
 									<AddChargesButton label='Lookup Key' onClick={() => onUpdateFormState({ showLookupKey: true })} />
@@ -504,7 +522,18 @@ const FeatureDetailsSection = ({
 								{!formState.showDescription && (
 									<AddChargesButton label='Feature description' onClick={() => onUpdateFormState({ showDescription: true })} />
 								)}
+								{!formState.showGroup && <AddChargesButton label='Add Group' onClick={() => onUpdateFormState({ showGroup: true })} />}
 							</div>
+						)}
+						{formState.showGroup && (
+							<SelectGroup
+								entityType={GROUP_ENTITY_TYPE.FEATURE}
+								label='Group'
+								placeholder='Select a group (optional)'
+								value={data.group_id ?? ''}
+								onChange={(group) => onUpdateFeature({ group_id: group?.id ?? undefined })}
+								showLookupKey={false}
+							/>
 						)}
 						{formState.showDescription && (
 							<Textarea
@@ -883,6 +912,7 @@ const AddFeaturePage = () => {
 				unit_singular: featureData.unit_singular?.trim() || undefined,
 				unit_plural: featureData.unit_plural?.trim() || undefined,
 				reporting_unit,
+				group_id: featureData.group_id?.trim() || undefined,
 			};
 
 			return await FeatureApi.createFeature(sanitizedData);

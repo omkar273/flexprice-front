@@ -24,6 +24,7 @@ export interface CreateFeatureRequest {
 	unit_plural?: string;
 	reporting_unit?: ReportingUnit;
 	alert_settings?: AlertSettings;
+	group_id?: string;
 }
 
 export interface UpdateFeatureRequest {
@@ -35,6 +36,8 @@ export interface UpdateFeatureRequest {
 	reporting_unit?: ReportingUnit;
 	filters?: MeterFilter[];
 	alert_settings?: AlertSettings;
+	/** Set to empty string to clear the group. */
+	group_id?: string;
 }
 
 // ============================================

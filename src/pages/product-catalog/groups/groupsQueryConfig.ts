@@ -6,7 +6,9 @@ import {
 	SortOption,
 	SortDirection,
 	FilterCondition,
+	FilterOperator,
 } from '@/types/common/QueryBuilder';
+import { GROUP_ENTITY_TYPE, getGroupEntityTypeLabel } from '@/models/Group';
 
 export const groupsSortOptions: SortOption[] = [
 	{ field: 'name', label: 'Name', direction: SortDirection.ASC },
@@ -36,7 +38,18 @@ export const groupsFilterOptions: FilterField[] = [
 		operators: DEFAULT_OPERATORS_PER_DATA_TYPE[DataType.DATE],
 		dataType: DataType.DATE,
 	},
-	// TODO: add status when groups search API supports it
+	{
+		field: 'entity_type',
+		label: 'Entity Type',
+		fieldType: FilterFieldType.SELECT,
+		operators: [FilterOperator.EQUAL],
+		dataType: DataType.STRING,
+		options: Object.values(GROUP_ENTITY_TYPE).map((value) => ({
+			value,
+			label: getGroupEntityTypeLabel(value),
+		})),
+	},
+	// TODO: add status
 ];
 
 /** No filters open by default; user adds filters as needed. */
