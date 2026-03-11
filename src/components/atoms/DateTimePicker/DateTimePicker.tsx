@@ -2,10 +2,19 @@
 
 import * as React from 'react';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
 
 import { cn } from '@/lib/utils';
 import { Button, Calendar, Popover, PopoverContent, PopoverTrigger, ScrollArea, ScrollBar } from '@/components/ui';
+import type { CalendarTimezone } from '@/components/ui/calendar';
+import {
+	formatDateTimeInZone,
+	getCalendarDayInZone,
+	getTimeInZone,
+	dateTimeInZone,
+	convertDateTimeToTimezone,
+	toCalendarDisplayDate,
+	type DateTimezone,
+} from '@/utils/common/format_date';
 
 interface Props {
 	date?: Date | undefined;
@@ -17,39 +26,62 @@ interface Props {
 
 export const DateTimePicker: React.FC<Props> = ({ date, setDate, disabled, placeholder, title }) => {
 	const [isOpen, setIsOpen] = React.useState(false);
+	const [timezone, setTimezone] = React.useState<CalendarTimezone>('local');
 
 	const hours = Array.from({ length: 12 }, (_, i) => i + 1);
+	const tz = timezone as DateTimezone;
 
-	const handleDateSelect = (selectedDate: Date | undefined) => {
-		if (selectedDate) {
-			// If we have an existing date, preserve the time
+	const handleDateSelect = React.useCallback(
+		(selectedDate: Date | undefined) => {
+			if (!selectedDate) return;
+			const y = selectedDate.getFullYear();
+			const mo = selectedDate.getMonth();
+			const d = selectedDate.getDate();
 			if (date) {
-				const newDate = new Date(selectedDate);
-				newDate.setHours(date.getHours());
-				newDate.setMinutes(date.getMinutes());
-				setDate(newDate);
+				const { hours: h, minutes: m, seconds: s } = getTimeInZone(date, tz);
+				setDate(dateTimeInZone(y, mo, d, h, m, s, tz));
 			} else {
-				setDate(selectedDate);
+				setDate(dateTimeInZone(y, mo, d, 0, 0, 0, tz));
 			}
-		}
-	};
+		},
+		[date, tz, setDate],
+	);
 
-	const handleTimeChange = (type: 'hour' | 'minute' | 'ampm', value: string) => {
-		if (date) {
-			const newDate = new Date(date);
+	const handleTimeChange = React.useCallback(
+		(type: 'hour' | 'minute' | 'ampm', value: string) => {
+			if (!date) return;
+			const { year, month, date: d } = getCalendarDayInZone(date, tz);
+			const { hours: initialH, minutes: initialM, seconds: s } = getTimeInZone(date, tz);
+			let h = initialH;
+			let m = initialM;
 			if (type === 'hour') {
 				const hour = parseInt(value, 10);
-				const isPM = newDate.getHours() >= 12;
-				newDate.setHours(isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour);
+				const isPM = h >= 12;
+				h = isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour;
 			} else if (type === 'minute') {
-				newDate.setMinutes(parseInt(value, 10));
+				m = parseInt(value, 10);
 			} else if (type === 'ampm') {
-				const currentHours = newDate.getHours() % 12;
-				newDate.setHours(value === 'PM' ? currentHours + 12 : currentHours);
+				const currentHours = h % 12;
+				h = value === 'PM' ? currentHours + 12 : currentHours;
 			}
-			setDate(newDate);
-		}
-	};
+			setDate(dateTimeInZone(year, month, d, h, m, s, tz));
+		},
+		[date, tz, setDate],
+	);
+
+	const handleTimezoneChange = React.useCallback(
+		(newTz: CalendarTimezone) => {
+			if (date) {
+				setDate(convertDateTimeToTimezone(date, tz, newTz as DateTimezone));
+			}
+			setTimezone(newTz);
+		},
+		[date, tz, setDate],
+	);
+
+	const displayDate = date ? toCalendarDisplayDate(date, tz) : undefined;
+	const displayLabel = date ? formatDateTimeInZone(date, tz) : (placeholder ?? 'MM/DD/YYYY hh:mm aa');
+	const timeInZone = date ? getTimeInZone(date, tz) : null;
 
 	return (
 		<div className='space-y-1'>
@@ -66,12 +98,19 @@ export const DateTimePicker: React.FC<Props> = ({ date, setDate, disabled, place
 						)}
 						disabled={disabled}>
 						<CalendarIcon className='mr-2 h-4 w-4' />
-						{date ? format(date, 'MM/dd/yyyy hh:mm aa') : <span>{placeholder ? placeholder : 'MM/DD/YYYY hh:mm aa'}</span>}
+						{date ? displayLabel : <span>{placeholder ?? 'MM/DD/YYYY hh:mm aa'}</span>}
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className='w-auto p-0'>
 					<div className='sm:flex'>
-						<Calendar mode='single' selected={date} onSelect={handleDateSelect} initialFocus />
+						<Calendar
+							mode='single'
+							selected={displayDate}
+							onSelect={handleDateSelect}
+							initialFocus
+							timezone={timezone}
+							onTimezoneChange={handleTimezoneChange}
+						/>
 						<div className='flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x'>
 							<ScrollArea className='w-64 sm:w-auto'>
 								<div className='flex sm:flex-col p-2'>
@@ -79,7 +118,7 @@ export const DateTimePicker: React.FC<Props> = ({ date, setDate, disabled, place
 										<Button
 											key={hour}
 											size='icon'
-											variant={date && date.getHours() % 12 === hour % 12 ? 'default' : 'ghost'}
+											variant={timeInZone && timeInZone.hours % 12 === hour % 12 ? 'default' : 'ghost'}
 											className='sm:w-full shrink-0 aspect-square'
 											onClick={() => handleTimeChange('hour', hour.toString())}>
 											{hour}
@@ -94,7 +133,7 @@ export const DateTimePicker: React.FC<Props> = ({ date, setDate, disabled, place
 										<Button
 											key={minute}
 											size='icon'
-											variant={date && date.getMinutes() === minute ? 'default' : 'ghost'}
+											variant={timeInZone && timeInZone.minutes === minute ? 'default' : 'ghost'}
 											className='sm:w-full shrink-0 aspect-square'
 											onClick={() => handleTimeChange('minute', minute.toString())}>
 											{minute}
@@ -110,7 +149,9 @@ export const DateTimePicker: React.FC<Props> = ({ date, setDate, disabled, place
 											key={ampm}
 											size='icon'
 											variant={
-												date && ((ampm === 'AM' && date.getHours() < 12) || (ampm === 'PM' && date.getHours() >= 12)) ? 'default' : 'ghost'
+												timeInZone && ((ampm === 'AM' && timeInZone.hours < 12) || (ampm === 'PM' && timeInZone.hours >= 12))
+													? 'default'
+													: 'ghost'
 											}
 											className='sm:w-full shrink-0 aspect-square'
 											onClick={() => handleTimeChange('ampm', ampm)}>

@@ -1,9 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CalendarIcon, X } from 'lucide-react';
 import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '@/components/ui';
+import type { CalendarTimezone } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { formatDateShort } from '@/utils/common/helper_functions';
 import { startOfMonth } from 'date-fns';
+import {
+	formatDateInZone,
+	startOfDayInZone,
+	convertDateToTimezone,
+	toCalendarDisplayDate,
+	type DateTimezone,
+} from '@/utils/common/format_date';
 
 interface Props {
 	startDate?: Date;
@@ -38,19 +45,45 @@ const DateRangePicker = ({
 }: Props) => {
 	const [open, setOpen] = useState(false);
 	const [selectedRange, setSelectedRange] = useState<{ from: Date; to: Date } | undefined>(undefined);
+	const [timezone, setTimezone] = useState<CalendarTimezone>('local');
 
 	const currentMonth = startOfMonth(new Date());
 
-	const handleSelect = (date: { from?: Date; to?: Date } | undefined) => {
-		if (!date) return;
-		if (date.from && date.to) {
-			setSelectedRange({
-				from: date.from,
-				to: date.to,
-			});
-		}
-		onChange({ startDate: date.from, endDate: date.to });
-	};
+	const toRangeInZone = useCallback(
+		(from: Date, to: Date) => {
+			const fromValue = timezone === 'utc' ? startOfDayInZone(from.getFullYear(), from.getMonth(), from.getDate(), 'utc') : from;
+			const toValue = timezone === 'utc' ? startOfDayInZone(to.getFullYear(), to.getMonth(), to.getDate(), 'utc') : to;
+			return { from: fromValue, to: toValue };
+		},
+		[timezone],
+	);
+
+	const handleSelect = useCallback(
+		(date: { from?: Date; to?: Date } | undefined) => {
+			if (!date) return;
+			if (date.from && date.to) {
+				const range = toRangeInZone(date.from, date.to);
+				setSelectedRange(range);
+				onChange({ startDate: range.from, endDate: range.to });
+			} else {
+				onChange({ startDate: date.from, endDate: date.to });
+			}
+		},
+		[onChange, toRangeInZone],
+	);
+
+	const handleTimezoneChange = useCallback(
+		(newTz: CalendarTimezone) => {
+			if (selectedRange?.from && selectedRange?.to) {
+				const fromConverted = convertDateToTimezone(selectedRange.from, timezone as DateTimezone, newTz as DateTimezone);
+				const toConverted = convertDateToTimezone(selectedRange.to, timezone as DateTimezone, newTz as DateTimezone);
+				setSelectedRange({ from: fromConverted, to: toConverted });
+				onChange({ startDate: fromConverted, endDate: toConverted });
+			}
+			setTimezone(newTz);
+		},
+		[selectedRange, timezone, onChange],
+	);
 
 	useEffect(() => {
 		if (startDate && endDate) {
@@ -60,11 +93,18 @@ const DateRangePicker = ({
 		}
 	}, [startDate, endDate]);
 
-	// useEffect(() => {
-	// 	if (open) {
-	// 		setSelectedRange(undefined);
-	// 	}
-	// }, [open]);
+	const displayRange =
+		selectedRange?.from && selectedRange?.to
+			? {
+					from: toCalendarDisplayDate(selectedRange.from, timezone as DateTimezone),
+					to: toCalendarDisplayDate(selectedRange.to, timezone as DateTimezone),
+				}
+			: undefined;
+
+	const displayLabel =
+		selectedRange?.from && selectedRange?.to
+			? `${formatDateInZone(selectedRange.from, timezone as DateTimezone)} - ${formatDateInZone(selectedRange.to, timezone as DateTimezone)}`
+			: placeholder;
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -82,11 +122,7 @@ const DateRangePicker = ({
 								className,
 							)}>
 							<CalendarIcon className='mr-0 h-4 w-4' />
-							<span>
-								{selectedRange?.from && selectedRange?.to
-									? `${formatDateShort(selectedRange?.from.toISOString())} - ${formatDateShort(selectedRange?.to.toISOString())}`
-									: placeholder}
-							</span>
+							<span>{displayLabel}</span>
 						</Button>
 						{selectedRange?.from && selectedRange?.to && (
 							<X
@@ -106,12 +142,14 @@ const DateRangePicker = ({
 				<Calendar
 					disabled={disabled}
 					mode='range'
-					selected={selectedRange}
+					selected={displayRange}
 					onSelect={handleSelect}
 					fromDate={minDate}
 					toDate={maxDate}
 					defaultMonth={currentMonth}
 					numberOfMonths={2}
+					timezone={timezone}
+					onTimezoneChange={handleTimezoneChange}
 				/>
 			</PopoverContent>
 		</Popover>
