@@ -60,13 +60,13 @@ const InvoiceTable: FC<Props> = ({ data }) => {
 			render: (row: Invoice) => getStatusChip(row.invoice_status),
 		},
 		{
-			title: 'Customer Slug',
+			title: 'Customer',
 			render: (row: Invoice) => {
-				if (!row.customer?.external_id) {
+				if (!row.customer?.name) {
 					return '--';
 				}
 
-				return <RedirectCell redirectUrl={`${RouteNames.customers}/${row.customer?.id}`}>{row.customer?.external_id}</RedirectCell>;
+				return <RedirectCell redirectUrl={`${RouteNames.customers}/${row.customer?.id}`}>{row.customer?.name}</RedirectCell>;
 			},
 		},
 		// {

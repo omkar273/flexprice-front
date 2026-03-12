@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import FlexpriceTable, { ColumnData } from '../Table';
 import { getCurrencySymbol } from '@/utils/common/helper_functions';
+import { formatBillingPeriod } from '@/utils/common/format_date';
 import { Invoice } from '@/models/Invoice';
 import { getPaymentStatusChip, getStatusChip } from './InvoiceTable';
 
@@ -25,6 +26,10 @@ const CustomerInvoiceTable: FC<Props> = ({ data, onRowClick }) => {
 		{
 			title: 'Payment Status',
 			render: (row: Invoice) => getPaymentStatusChip(row.payment_status),
+		},
+		{
+			title: 'Billing Period',
+			render: (row) => <>{row.period_start && row.period_end ? formatBillingPeriod(row.period_start, row.period_end) : '--'}</>,
 		},
 		{
 			title: 'Total',

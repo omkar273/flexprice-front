@@ -193,3 +193,18 @@ export function convertDateTimeToTimezone(date: Date, fromZone: DateTimezone, to
 	const { hours, minutes, seconds } = getTimeInZone(date, fromZone);
 	return dateTimeInZone(year, month, d, hours, minutes, seconds, toZone);
 }
+
+/** Format a date as "7 Mar" (day + short month) for billing period display. */
+export function formatBillingPeriodDate(date: string | Date): string {
+	const dateObj = typeof date === 'string' ? new Date(date) : date;
+	if (isNaN(dateObj.getTime())) return 'Invalid Date';
+	const day = dateObj.getDate();
+	const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
+	return `${day} ${month}`;
+}
+
+/** Format a billing period as "7 Mar - 8 Dec". End date is shown as periodEnd - 1 second. */
+export function formatBillingPeriod(periodStart: string, periodEnd: string): string {
+	const endMinusOneSec = new Date(new Date(periodEnd).getTime() - 1000).toISOString();
+	return `${formatBillingPeriodDate(periodStart)} - ${formatBillingPeriodDate(endMinusOneSec)}`;
+}
