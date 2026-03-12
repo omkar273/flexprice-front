@@ -18,17 +18,6 @@ export const getDashboardUrls = (): DashboardUrls => {
 };
 
 /**
- * Gets deployment region from environment variable
- * @returns Region string (e.g. 'india' | 'us') or undefined if not set
- */
-export const getDeploymentRegion = (): string | undefined => import.meta.env.VITE_DEPLOYMENT_REGION;
-
-/**
- * Returns true when deployment region is US (case-insensitive)
- */
-export const isUSRegion = (): boolean => getDeploymentRegion()?.toLowerCase() === 'us';
-
-/**
  * Detects the current region based on window.location.origin
  * Compares the current origin with configured dashboard URLs
  * @returns Region enum value or null if region cannot be determined

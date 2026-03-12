@@ -8,7 +8,6 @@ import { RouteNames } from '@/core/routes/Routes';
 import { useBreadcrumbsStore } from '@/store/useBreadcrumbsStore';
 import { CustomerApi, SubscriptionApi, TaxApi } from '@/api';
 import { formatDateShort, getCurrencySymbol } from '@/utils/common/helper_functions';
-import { isUSRegion } from '@/utils/region/regionUtils';
 import { useQuery } from '@tanstack/react-query';
 import { FC, useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -81,7 +80,6 @@ const CustomerSubscriptionDetailsPage: FC = () => {
 			return await SubscriptionApi.getSubscriptionInvoicesPreview({ subscription_id: subscription_id! });
 		},
 		enabled:
-			!isUSRegion() &&
 			!!subscriptionDetails &&
 			subscriptionDetails.subscription_status !== SUBSCRIPTION_STATUS.CANCELLED &&
 			subscriptionDetails.subscription_status !== SUBSCRIPTION_STATUS.TRIALING &&
@@ -348,7 +346,7 @@ const CustomerSubscriptionDetailsPage: FC = () => {
 				</Card>
 			)}
 
-			{!isUSRegion() && subscriptionDetails?.subscription_status !== SUBSCRIPTION_STATUS.DRAFT && (data?.line_items?.length ?? 0) > 0 && (
+			{subscriptionDetails?.subscription_status !== SUBSCRIPTION_STATUS.DRAFT && (data?.line_items?.length ?? 0) > 0 && (
 				<div className='card !mt-4'>
 					<SubscriptionPreviewLineItemTable
 						discount={data?.total_discount}
