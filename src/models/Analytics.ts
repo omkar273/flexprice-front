@@ -1,6 +1,7 @@
 import { Price } from './Price';
 import { Meter, METER_AGGREGATION_TYPE } from './Meter';
 import { Feature } from './Feature';
+import { Group } from './Group';
 import { LineItem as SubscriptionLineItem } from './Subscription';
 import { Plan } from './Plan';
 import Addon from './Addon';
@@ -37,6 +38,8 @@ export interface UsageAnalyticItem {
 	price?: Price;
 	meter?: Meter;
 	feature?: Feature;
+	/** Feature group (when expand includes "feature") – group by this for feature-based grouping */
+	group?: Group;
 	subscription_line_item?: SubscriptionLineItem;
 	plan?: Plan;
 	addon?: Addon;

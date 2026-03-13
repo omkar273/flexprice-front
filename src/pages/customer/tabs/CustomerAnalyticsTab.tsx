@@ -438,6 +438,37 @@ interface GroupBucket {
 	items: UsageAnalyticItem[];
 }
 
+/** Unique key for a usage row (same feature can appear multiple times under different prices/meters). */
+function usageRowKey(row: UsageAnalyticItem, fallbackIndex: number): string {
+	return row.sub_line_item_id ?? ([row.price_id, row.meter_id, row.feature_id].filter(Boolean).join(':') || `row-${fallbackIndex}`);
+}
+
+/** Renders only the child rows of a group so expanding/collapsing doesn't re-render the whole table. */
+const GroupChildRows = React.memo(function GroupChildRows({ bucket, isExpanded }: { bucket: GroupBucket; isExpanded: boolean }) {
+	if (!isExpanded || bucket.items.length === 0) return null;
+	return (
+		<>
+			{bucket.items.map((row, childIndex) => (
+				<TableRow
+					key={usageRowKey(row, childIndex)}
+					className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50 transition-colors'>
+					<TableCell className='py-2.5 pl-4 font-normal text-gray-700 text-[13px] align-middle'>
+						{row.feature_id ? (
+							<RedirectCell target='_blank' redirectUrl={`${RouteNames.featureDetails}/${row.feature_id}`}>
+								{row.name}
+							</RedirectCell>
+						) : (
+							<span>{row.name || 'Unknown'}</span>
+						)}
+					</TableCell>
+					<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsage(row)}</TableCell>
+					<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCost(row)}</TableCell>
+				</TableRow>
+			))}
+		</>
+	);
+});
+
 function renderTotalUsage(row: UsageAnalyticItem) {
 	const useDisplayValue = row.total_usage_display !== '' && row.total_usage_display != null;
 	const displayNum = useDisplayValue
@@ -507,10 +538,11 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 		return sorted;
 	}, [items, sortDirection, sortField]);
 
+	// Group by feature's group (top-level group or feature.group from API); fallback to price.group for backward compat
 	const { groupedBuckets, ungroupedItems } = useMemo(() => {
 		const map = new Map<string, GroupBucket>();
 		for (const item of sortedItems) {
-			const group = item.price?.group;
+			const group = item.group ?? item.feature?.group ?? item.price?.group;
 			const groupKey = group?.id ?? UNGROUPED_KEY;
 			const groupName = group?.name ?? 'No group';
 			if (!map.has(groupKey)) {
@@ -640,30 +672,13 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 											)}
 										</TableCell>
 									</TableRow>
-									{isExpanded &&
-										bucket.items.map((row, childIndex) => (
-											<TableRow
-												key={`${bucket.groupKey}:${row.feature_id ?? row.price_id ?? row.meter_id ?? childIndex}`}
-												className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50 transition-colors'>
-												<TableCell className='py-2.5 pl-4 font-normal text-gray-700 text-[13px] align-middle'>
-													{row.feature_id ? (
-														<RedirectCell target='_blank' redirectUrl={`${RouteNames.featureDetails}/${row.feature_id}`}>
-															{row.name}
-														</RedirectCell>
-													) : (
-														<span>{row.name || 'Unknown'}</span>
-													)}
-												</TableCell>
-												<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalUsage(row)}</TableCell>
-												<TableCell className='py-2.5 font-normal text-gray-600 text-[13px]'>{renderTotalCost(row)}</TableCell>
-											</TableRow>
-										))}
+									<GroupChildRows bucket={bucket} isExpanded={isExpanded} />
 								</React.Fragment>
 							);
 						})}
 						{ungroupedItems.map((row, index) => (
 							<TableRow
-								key={`ungrouped:${row.feature_id ?? row.price_id ?? row.meter_id ?? index}`}
+								key={`ungrouped:${usageRowKey(row, index)}`}
 								className='h-10 align-middle border-b border-gray-200 bg-white hover:bg-gray-50/50 transition-colors'>
 								<TableCell className='pl-4 py-2.5 font-normal text-gray-700 text-[13px]'>
 									{row.feature_id ? (
