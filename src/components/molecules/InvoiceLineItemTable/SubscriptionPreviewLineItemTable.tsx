@@ -1,5 +1,6 @@
 import { Button, FormHeader, Toggle } from '@/components/atoms';
 import { LineItem, INVOICE_TYPE } from '@/models/Invoice';
+import { formatBillingPeriod } from '@/utils/common/format_date';
 import { getCurrencySymbol } from '@/utils/common/helper_functions';
 import { FC, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
@@ -16,12 +17,6 @@ interface Props {
 	subtitle?: string;
 	invoiceType?: INVOICE_TYPE;
 }
-
-const formatToShortDate = (dateString: string): string => {
-	const date = new Date(dateString);
-	const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
-	return date.toLocaleDateString('en-US', options);
-};
 
 const formatAmount = (amount: number, currency: string): string => {
 	return `${getCurrencySymbol(currency)}${amount}`;
@@ -110,9 +105,7 @@ const SubscriptionPreviewLineItemTable: FC<Props> = ({
 									)}
 									{invoiceType === INVOICE_TYPE.SUBSCRIPTION && (
 										<td className='py-4 px-4 text-sm text-gray-600'>
-											{item.period_start && item.period_end
-												? `${formatToShortDate(item.period_start)} - ${formatToShortDate(item.period_end)}`
-												: '--'}
+											{item.period_start && item.period_end ? formatBillingPeriod(item.period_start, item.period_end) : '--'}
 										</td>
 									)}
 									<td className='py-4 px-4 text-center text-sm text-gray-600'>{item.quantity ? item.quantity : '--'}</td>

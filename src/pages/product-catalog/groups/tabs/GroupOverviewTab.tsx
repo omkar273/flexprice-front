@@ -7,7 +7,7 @@ import { PriceApi } from '@/api/PriceApi';
 import { Card, CardHeader, Loader, NoDataCard, ShortPagination } from '@/components/atoms';
 import { FlexpriceTable, ColumnData, QueryBuilder } from '@/components/molecules';
 import { ChargeValueCell } from '@/components/molecules';
-import { Price, PRICE_STATUS, PRICE_TYPE } from '@/models';
+import { Price, PRICE_STATUS, PRICE_TYPE, PRICE_ENTITY_TYPE } from '@/models';
 import { PriceUnit } from '@/models/PriceUnit';
 import Feature, { FEATURE_TYPE } from '@/models/Feature';
 import { GROUP_ENTITY_TYPE } from '@/models/Group';
@@ -370,9 +370,23 @@ const GroupOverviewTab = () => {
 	const totalFromSearch = searchData?.pagination?.total ?? 0;
 	const totalItems = totalFromSearch || Math.max(offset + tableItems.length, limit * page);
 
+	const getPriceRedirectUrl = (price: Price): string | null => {
+		if (!price.entity_id?.trim()) return null;
+		if (price.entity_type === PRICE_ENTITY_TYPE.PLAN) return `${RouteNames.plan}/${price.entity_id}`;
+		if (price.entity_type === PRICE_ENTITY_TYPE.ADDON) return `${RouteNames.addonDetails}/${price.entity_id}`;
+		return null;
+	};
+
 	const chargeColumns: ColumnData<Price>[] = useMemo(
 		() => [
-			{ title: 'Display Name', render: (row) => <span>{row.display_name ?? '--'}</span> },
+			{
+				title: 'Display Name',
+				render: (row) => {
+					const url = getPriceRedirectUrl(row);
+					const label = row.display_name ?? '--';
+					return url ? <RedirectCell redirectUrl={url}>{label}</RedirectCell> : <span>{label}</span>;
+				},
+			},
 			{ title: 'Charge Type', render: (row) => <span>{getPriceTypeLabel(row.type)}</span> },
 			{ title: 'Billing Timing', render: (row) => <span>{formatInvoiceCadence(row.invoice_cadence as string)}</span> },
 			{ title: 'Billing Period', render: (row) => <span>{formatBillingPeriodForDisplay(row.billing_period as string)}</span> },
