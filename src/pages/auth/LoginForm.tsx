@@ -1,7 +1,7 @@
 import supabase from '@/core/services/supbase/config';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { data, useNavigate } from 'react-router';
+import { data, useNavigate, useSearchParams } from 'react-router';
 import { useUser } from '@/hooks/UserContext';
 import { Button, Input } from '@/components/atoms';
 import { EyeIcon, EyeOff } from 'lucide-react';
@@ -18,11 +18,33 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ switchTab }) => {
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const userContext = useUser();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
+
+	// Prefill from query params (e.g. shared login link); then strip params from URL
+	useEffect(() => {
+		const emailParam = searchParams.get('email');
+		const passwordParam = searchParams.get('password');
+		if (!emailParam?.trim() || !passwordParam?.trim()) return;
+		try {
+			const decodedEmail = decodeURIComponent(emailParam.trim());
+			const decodedPassword = decodeURIComponent(passwordParam.trim());
+			if (decodedEmail && decodedPassword) {
+				setEmail(decodedEmail);
+				setPassword(decodedPassword);
+				const next = new URLSearchParams(searchParams);
+				next.delete('email');
+				next.delete('password');
+				setSearchParams(next, { replace: true });
+			}
+		} catch {
+			// ignore malformed params
+		}
+	}, [searchParams, setSearchParams]);
 
 	const { mutate: localLogin } = useMutation({
 		mutationFn: async () => {

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { BookOpen, ExternalLink, ChevronsUpDown, LogOut, ListChecks } from 'lucide-react';
+import { BookOpen, ExternalLink, ChevronsUpDown, LogOut, ListChecks, Settings } from 'lucide-react';
 import { RouteNames } from '@/core/routes/Routes';
 import { SidebarMenuButton, useSidebar, Popover, PopoverContent, PopoverTrigger, Skeleton } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -36,13 +36,13 @@ const SidebarFooter = () => {
 				navigate(RouteNames.onboarding);
 			},
 		},
-		// {
-		// 	label: 'Billing',
-		// 	icon: CreditCard,
-		// 	onClick: () => {
-		// 		navigate(RouteNames.customerBilling);
-		// 	},
-		// },
+		{
+			label: 'Settings',
+			icon: Settings,
+			onClick: () => {
+				navigate(RouteNames.settings);
+			},
+		},
 		{
 			label: 'Logout',
 			icon: LogOut,
@@ -81,17 +81,15 @@ const SidebarFooter = () => {
 					</button>
 				</PopoverTrigger>
 				<PopoverContent className='!w-56 mx-auto p-2 space-y-1'>
-					{dropdownItems.map((item, index) => {
-						return (
-							<button
-								key={index}
-								onClick={item.onClick}
-								className='w-full flex items-center gap-2 rounded-[6px] px-2 py-1 text-sm hover:bg-muted transition-colors'>
-								{item.icon && <item.icon className='size-4' />}
-								<span className='text-sm'>{item.label}</span>
-							</button>
-						);
-					})}
+					{dropdownItems.map((item) => (
+						<button
+							key={item.label}
+							onClick={item.onClick}
+							className='w-full flex items-center gap-2 rounded-[6px] px-2 py-1 text-sm hover:bg-muted transition-colors'>
+							{item.icon && <item.icon className='size-4' />}
+							<span className='text-sm'>{item.label}</span>
+						</button>
+					))}
 				</PopoverContent>
 			</Popover>
 		</div>

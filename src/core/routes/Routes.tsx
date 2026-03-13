@@ -74,6 +74,7 @@ import {
 	WebhookDashboard,
 	// Settings pages
 	Billing as BillingPage,
+	SettingsDashboard,
 	// Insights tools pages
 	Integrations,
 	IntegrationDetails,
@@ -177,6 +178,7 @@ export const RouteNames = {
 
 	// footer
 	onboarding: '/onboarding',
+	settings: '/settings',
 	customerBilling: '/settings/billing',
 };
 
@@ -550,6 +552,10 @@ export const MainRouter = createBrowserRouter([
 			{
 				path: RouteNames.onboarding,
 				element: <OnboardingTenant />,
+			},
+			{
+				path: RouteNames.settings,
+				element: <SettingsDashboard />,
 			},
 			{
 				path: RouteNames.customerBilling,

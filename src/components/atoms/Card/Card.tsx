@@ -75,13 +75,14 @@ interface HeaderProps {
 	subtitle?: string;
 	cta?: React.ReactNode;
 	className?: string;
+	titleClassName?: string;
 }
-export const CardHeader = ({ title, subtitle, cta, className }: HeaderProps) => {
+export const CardHeader = ({ title, subtitle, cta, className, titleClassName }: HeaderProps) => {
 	return (
 		<div>
 			<div className={cn('flex items-center justify-between mb-4', className)}>
 				<div>
-					<h3 className={getTypographyClass('card-header')}>{title}</h3>
+					<h3 className={cn(getTypographyClass('card-header'), titleClassName)}>{title}</h3>
 				</div>
 				{cta && cta}
 			</div>
