@@ -24,6 +24,7 @@ import {
 	SortDirection,
 	FilterCondition,
 } from '@/types/common/QueryBuilder';
+import type { TypedBackendFilter } from '@/types/formatters/QueryBuilder';
 import { BILLING_CADENCE } from '@/models/Invoice';
 import { BILLING_PERIOD } from '@/constants/constants';
 import { toSentenceCase } from '@/utils/common/helper_functions';
@@ -147,23 +148,35 @@ const CustomerOverviewTab = () => {
 
 	const uniquePlanIds = useMemo(() => [...new Set(currentPageItems.map((s) => s.plan_id).filter(Boolean))] as string[], [currentPageItems]);
 
-	const planQueries = useQueries({
-		queries: uniquePlanIds.map((planId) => ({
-			queryKey: ['plan', planId],
-			queryFn: () => PlanApi.getPlanById(planId),
-			enabled: !!planId,
-		})),
+	const planSearchFilters = useMemo<TypedBackendFilter[]>(
+		() =>
+			uniquePlanIds.length > 0
+				? [{ field: 'id', operator: FilterOperator.IN, data_type: DataType.ARRAY, value: { array: uniquePlanIds } }]
+				: [],
+		[uniquePlanIds],
+	);
+
+	const { data: plansResponse, isLoading: isPlansLoading } = useQuery({
+		queryKey: ['plansByFilter', uniquePlanIds],
+		queryFn: () =>
+			PlanApi.getPlansByFilter({
+				filters: planSearchFilters,
+				limit: uniquePlanIds.length || 10,
+				offset: 0,
+				sort: [],
+			}),
+		enabled: uniquePlanIds.length > 0,
 	});
 
 	const planMap = useMemo(() => {
 		const map = new Map<string, { id: string; name: string }>();
-		planQueries.forEach((query) => {
-			if (query.data?.id) {
-				map.set(query.data.id, { id: query.data.id, name: query.data.name ?? '' });
+		plansResponse?.items?.forEach((plan) => {
+			if (plan.id) {
+				map.set(plan.id, { id: plan.id, name: plan.name ?? '' });
 			}
 		});
 		return map;
-	}, [planQueries]);
+	}, [plansResponse?.items]);
 
 	const subscriptionsWithPlan = useMemo(
 		() =>
@@ -173,8 +186,6 @@ const CustomerOverviewTab = () => {
 			})),
 		[currentPageItems, planMap],
 	);
-
-	const isPlansLoading = planQueries.some((q) => q.isLoading);
 
 	const overrideQueries = useQueries({
 		queries: currentPageItems.map((sub) => ({
@@ -194,9 +205,10 @@ const CustomerOverviewTab = () => {
 		})),
 	});
 
+	type OverrideQueryResult = { subscriptionId: string; hasOverride: boolean };
 	const subscriptionOverrides = useMemo(() => {
 		const overrideMap = new Map<string, boolean>();
-		overrideQueries.forEach((query) => {
+		overrideQueries.forEach((query: { data?: OverrideQueryResult }) => {
 			if (query.data) {
 				overrideMap.set(query.data.subscriptionId, query.data.hasOverride);
 			}
@@ -204,7 +216,7 @@ const CustomerOverviewTab = () => {
 		return overrideMap;
 	}, [overrideQueries]);
 
-	const isOverridesLoading = overrideQueries.some((query) => query.isLoading);
+	const isOverridesLoading = overrideQueries.some((query: { isLoading: boolean }) => query.isLoading);
 
 	const {
 		data: usageData,
