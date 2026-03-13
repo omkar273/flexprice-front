@@ -11,7 +11,7 @@ import FeatureApi from '@/api/FeatureApi';
 import { Feature } from '@/models';
 import { GetUsageAnalyticsRequest, GetCostAnalyticsRequest } from '@/types';
 import { WindowSize } from '@/models';
-import { CustomerUsageChart, RedirectCell } from '@/components/molecules';
+import { RedirectCell } from '@/components/molecules';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/molecules/Table/Table';
 import { UsageAnalyticItem, PRICE_ENTITY_TYPE } from '@/models';
 import { formatNumber } from '@/utils';
@@ -143,7 +143,7 @@ const CustomerAnalyticsTab = () => {
 
 			const sanitizedParams = {
 				...debouncedUsageParams,
-				expand: ['meter', 'price'],
+				expand: ['price'],
 			};
 			return await EventsApi.getUsageAnalytics(sanitizedParams);
 		},
@@ -405,11 +405,11 @@ const CustomerAnalyticsTab = () => {
 					)}
 
 					{/* Usage Chart */}
-					{filteredUsageData && (
+					{/* {filteredUsageData && (
 						<div className=''>
 							<CustomerUsageChart data={filteredUsageData} />
 						</div>
-					)}
+					)} */}
 
 					{/* Usage Data Table */}
 					{filteredUsageData && filteredUsageData.items.length > 0 && (
