@@ -367,6 +367,12 @@ const PlanPriceTable: FC<PlanChargesTableProps> = ({ plan, onPriceUpdate }) => {
 	const tableItems = searchData?.items || [];
 	const totalFromSearch = searchData?.pagination?.total ?? 0;
 	const totalItems = totalFromSearch || Math.max(offset + tableItems.length, limit * page);
+	const hasActiveFilters = filters.some(
+		(f) =>
+			(f.valueString != null && String(f.valueString).trim() !== '') ||
+			(f.valueNumber != null && !Number.isNaN(f.valueNumber)) ||
+			(f.valueArray != null && f.valueArray.length > 0),
+	);
 
 	// ===== TABLE COLUMNS =====
 	const chargeColumns: ColumnData<Price>[] = [
@@ -469,52 +475,50 @@ const PlanPriceTable: FC<PlanChargesTableProps> = ({ plan, onPriceUpdate }) => {
 				/>
 			)}
 
-			{/* Charges Table */}
-			{(searchData?.items?.length ?? 0) > 0 ? (
-				<Card variant='notched'>
-					<CardHeader
-						title='Charges'
-						cta={
-							<Button prefixIcon={<Plus />} onClick={() => navigate(`${RouteNames.plan}/${plan.id}/add-charges`)}>
-								Add
-							</Button>
-						}
-					/>
-					<div className='pb-3'>
-						<QueryBuilder
-							filterOptions={chargeFilterOptions}
-							filters={filters}
-							onFilterChange={setFilters}
-							sortOptions={chargeSortOptions}
-							selectedSorts={sorts}
-							onSortChange={setSorts}
-							debounceTime={300}
-						/>
-					</div>
-					{isSearchLoading ? (
-						<div className='flex items-center justify-center py-12'>
-							<Loader />
-						</div>
-					) : (
-						<>
-							<FlexpriceTable showEmptyRow columns={chargeColumns} data={tableItems} />
-							{(totalItems > 0 || page > 1) && (
-								<ShortPagination unit='Charges' totalItems={totalItems} pageSize={limit} prefix={PAGINATION_PREFIX.PLAN_CHARGES} />
-							)}
-						</>
-					)}
-				</Card>
-			) : (
-				<NoDataCard
+			{/* Charges Table - always show Card + QueryBuilder; inner content is filled or empty state */}
+			<Card variant='notched'>
+				<CardHeader
 					title='Charges'
-					subtitle='No charges added to the plan yet'
 					cta={
 						<Button prefixIcon={<Plus />} onClick={() => navigate(`${RouteNames.plan}/${plan.id}/add-charges`)}>
 							Add
 						</Button>
 					}
 				/>
-			)}
+				<div className='pb-3'>
+					<QueryBuilder
+						filterOptions={chargeFilterOptions}
+						filters={filters}
+						onFilterChange={setFilters}
+						sortOptions={chargeSortOptions}
+						selectedSorts={sorts}
+						onSortChange={setSorts}
+						debounceTime={300}
+					/>
+				</div>
+				{isSearchLoading ? (
+					<div className='flex items-center justify-center py-12'>
+						<Loader />
+					</div>
+				) : tableItems.length > 0 ? (
+					<>
+						<FlexpriceTable showEmptyRow columns={chargeColumns} data={tableItems} />
+						{(totalItems > 0 || page > 1) && (
+							<ShortPagination unit='Charges' totalItems={totalItems} pageSize={limit} prefix={PAGINATION_PREFIX.PLAN_CHARGES} />
+						)}
+					</>
+				) : (
+					<NoDataCard
+						title='Charges'
+						subtitle={hasActiveFilters ? 'No charges match your filters' : 'No charges added to the plan yet'}
+						cta={
+							<Button prefixIcon={<Plus />} onClick={() => navigate(`${RouteNames.plan}/${plan.id}/add-charges`)}>
+								Add
+							</Button>
+						}
+					/>
+				)}
+			</Card>
 		</>
 	);
 };
