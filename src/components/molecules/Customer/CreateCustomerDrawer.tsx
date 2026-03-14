@@ -206,7 +206,7 @@ const CreateCustomerDrawer: FC<Props> = ({ data, onOpenChange, open, trigger }) 
 		},
 		onError: (error: ServerError) => {
 			logger.error(error);
-			toast.error(error.error.message || 'Failed to add customer. Please try again.');
+			toast.error(error?.error?.message || 'Failed to add customer. Please try again.');
 		},
 	});
 

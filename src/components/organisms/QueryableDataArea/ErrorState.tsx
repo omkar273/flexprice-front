@@ -8,8 +8,8 @@ interface ErrorStateProps {
 
 const ErrorState = ({ error, onError }: ErrorStateProps) => {
 	useEffect(() => {
-		const errorMessage = error as any;
-		const message = errorMessage?.error?.message || 'Error fetching data';
+		const err = error as { error?: { message?: string }; message?: string } | undefined;
+		const message = err?.error?.message ?? err?.message ?? 'Error fetching data';
 		toast.error(message);
 
 		if (onError) {

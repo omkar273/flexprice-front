@@ -201,8 +201,8 @@ const FeatureDetails = () => {
 					const usageLimit = rowData.usage_limit ? formatAmount(rowData.usage_limit.toString()) : 'Unlimited';
 					const unit =
 						rowData.usage_limit === null || rowData.usage_limit > 1
-							? rowData.feature.unit_plural || 'units'
-							: rowData.feature.unit_singular || 'unit';
+							? rowData.feature?.unit_plural || 'units'
+							: rowData.feature?.unit_singular || 'unit';
 					return (
 						<span className='text-right'>
 							{usageLimit}

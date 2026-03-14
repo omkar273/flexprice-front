@@ -104,7 +104,7 @@ const ActionButton: FC<ActionProps> = ({
 		},
 		onError: (err: ServerError) => {
 			if (!disableToast) {
-				toast.error(err.error.message || `Failed to ${archiveActionText.toLowerCase()} ${entityName}. Please try again.`);
+				toast.error(err?.error?.message || `Failed to ${archiveActionText.toLowerCase()} ${entityName}. Please try again.`);
 			}
 		},
 	});
