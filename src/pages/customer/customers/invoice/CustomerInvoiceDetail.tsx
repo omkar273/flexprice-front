@@ -99,7 +99,10 @@ const CustomerInvoiceDetail: FC<Props> = ({ invoice_id, breadcrumb_index }) => {
 
 	if (isError) {
 		toast.error('Something went wrong');
+		return null;
 	}
+
+	if (!data) return null;
 
 	const invoiceType = data?.invoice_type as INVOICE_TYPE;
 
@@ -136,7 +139,7 @@ const CustomerInvoiceDetail: FC<Props> = ({ invoice_id, breadcrumb_index }) => {
 									<Download />
 									<span>Download</span>
 								</Button>
-								<InvoiceTableMenu data={data!} />
+								<InvoiceTableMenu data={data} />
 							</div>
 						</div>
 						<Spacer className='!my-10' />

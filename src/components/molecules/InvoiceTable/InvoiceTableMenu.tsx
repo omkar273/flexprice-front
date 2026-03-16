@@ -99,7 +99,9 @@ const InvoiceTableMenu: FC<Props> = ({ data }) => {
 				});
 			},
 			disabled:
-				data?.payment_status === PAYMENT_STATUS.SUCCEEDED || data?.invoice_status === INVOICE_STATUS.VOIDED || data.amount_remaining === 0,
+				data?.payment_status === PAYMENT_STATUS.SUCCEEDED ||
+				data?.invoice_status === INVOICE_STATUS.VOIDED ||
+				(data?.amount_remaining ?? 0) === 0,
 		},
 		{
 			label: 'Update Invoice Status',
@@ -197,7 +199,7 @@ const InvoiceTableMenu: FC<Props> = ({ data }) => {
 				destination_id={data.id}
 				destination_type={PAYMENT_DESTINATION_TYPE.INVOICE}
 				customer_id={data.customer_id}
-				max_amount={Number(data.amount_remaining)}
+				max_amount={Number(data?.amount_remaining ?? 0)}
 				currency={data.currency}
 				onSuccess={handlePaymentSuccess}
 			/>
