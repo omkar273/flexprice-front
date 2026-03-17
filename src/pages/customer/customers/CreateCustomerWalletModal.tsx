@@ -13,6 +13,7 @@ import CurrencyPriceUnitSelector from '@/components/molecules/CurrencyPriceUnitS
 import { CurrencyPriceUnitSelection, isPriceUnitOption } from '@/types/common/PriceUnitSelector';
 import { ServerError } from '@/core/axios/types';
 import { CirclePlus } from 'lucide-react';
+import { useMinCreditExpiryDate, toDateOnlyUtc } from '@/hooks/useMinCreditExpiryDate';
 
 // Reusable AddButton component
 const AddButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
@@ -38,7 +39,10 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 		currency: '',
 		conversion_rate: '',
 		topup_conversion_rate: '',
+		initial_credits_expiry_date_utc: '',
 	});
+
+	const { minExpiryDate } = useMinCreditExpiryDate(customerId);
 
 	const [selectedPriceUnitOrCurrency, setSelectedPriceUnitOrCurrency] = useState<CurrencyPriceUnitSelection | null>(null);
 	const [showTopupConversionRate, setShowTopupConversionRate] = useState(false);
@@ -75,6 +79,7 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 			currency: '',
 			conversion_rate: '',
 			topup_conversion_rate: '',
+			initial_credits_expiry_date_utc: '',
 		});
 	}, [customerId]);
 
@@ -140,6 +145,14 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 	});
 
 	const handleCreateWallet = async () => {
+		let expiryError = '';
+		if (walletPayload.initial_credits_expiry_date_utc && minExpiryDate) {
+			const expiryDateOnly = toDateOnlyUtc(walletPayload.initial_credits_expiry_date_utc);
+			if (expiryDateOnly.getTime() < minExpiryDate.getTime()) {
+				expiryError = 'Expiry date must be after the current subscription period end';
+			}
+		}
+
 		const newErrors = {
 			currency: !walletPayload.currency ? 'Currency is required' : '',
 			conversion_rate: (walletPayload.conversion_rate ?? 0) <= 0 ? 'Conversion rate must be greater than 0' : '',
@@ -147,6 +160,7 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 				walletPayload.topup_conversion_rate !== undefined && walletPayload.topup_conversion_rate <= 0
 					? 'Top-up conversion rate must be greater than 0'
 					: '',
+			initial_credits_expiry_date_utc: expiryError,
 		};
 
 		if (Object.values(newErrors).some((error) => error !== '')) {
@@ -269,15 +283,32 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 								<DatePicker
 									labelClassName='text-foreground'
 									label='Free Credits Expiry Date'
-									minDate={new Date()}
+									minDate={
+										minExpiryDate
+											? new Date(minExpiryDate.getUTCFullYear(), minExpiryDate.getUTCMonth(), minExpiryDate.getUTCDate())
+											: (() => {
+													const startOfToday = new Date();
+													startOfToday.setHours(0, 0, 0, 0);
+													return startOfToday;
+												})()
+									}
 									popoverTriggerClassName='w-full'
 									className='w-full'
 									placeholder='Select Expiry Date'
 									date={walletPayload.initial_credits_expiry_date_utc ? new Date(walletPayload.initial_credits_expiry_date_utc) : undefined}
 									setDate={(e) => {
-										setwalletPayload({ ...walletPayload, initial_credits_expiry_date_utc: e ? e.toISOString() : undefined });
+										setwalletPayload({
+											...walletPayload,
+											initial_credits_expiry_date_utc: e
+												? new Date(Date.UTC(e.getFullYear(), e.getMonth(), e.getDate(), 0, 0, 0, 0)).toISOString()
+												: undefined,
+										});
+										if (errors.initial_credits_expiry_date_utc) setErrors((prev) => ({ ...prev, initial_credits_expiry_date_utc: '' }));
 									}}
 								/>
+								{errors.initial_credits_expiry_date_utc && (
+									<p className='text-sm text-destructive mt-1'>{errors.initial_credits_expiry_date_utc}</p>
+								)}
 							</div>
 						</div>
 					)}

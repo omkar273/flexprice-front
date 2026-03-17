@@ -232,6 +232,7 @@ const CustomerWalletTab = () => {
 					walletId={activeWallet?.id}
 					conversion_rate={activeWallet?.conversion_rate}
 					currency={activeWallet?.currency ?? ''}
+					customerId={customerId ?? undefined}
 				/>
 			</Dialog>
 

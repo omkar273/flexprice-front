@@ -11,6 +11,7 @@ import { Label, Switch } from '@/components/ui';
 import { getCurrencyAmountFromCredits } from '@/utils';
 import { TopupWalletPayload } from '@/types';
 import { DialogContent, DialogHeader, DialogTitle } from '@/components/ui';
+import { useMinCreditExpiryDate, toDateOnlyUtc } from '@/hooks/useMinCreditExpiryDate';
 
 // Enum for credits type with more descriptive names
 enum CreditsType {
@@ -49,9 +50,13 @@ interface TopupCardProps {
 	currency?: string;
 	conversion_rate?: number;
 	onSuccess?: () => void;
+	/** When provided, expiry date must be after the customer's active subscription period end */
+	customerId?: string;
 }
 
-const TopupCard: FC<TopupCardProps> = ({ walletId, currency, conversion_rate = 1, onSuccess }) => {
+const TopupCard: FC<TopupCardProps> = ({ walletId, currency, conversion_rate = 1, onSuccess, customerId }) => {
+	const { minExpiryDate } = useMinCreditExpiryDate(customerId);
+
 	// State management with more explicit typing
 	const [topupPayload, setTopupPayload] = useState<TopupPayload>({
 		credits_type: CreditsType.FreeCredit,
@@ -101,22 +106,25 @@ const TopupCard: FC<TopupCardProps> = ({ walletId, currency, conversion_rate = 1
 		}
 
 		if (expiry_date_utc) {
-			// Reset time to start of the day for both dates
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
+			const expiryDateOnly = toDateOnlyUtc(expiry_date_utc);
 
-			// Convert ISO string to Date object
-			const expiryDate = new Date(expiry_date_utc);
-			expiryDate.setHours(0, 0, 0, 0);
-
-			if (expiryDate.getTime() < today.getTime()) {
-				toast.error('Expiry date cannot be in the past');
-				return false;
+			if (minExpiryDate) {
+				if (expiryDateOnly.getTime() < minExpiryDate.getTime()) {
+					toast.error('Expiry date must be after the current subscription period end');
+					return false;
+				}
+			} else {
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+				if (expiryDateOnly.getTime() < today.getTime()) {
+					toast.error('Expiry date cannot be in the past');
+					return false;
+				}
 			}
 		}
 
 		return true;
-	}, [topupPayload]);
+	}, [topupPayload, minExpiryDate]);
 
 	// Wallet topup mutation with improved error handling
 	const { isPending, mutate: topupWallet } = useMutation({
@@ -239,7 +247,11 @@ const TopupCard: FC<TopupCardProps> = ({ walletId, currency, conversion_rate = 1
 
 			{topupPayload.credits_type && (
 				<DatePicker
-					minDate={new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1, 0, 0, 0, 0))}
+					minDate={
+						minExpiryDate
+							? new Date(minExpiryDate.getUTCFullYear(), minExpiryDate.getUTCMonth(), minExpiryDate.getUTCDate())
+							: new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1, 0, 0, 0, 0))
+					}
 					label='Expiry Date'
 					date={topupPayload.expiry_date_utc ? new Date(topupPayload.expiry_date_utc) : undefined}
 					setDate={(value) =>
