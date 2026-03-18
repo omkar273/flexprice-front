@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { PriceApi } from '@/api/PriceApi';
-import { PRICE_ENTITY_TYPE } from '@/models';
+import { ENTITY_STATUS, PRICE_ENTITY_TYPE } from '@/models';
 import type { SearchPricesResponse } from '@/types/dto';
 import type { Price } from '@/models/Price';
+import { DataType, FilterOperator } from '@/types/common/QueryBuilder';
 
 /** Shared query key for plan prices so all consumers share the same cache. */
 export const PLAN_PRICES_QUERY_KEY = ['planPrices'] as const;
@@ -36,8 +37,26 @@ export function usePlanPrices(planId: string | undefined) {
 		queryFn: async (): Promise<SearchPricesResponse | null> => {
 			if (!planId) return null;
 			const response = await PriceApi.searchPrices({
-				entity_ids: [planId],
-				entity_type: PRICE_ENTITY_TYPE.PLAN,
+				filters: [
+					{
+						field: 'entity_type',
+						operator: FilterOperator.EQUAL,
+						data_type: DataType.STRING,
+						value: { string: PRICE_ENTITY_TYPE.PLAN },
+					},
+					{
+						field: 'entity_id',
+						operator: FilterOperator.EQUAL,
+						data_type: DataType.STRING,
+						value: { string: planId },
+					},
+					{
+						field: 'status',
+						operator: FilterOperator.EQUAL,
+						data_type: DataType.STRING,
+						value: { string: ENTITY_STATUS.PUBLISHED },
+					},
+				],
 				allow_expired_prices: false,
 				limit: 10000,
 			});

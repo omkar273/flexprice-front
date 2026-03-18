@@ -1,5 +1,4 @@
 import { AxiosClient } from '@/core/axios/verbs';
-import { generateQueryParams } from '@/utils/common/api_helper';
 import {
 	EntitlementFilter,
 	EntitlementResponse,
@@ -38,16 +37,6 @@ class EntitlementApi {
 	 */
 	public static async get(id: string) {
 		return await AxiosClient.get<EntitlementResponse>(`${this.baseUrl}/${id}`);
-	}
-
-	/**
-	 * List entitlements with filters (GET method with query params)
-	 * @param filters - Filter parameters
-	 * @returns Promise<ListEntitlementsResponse>
-	 */
-	public static async list(filters: EntitlementFilter) {
-		const url = generateQueryParams(this.baseUrl, filters);
-		return await AxiosClient.get<ListEntitlementsResponse>(url);
 	}
 
 	/**

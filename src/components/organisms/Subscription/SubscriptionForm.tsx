@@ -15,6 +15,7 @@ import {
 	CREDIT_GRANT_PERIOD_UNIT,
 	CREDIT_GRANT_SCOPE,
 	ENTITLEMENT_ENTITY_TYPE,
+	ENTITY_STATUS,
 	EXPAND,
 } from '@/models';
 import { BILLING_PERIOD, PAYMENT_TERMS_NONE, paymentTermsOptions } from '@/constants/constants';
@@ -26,6 +27,7 @@ import EntitlementApi from '@/api/EntitlementApi';
 import AddonApi from '@/api/AddonApi';
 import { AddAddonToSubscriptionRequest } from '@/types/dto/Addon';
 import { SubscriptionDiscountTable, EntitlementOverridesTable } from '@/components/molecules';
+import { DataType, FilterOperator } from '@/types/common/QueryBuilder';
 import SubscriptionTaxAssociationTable from '@/components/molecules/SubscriptionTaxAssociationTable';
 import PhaseList from './PhaseList';
 import { SubscriptionPhaseCreateRequest, EntitlementOverrideRequest } from '@/types/dto/Subscription';
@@ -308,9 +310,29 @@ const SubscriptionForm = ({
 			if (!state.selectedPlan) return null;
 			try {
 				return await EntitlementApi.search({
-					entity_ids: [state.selectedPlan],
-					entity_type: ENTITLEMENT_ENTITY_TYPE.PLAN,
+					filters: [
+						{
+							field: 'entity_type',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: ENTITLEMENT_ENTITY_TYPE.PLAN },
+						},
+						{
+							field: 'entity_id',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: state.selectedPlan },
+						},
+						{
+							field: 'status',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: ENTITY_STATUS.PUBLISHED },
+						},
+					],
 					expand: generateExpandQueryParams([EXPAND.FEATURES]),
+					limit: 10000,
+					offset: 0,
 				});
 			} catch (error) {
 				console.warn('Failed to fetch plan entitlements:', error);

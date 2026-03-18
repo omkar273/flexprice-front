@@ -6,12 +6,15 @@ import toast from 'react-hot-toast';
 import { AppPortal } from 'svix-react';
 import { EmptyPage } from '@/components/organisms';
 import { useMemo, useEffect } from 'react';
+import useEnvironment from '@/hooks/useEnvironment';
 
 const WebhookDashboard = () => {
 	const queryClient = useQueryClient();
 
+	const { activeEnvironment } = useEnvironment();
+
 	const { data, isLoading, isError, error } = useQuery({
-		queryKey: ['webhookDashboardUrl'],
+		queryKey: ['webhookDashboardUrl', activeEnvironment?.id],
 		queryFn: async () => await WebhookApi.getWebhookDashboardUrl(),
 		// Cache for 5 minutes to reduce API calls
 		staleTime: 5 * 60 * 1000,
@@ -25,19 +28,20 @@ const WebhookDashboard = () => {
 		refetchOnWindowFocus: true,
 		// Refetch when network reconnects
 		refetchOnReconnect: true,
+		enabled: !!activeEnvironment?.id,
 	});
 
 	// Preload the dashboard URL when component mounts
 	useEffect(() => {
 		// Prefetch the data if not already cached
-		if (!queryClient.getQueryData(['webhookDashboardUrl'])) {
+		if (!queryClient.getQueryData(['webhookDashboardUrl', activeEnvironment?.id])) {
 			queryClient.prefetchQuery({
-				queryKey: ['webhookDashboardUrl'],
+				queryKey: ['webhookDashboardUrl', activeEnvironment?.id],
 				queryFn: async () => await WebhookApi.getWebhookDashboardUrl(),
 				staleTime: 5 * 60 * 1000,
 			});
 		}
-	}, [queryClient]);
+	}, [queryClient, activeEnvironment?.id]);
 
 	// Memoize the AppPortal props to prevent unnecessary re-renders
 	const appPortalProps = useMemo(

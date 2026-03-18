@@ -25,6 +25,7 @@ import {
 	DropdownMenuOption,
 	FeatureDrawer,
 } from '@/components/molecules';
+import { FilterOperator, DataType } from '@/types/common/QueryBuilder';
 import { FeatureAlertDialog } from '@/components/molecules/FeatureAlertDialog';
 
 // Models and types
@@ -111,21 +112,34 @@ const FeatureDetails = () => {
 	const { data: linkedEntitlements } = useQuery({
 		queryKey: ['fetchLinkedEntitlements', featureId],
 		queryFn: async () =>
-			await EntitlementApi.list({
+			await EntitlementApi.search({
 				feature_ids: [featureId!],
-				expand: 'plans,features,prices',
+				expand: generateExpandQueryParams([EXPAND.PLANS, EXPAND.FEATURES, EXPAND.PRICES, EXPAND.ADDONS]),
 				status: ENTITY_STATUS.PUBLISHED,
+				filters: [
+					{
+						field: 'entity_type',
+						operator: FilterOperator.IN,
+						data_type: DataType.ARRAY,
+						value: {
+							array: [ENTITLEMENT_ENTITY_TYPE.PLAN, ENTITLEMENT_ENTITY_TYPE.ADDON],
+						},
+					},
+				],
 			}),
 		enabled: !!featureId,
 	});
 
 	const { data: linkedPrices } = useQuery({
-		queryKey: ['fetchLinkedPrices', featureId],
+		queryKey: ['fetchLinkedPrices', featureId, data?.meter?.id],
 		queryFn: async () => {
 			const prices = await PriceApi.ListPrices({
 				expand: generateExpandQueryParams([EXPAND.PLAN, EXPAND.ADDONS]),
 				meter_ids: [data?.meter?.id || ''],
 				start_date_lt: new Date().toISOString(),
+				status: ENTITY_STATUS.PUBLISHED,
+				limit: 10000,
+				offset: 0,
 			});
 			// Filter prices to only include PLAN or ADDON entity types
 			const filteredPrices = {

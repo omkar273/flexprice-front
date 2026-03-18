@@ -191,10 +191,23 @@ const CustomerOverviewTab = () => {
 		queries: currentPageItems.map((sub) => ({
 			queryKey: ['subscriptionOverride', sub.id],
 			queryFn: async () => {
-				const result = await PriceApi.ListPrices({
-					entity_type: PRICE_ENTITY_TYPE.SUBSCRIPTION,
-					entity_ids: [sub.id],
+				const result = await PriceApi.searchPrices({
+					filters: [
+						{
+							field: 'entity_type',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: PRICE_ENTITY_TYPE.SUBSCRIPTION },
+						},
+						{
+							field: 'entity_id',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: sub.id },
+						},
+					],
 					limit: 1,
+					offset: 0,
 				});
 				return {
 					subscriptionId: sub.id,

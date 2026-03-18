@@ -13,7 +13,7 @@ import { GetAllPlansResponse } from '@/api/PlanApi';
 import { PricingCard, type PricingCardProps } from '@/components/molecules';
 import { ApiDocsContent } from '@/components/molecules';
 import { PlanDrawer } from '@/components/molecules';
-import { Price, INVOICE_CADENCE, PRICE_TYPE, ENTITLEMENT_ENTITY_TYPE, PRICE_ENTITY_TYPE } from '@/models';
+import { Price, INVOICE_CADENCE, PRICE_TYPE, ENTITLEMENT_ENTITY_TYPE, PRICE_ENTITY_TYPE, ENTITY_STATUS } from '@/models';
 import { generateExpandQueryParams } from '@/utils/common/api_helper';
 import { EXPAND } from '@/models/expand';
 
@@ -198,8 +198,26 @@ const PricingPage = () => {
 
 			while (true) {
 				const response = await PriceApi.searchPrices({
-					entity_type: PRICE_ENTITY_TYPE.PLAN,
-					entity_ids: planIds,
+					filters: [
+						{
+							field: 'entity_type',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: PRICE_ENTITY_TYPE.PLAN },
+						},
+						{
+							field: 'entity_id',
+							operator: FilterOperator.IN,
+							data_type: DataType.ARRAY,
+							value: { array: planIds },
+						},
+						{
+							field: 'status',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: ENTITY_STATUS.PUBLISHED },
+						},
+					],
 					limit: PAGE_SIZE,
 					offset,
 				});
@@ -230,8 +248,21 @@ const PricingPage = () => {
 
 			while (true) {
 				const response = await EntitlementApi.search({
-					entity_type: ENTITLEMENT_ENTITY_TYPE.PLAN,
-					entity_ids: planIds,
+					filters: [
+						{
+							field: 'entity_type',
+							operator: FilterOperator.EQUAL,
+							data_type: DataType.STRING,
+							value: { string: ENTITLEMENT_ENTITY_TYPE.PLAN },
+						},
+						{
+							field: 'entity_id',
+							operator: FilterOperator.IN,
+							data_type: DataType.ARRAY,
+							value: { array: planIds },
+						},
+					],
+					status: ENTITY_STATUS.PUBLISHED,
 					limit: PAGE_SIZE,
 					offset,
 					expand: generateExpandQueryParams([EXPAND.FEATURES]),

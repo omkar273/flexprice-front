@@ -20,6 +20,7 @@ import { Card } from '@/components/atoms';
 import formatChips from '@/utils/common/format_chips';
 import { ChargeValueCell } from '@/components/molecules';
 import { BILLING_PERIOD } from '@/constants/constants';
+import { DataType, FilterOperator } from '@/types/common/QueryBuilder';
 
 const formatBillingPeriod = (billingPeriod: string) => {
 	switch (billingPeriod.toUpperCase()) {
@@ -128,8 +129,20 @@ const CostSheetDetails = () => {
 		queryKey: ['costSheetCharges', id, limit, offset],
 		queryFn: () =>
 			PriceApi.searchPrices({
-				entity_ids: [id!],
-				entity_type: PRICE_ENTITY_TYPE.COST_SHEET,
+				filters: [
+					{
+						field: 'entity_type',
+						operator: FilterOperator.EQUAL,
+						data_type: DataType.STRING,
+						value: { string: PRICE_ENTITY_TYPE.COST_SHEET },
+					},
+					{
+						field: 'entity_id',
+						operator: FilterOperator.EQUAL,
+						data_type: DataType.STRING,
+						value: { string: id! },
+					},
+				],
 				limit,
 				offset,
 			}),
