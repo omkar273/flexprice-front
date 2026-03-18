@@ -15,6 +15,7 @@ import {
 	CREDIT_GRANT_PERIOD_UNIT,
 	CREDIT_GRANT_SCOPE,
 	ENTITLEMENT_ENTITY_TYPE,
+	EXPAND,
 } from '@/models';
 import { BILLING_PERIOD, PAYMENT_TERMS_NONE, paymentTermsOptions } from '@/constants/constants';
 import { SubscriptionFormState } from '@/pages';
@@ -34,6 +35,7 @@ import { usePriceOverrides } from '@/hooks/usePriceOverrides';
 import { Coupon } from '@/models/Coupon';
 import { InternalCreditGrantRequest, creditGrantToInternal } from '@/types/dto/CreditGrant';
 import { uniqueId } from 'lodash';
+import { generateExpandQueryParams } from '@/utils/common/api_helper';
 
 // Helper components
 const BillingCycleSelector = ({
@@ -308,6 +310,7 @@ const SubscriptionForm = ({
 				return await EntitlementApi.search({
 					entity_ids: [state.selectedPlan],
 					entity_type: ENTITLEMENT_ENTITY_TYPE.PLAN,
+					expand: generateExpandQueryParams([EXPAND.FEATURES]),
 				});
 			} catch (error) {
 				console.warn('Failed to fetch plan entitlements:', error);
