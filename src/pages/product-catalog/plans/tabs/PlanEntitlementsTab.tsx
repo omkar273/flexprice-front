@@ -56,6 +56,7 @@ const PlanEntitlementsTab = () => {
 				entity_ids: [planId!],
 				entity_type: ENTITLEMENT_ENTITY_TYPE.PLAN,
 				expand: generateExpandQueryParams([EXPAND.FEATURES]),
+				status: ENTITY_STATUS.PUBLISHED,
 			});
 		},
 		enabled: !!planId,

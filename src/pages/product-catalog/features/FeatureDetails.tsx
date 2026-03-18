@@ -38,7 +38,7 @@ import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { ENTITY_STATUS } from '@/models/base';
 import { EntitlementResponse } from '@/types/dto';
 import { METER_AGGREGATION_TYPE } from '@/models/Meter';
-import { PRICE_ENTITY_TYPE } from '@/models';
+import { ENTITLEMENT_ENTITY_TYPE, PRICE_ENTITY_TYPE } from '@/models';
 import { PriceApi } from '@/api/PriceApi';
 import { formatBillingPeriodForDisplay } from '@/utils/common/helper_functions';
 import { ChargeValueCell } from '@/components/molecules';
@@ -139,6 +139,14 @@ const FeatureDetails = () => {
 		enabled: !!data?.meter?.id,
 	});
 
+	const planOrAddonEntitlements = useMemo(
+		() =>
+			(linkedEntitlements?.items ?? []).filter(
+				(e) => e.entity_type === ENTITLEMENT_ENTITY_TYPE.PLAN || e.entity_type === ENTITLEMENT_ENTITY_TYPE.ADDON,
+			),
+		[linkedEntitlements?.items],
+	);
+
 	const { mutate: archiveFeature, isPending: isArchiving } = useMutation({
 		mutationFn: async () => await FeatureApi.deleteFeature(featureId!),
 		onSuccess: () => {
@@ -175,15 +183,19 @@ const FeatureDetails = () => {
 
 	const columns: ColumnData<EntitlementResponse>[] = [
 		{
-			title: 'Plan',
+			title: 'Plan / Addon',
 			render: (rowData) => {
-				return <RedirectCell redirectUrl={`${RouteNames.plan}/${rowData?.entity_id}`}>{rowData?.plan?.name}</RedirectCell>;
+				if (rowData.entity_type === ENTITLEMENT_ENTITY_TYPE.ADDON) {
+					return <RedirectCell redirectUrl={`${RouteNames.addons}/${rowData.entity_id}`}>{rowData.addon?.name ?? '—'}</RedirectCell>;
+				}
+				return <RedirectCell redirectUrl={`${RouteNames.plan}/${rowData.entity_id}`}>{rowData.plan?.name ?? '—'}</RedirectCell>;
 			},
 		},
 		{
 			title: 'Status',
 			render: (rowData) => {
-				const label = formatChips(rowData?.plan?.status || '');
+				const rawStatus = rowData.entity_type === ENTITLEMENT_ENTITY_TYPE.ADDON ? rowData.addon?.status : rowData.plan?.status;
+				const label = formatChips(rawStatus || '');
 				return <Chip variant={label === 'Active' ? 'success' : 'default'} label={label} />;
 			},
 		},
@@ -323,10 +335,10 @@ const FeatureDetails = () => {
 					</div>
 				)}
 
-				{(linkedEntitlements?.items?.length || 0) > 0 ? (
+				{planOrAddonEntitlements.length > 0 ? (
 					<Card variant='notched'>
 						<CardHeader title='Entitlements' />
-						<FlexpriceTable showEmptyRow columns={columns} data={linkedEntitlements?.items ?? []} variant='no-bordered' />
+						<FlexpriceTable showEmptyRow columns={columns} data={planOrAddonEntitlements} variant='no-bordered' />
 					</Card>
 				) : (
 					<NoDataCard title='Entitlements' subtitle='No entitlements linked to the feature yet' />
