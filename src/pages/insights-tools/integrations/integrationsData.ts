@@ -289,6 +289,39 @@ export const integrations: Integration[] = [
 			},
 		],
 	},
+	{
+		name: 'Paddle',
+		description: 'Send invoices and collect payments using Paddle payment gateway integration.',
+		logo: '/assets/logo/paddle.png',
+		tags: ['Payments', 'Invoices'],
+		type: 'available',
+		info: [
+			{
+				title: 'Overview',
+				description: [
+					'The Flexprice Paddle app enables invoicing and payment collection through Paddle payment gateway. Integrate it seamlessly with Flexprice to streamline your payment workflows.',
+				],
+			},
+			{
+				title: 'Invoice Sync',
+				description: [
+					'Create and send invoices through Paddle directly from Flexprice. Payment collection can be automated through Paddle payment gateway.',
+				],
+			},
+			{
+				title: 'Secure Payments',
+				description: [
+					'Collect payments quickly and securely via Paddle payment gateway. Your customers can choose from various payment methods to improve the overall customer experience and speed up cash flow.',
+				],
+			},
+			{
+				title: 'Webhook Integration',
+				description: [
+					'Receive real-time notifications about payment events through webhooks. Subscribe to transactions.completed event to stay updated on payment status.',
+				],
+			},
+		],
+	},
 ];
 
 export const installedIntegrations = integrations.filter((integration) => integration.type === 'installed');

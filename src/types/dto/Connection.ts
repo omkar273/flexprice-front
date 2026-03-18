@@ -69,6 +69,10 @@ export interface CreateConnectionPayload {
 				publishable_key?: string;
 				secret_key?: string;
 				webhook_secret?: string;
+		  }
+		| {
+				api_key?: string;
+				webhook_secret?: string;
 		  };
 	sync_config?: {
 		plan?: {

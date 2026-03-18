@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { DocsProvider } from './context/DocsContext';
 import ReactQueryProvider from './core/services/tanstack/ReactQueryProvider';
 import useVersionCheck from '@/hooks/useVersionCheck';
+import { PaddleProvider } from '@/core/paddle/PaddleProvider';
 
 const App = () => {
 	useVersionCheck();
@@ -12,46 +13,48 @@ const App = () => {
 	return (
 		<ReactQueryProvider>
 			<UserProvider>
-				<DocsProvider>
-					<RouterProvider router={MainRouter} />
-				</DocsProvider>
+				<PaddleProvider>
+					<DocsProvider>
+						<RouterProvider router={MainRouter} />
+					</DocsProvider>
 
-				{/* Toast Notifications */}
-				<Toaster
-					toastOptions={{
-						success: {
-							iconTheme: {
-								primary: '#5CA7A0',
-								secondary: '#fff',
+					{/* Toast Notifications */}
+					<Toaster
+						toastOptions={{
+							success: {
+								iconTheme: {
+									primary: '#5CA7A0',
+									secondary: '#fff',
+								},
+								style: {
+									whiteSpace: 'nowrap',
+									minWidth: 'fit-content',
+									width: 'auto',
+									maxWidth: 'none',
+								},
+								className: 'whitespace-nowrap',
 							},
-							style: {
-								whiteSpace: 'nowrap',
-								minWidth: 'fit-content',
-								width: 'auto',
-								maxWidth: 'none',
+							error: {
+								iconTheme: {
+									primary: '#E76E50',
+									secondary: '#fff',
+								},
+								style: {
+									whiteSpace: 'nowrap',
+									minWidth: 'fit-content',
+									width: 'auto',
+									maxWidth: 'none',
+								},
+								className: 'whitespace-nowrap',
 							},
-							className: 'whitespace-nowrap',
-						},
-						error: {
-							iconTheme: {
-								primary: '#E76E50',
-								secondary: '#fff',
-							},
-							style: {
-								whiteSpace: 'nowrap',
-								minWidth: 'fit-content',
-								width: 'auto',
-								maxWidth: 'none',
-							},
-							className: 'whitespace-nowrap',
-						},
-					}}
-					position='bottom-center'
-					containerStyle={{
-						bottom: '80px',
-					}}
-				/>
-				<div id='modal-root'></div>
+						}}
+						position='bottom-center'
+						containerStyle={{
+							bottom: '80px',
+						}}
+					/>
+					<div id='modal-root'></div>
+				</PaddleProvider>
 			</UserProvider>
 		</ReactQueryProvider>
 	);

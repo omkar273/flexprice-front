@@ -118,6 +118,9 @@ const RecordPaymentTopup: FC<Props> = ({
 			if (connection.provider_type === CONNECTION_PROVIDER_TYPE.MOYASAR) {
 				return { label: 'Moyasar', value: connection.id, description: `Process payment through Moyasar (${connection.name})` };
 			}
+			if (connection.provider_type === CONNECTION_PROVIDER_TYPE.PADDLE) {
+				return { label: 'Paddle', value: connection.id, description: `Process payment through Paddle (${connection.name})` };
+			}
 			return null;
 		})
 		.filter((option): option is { label: string; value: string; description: string } => option !== null);

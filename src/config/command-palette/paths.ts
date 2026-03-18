@@ -37,6 +37,7 @@ export const commandPalettePaths = {
 	'tools-integrations-quickbooks': '/tools/integrations/quickbooks',
 	'tools-integrations-nomod': '/tools/integrations/nomod',
 	'tools-integrations-moyasar': '/tools/integrations/moyasar',
+	'tools-integrations-paddle': '/tools/integrations/paddle',
 	'product-catalog-pricing-widget': '/product-catalog/pricing-widget',
 } as const;
 

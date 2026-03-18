@@ -484,6 +484,14 @@ export const commandPaletteCommands: CommandPaletteCommand[] = [
 		icon: Puzzle,
 	},
 	{
+		id: CommandPaletteCommandId.navIntegrationPaddle,
+		label: 'Integrations → Paddle',
+		group: CommandPaletteGroup.GoTo,
+		path: P['tools-integrations-paddle'],
+		keywords: ['paddle', 'payments', 'invoices', 'integrations'],
+		icon: Puzzle,
+	},
+	{
 		id: CommandPaletteCommandId.navPricingWidget,
 		label: 'Pricing Widget',
 		group: CommandPaletteGroup.GoTo,

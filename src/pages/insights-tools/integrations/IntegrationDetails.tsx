@@ -11,6 +11,7 @@ import HubSpotConnectionDrawer from '@/components/molecules/HubSpotConnectionDra
 import QuickBooksConnectionDrawer from '@/components/molecules/QuickBooksConnectionDrawer/QuickBooksConnectionDrawer';
 import NomodConnectionDrawer from '@/components/molecules/NomodConnectionDrawer';
 import MoyasarConnectionDrawer from '@/components/molecules/MoyasarConnectionDrawer';
+import PaddleConnectionDrawer from '@/components/molecules/PaddleConnectionDrawer';
 import { PencilIcon, TrashIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ApiDocsContent } from '@/components/molecules';
@@ -194,6 +195,16 @@ const IntegrationDetails = () => {
 				/>
 			) : name.toLowerCase() === CONNECTION_PROVIDER_TYPE.MOYASAR ? (
 				<MoyasarConnectionDrawer
+					isOpen={isDrawerOpen}
+					onOpenChange={(open) => {
+						setIsDrawerOpen(open);
+						if (!open) setEditingConnection(null);
+					}}
+					connection={editingConnection}
+					onSave={handleSaveConnection}
+				/>
+			) : name.toLowerCase() === CONNECTION_PROVIDER_TYPE.PADDLE ? (
+				<PaddleConnectionDrawer
 					isOpen={isDrawerOpen}
 					onOpenChange={(open) => {
 						setIsDrawerOpen(open);

@@ -63,6 +63,7 @@ export const CommandPaletteCommandId = {
 	navIntegrationQuickbooks: 'nav-integration-quickbooks',
 	navIntegrationNomod: 'nav-integration-nomod',
 	navIntegrationMoyasar: 'nav-integration-moyasar',
+	navIntegrationPaddle: 'nav-integration-paddle',
 	navPricingWidget: 'nav-pricing-widget',
 } as const;
 

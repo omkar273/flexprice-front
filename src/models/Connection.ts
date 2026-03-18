@@ -17,6 +17,7 @@ export enum CONNECTION_PROVIDER_TYPE {
 	QUICKBOOKS = 'quickbooks',
 	NOMOD = 'nomod',
 	MOYASAR = 'moyasar',
+	PADDLE = 'paddle',
 	// Add more providers as needed
 }
 
