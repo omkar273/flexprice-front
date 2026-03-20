@@ -3,18 +3,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { usePaddleCheckout } from '@/hooks/usePaddleCheckout';
 
-/**
- * Paddle Overlay Checkout Demo Page
- *
- * Replace the price IDs below with your own from Paddle Dashboard:
- * Catalog > Products > [Product] > Prices
- *
- * Sandbox test card: 4242 4242 4242 4242
- * Expiry: any future date | CVC: 100
- */
-const DEFAULT_ITEMS = [
-	{ priceId: 'pri_01gsz8ntc6z7npqqp6j4ys0w1w', quantity: 5 },
-	{ priceId: 'pri_01h1vjfevh5etwq3rb416a23h2', quantity: 1 },
+/** Sample price IDs from Paddle docs — replace with your own from Paddle dashboard */
+const SAMPLE_PRICE_IDS = {
+	proPlan: 'pri_01gsz8ntc6z7npqqp6j4ys0w1w',
+	enterprisePlan: 'pri_01h1vjfevh5etwq3rb416a23h2',
+} as const;
+
+/** Sandbox test card: 4242 4242 4242 4242 | Expiry: any future | CVC: 100 */
+const DEMO_ITEMS = [
+	{ priceId: SAMPLE_PRICE_IDS.proPlan, quantity: 5 },
+	{ priceId: SAMPLE_PRICE_IDS.enterprisePlan, quantity: 1 },
 ];
 
 const PREFILLED_CUSTOMER = {
@@ -48,7 +46,7 @@ const PaddleCheckoutDemo = () => {
 						<CardDescription>Opens overlay with contact info → payment screens</CardDescription>
 					</CardHeader>
 					<CardContent className='space-y-4'>
-						<PaddleCheckoutButton items={DEFAULT_ITEMS} className='w-full'>
+						<PaddleCheckoutButton items={DEMO_ITEMS} className='w-full'>
 							Sign up now
 						</PaddleCheckoutButton>
 						<p className='text-xs text-zinc-500'>
@@ -67,7 +65,7 @@ const PaddleCheckoutDemo = () => {
 							className='w-full'
 							onClick={() =>
 								openCheckout({
-									items: DEFAULT_ITEMS,
+									items: DEMO_ITEMS,
 									customer: PREFILLED_CUSTOMER,
 								})
 							}>
@@ -86,11 +84,8 @@ const PaddleCheckoutDemo = () => {
 							className='w-full'
 							onClick={() =>
 								openCheckout({
-									items: DEFAULT_ITEMS,
-									settings: {
-										displayMode: 'overlay',
-										variant: 'one-page',
-									},
+									items: DEMO_ITEMS,
+									settings: { variant: 'one-page' },
 								})
 							}>
 							One-page overlay

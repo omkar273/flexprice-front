@@ -5,6 +5,7 @@ import { useUser } from '@/hooks/UserContext';
 import { useEnvironment } from '@/hooks/useEnvironment';
 import { useMutation } from '@tanstack/react-query';
 import ConnectionApi from '@/api/ConnectionApi';
+import type { CreateConnectionPayload } from '@/types/dto/Connection';
 import toast from 'react-hot-toast';
 import { Copy, CheckCircle, ChevronDown, ChevronRight } from 'lucide-react';
 import { CONNECTION_PROVIDER_TYPE, Connection } from '@/models';
@@ -214,7 +215,7 @@ const HubSpotConnectionDrawer: FC<HubSpotConnectionDrawerProps> = ({ isOpen, onO
 				};
 			}
 
-			return await ConnectionApi.Create(payload);
+			return await ConnectionApi.Create(payload as CreateConnectionPayload);
 		},
 		onSuccess: (response) => {
 			toast.success('HubSpot connection created successfully');

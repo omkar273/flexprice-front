@@ -32,3 +32,5 @@ export * from './webhooks';
 export * from './home';
 
 export * from './customer-portal';
+
+export * from './checkout';

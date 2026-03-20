@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { DocsProvider } from './context/DocsContext';
 import ReactQueryProvider from './core/services/tanstack/ReactQueryProvider';
 import useVersionCheck from '@/hooks/useVersionCheck';
-import { PaddleProvider } from '@/core/paddle/PaddleProvider';
+import { PaddleProvider } from '@/core/paddle';
 
 const App = () => {
 	useVersionCheck();
