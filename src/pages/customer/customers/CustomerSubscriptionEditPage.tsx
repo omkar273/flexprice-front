@@ -2,6 +2,7 @@ import { Loader, Page, Spacer } from '@/components/atoms';
 import {
 	SubscriptionEntitlementsSection,
 	SubscriptionAddonsSection,
+	SubscriptionUsageCustomersSection,
 	SubscriptionEditDetailsHeader,
 	SubscriptionEditChargesSection,
 	SubscriptionEditCreditGrantsSection,
@@ -312,6 +313,16 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 				{subscriptionId && <SubscriptionEntitlementsSection subscriptionId={subscriptionId} />}
 
 				{subscriptionId && <SubscriptionAddonsSection subscriptionId={subscriptionId} />}
+
+				{subscriptionId && subscriptionDetails?.customer_id && (
+					<SubscriptionUsageCustomersSection
+						subscriptionId={subscriptionId}
+						customerId={subscriptionDetails.customer_id}
+						usageCustomerIds={subscriptionDetails.usage_customer_ids ?? []}
+						onUpdate={(ids) => updateSubscription({ usage_customer_ids: ids })}
+						isUpdating={isUpdatingSubscription}
+					/>
+				)}
 
 				{editingLineItem && (
 					<PriceOverrideDialog

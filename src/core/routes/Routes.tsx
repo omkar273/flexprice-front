@@ -29,6 +29,7 @@ import {
 	ImportExport,
 	CustomerInvoiceDetailsPage,
 	CustomerInformationTab as CustomerInformation,
+	CustomerHierarchyTab as CustomerHierarchy,
 	CustomerUsageEventsTab as CustomerUsageEvents,
 	PaymentPage,
 	CreateInvoice as CreateInvoicePage,
@@ -450,7 +451,10 @@ export const MainRouter = createBrowserRouter([
 								path: 'analytics',
 								element: <AnalyticsTab />,
 							},
-
+							{
+								path: 'hierarchy',
+								element: <CustomerHierarchy />,
+							},
 							{
 								path: 'invoice/:invoice_id',
 								element: <CustomerInvoiceDetailsPage />,

@@ -115,6 +115,14 @@ class CustomerApi {
 	}
 
 	/**
+	 * Get child customers for a parent customer
+	 * GET /customers/:id/children
+	 */
+	public static async getCustomerChildren(id: string): Promise<ListCustomersResponse> {
+		return await AxiosClient.get<ListCustomersResponse>(`${this.baseUrl}/${id}/children`);
+	}
+
+	/**
 	 * Get upcoming credit grant applications for a customer
 	 */
 	public static async getUpcomingCreditGrantApplications(customerId: string): Promise<ListCreditGrantApplicationsResponse> {

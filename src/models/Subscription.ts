@@ -51,6 +51,12 @@ export interface Pause extends BaseModel {
 	readonly status: ENTITY_STATUS;
 }
 
+export enum SUBSCRIPTION_TYPE {
+	STANDALONE = 'standalone',
+	PARENT = 'parent',
+	INHERITED = 'inherited',
+}
+
 export interface Subscription extends BaseModel {
 	readonly id: string;
 	readonly lookup_key: string;
@@ -60,6 +66,10 @@ export interface Subscription extends BaseModel {
 	readonly invoicing_customer_id?: string;
 	/** Parent subscription ID when this subscription is a child (e.g. in parent-child subscription hierarchy) */
 	readonly parent_subscription_id?: string;
+	/** Customer IDs whose usage is aggregated for this subscription (e.g. child customers) */
+	readonly usage_customer_ids?: string[];
+	/** Subscription type: standalone (default), parent (manages children), or inherited (child of a parent) */
+	readonly subscription_type?: SUBSCRIPTION_TYPE;
 	readonly plan_id: string;
 	readonly environment_id: string;
 	readonly tenant_id: string;

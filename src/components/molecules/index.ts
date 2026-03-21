@@ -42,11 +42,13 @@ export { default as CustomerUsageTable } from './CustomerUsageTable';
 // Subscription Management
 export { SubscriptionTable } from './SubscriptionTable';
 export { default as SubscriptionTaxAssociationTable } from './SubscriptionTaxAssociationTable';
+export { default as UsageCustomersTable } from './UsageCustomersTable';
 export { default as SubscriptionPauseWarning } from './CustomerSubscription/SubscriptionPauseWarning';
 export { default as SubscriptionCoupon } from './SubscriptionCoupon/SubscriptionCoupon';
 export { SubscriptionDiscountTable } from './SubscriptionDiscountTable';
 export { SubscriptionEntitlementsSection } from './SubscriptionEntitlementsSection';
 export { default as SubscriptionAddonsSection } from './SubscriptionAddonsSection/SubscriptionAddonsSection';
+export { SubscriptionUsageCustomersSection } from './SubscriptionUsageCustomersSection';
 export { SubscriptionEditDetailsHeader, SubscriptionEditChargesSection, SubscriptionEditCreditGrantsSection } from './Subscription';
 export { UpdateSubscriptionDrawer } from './UpdateSubscriptionDrawer';
 

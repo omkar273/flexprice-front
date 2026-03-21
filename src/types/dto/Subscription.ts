@@ -3,6 +3,7 @@ import {
 	LineItem as InvoiceLineItem,
 	BILLING_CYCLE,
 	SUBSCRIPTION_STATUS,
+	SUBSCRIPTION_TYPE,
 	SubscriptionPhase,
 	SUBSCRIPTION_PRORATION_BEHAVIOR,
 	SUBSCRIPTION_CANCELLATION_TYPE,
@@ -53,6 +54,8 @@ export interface ListSubscriptionsPayload extends Omit<QueryFilter, 'sort'>, Tim
 	parent_subscription_ids?: string[];
 	/** Filters by invoicing customer IDs (backend: invoicing_customer_ids) */
 	invoicing_customer_ids?: string[];
+	/** Filter by subscription type (standalone, parent, inherited) */
+	subscription_type?: SUBSCRIPTION_TYPE;
 }
 
 import { TaxRateOverride } from './tax';
@@ -236,6 +239,9 @@ export interface CreateSubscriptionRequest {
 	external_customer_id?: string;
 	invoice_billing?: INVOICE_BILLING;
 
+	/** Customer IDs whose usage is aggregated for this subscription (e.g. child customers for consolidated billing) */
+	usage_customer_ids?: string[];
+
 	// Plan and billing configuration
 	plan_id: string;
 	currency: string;
@@ -373,6 +379,8 @@ export interface UpdateSubscriptionRequest {
 	cancel_at_period_end?: boolean;
 	/** Set to another subscription ID to link as child; "" or null to clear; omit to leave unchanged */
 	parent_subscription_id?: string | null;
+	/** Replace the set of customer IDs whose usage is aggregated for this subscription */
+	usage_customer_ids?: string[];
 }
 
 export interface CancelSubscriptionRequest {

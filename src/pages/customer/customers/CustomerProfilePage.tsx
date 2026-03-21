@@ -11,7 +11,7 @@ import { ENTITY_STATUS } from '@/models';
 import CustomerHeader from '@/components/molecules/Customer/CustomerHeader';
 import { RouteNames } from '@/core/routes/Routes';
 
-const tabs = [
+const baseTabs = [
 	{ id: '', label: 'Overview' },
 	{ id: 'wallet', label: 'Wallet' },
 	{ id: 'invoice', label: 'Invoice' },
@@ -21,23 +21,35 @@ const tabs = [
 	{ id: 'usage-events', label: 'Usage Events' },
 ] as const;
 
-type TabId = (typeof tabs)[number]['id'];
+const hierarchyTab = { id: 'hierarchy' as const, label: 'Hierarchy' };
+
+type TabId = (typeof baseTabs)[number]['id'] | 'hierarchy';
+
+const allTabIds: TabId[] = [...baseTabs.map((t) => t.id), 'hierarchy'];
 
 const getActiveTab = (pathTabId: string): TabId => {
-	const validTabId = tabs.find((tab) => tab.id === pathTabId);
-	return validTabId ? validTabId.id : '';
+	return allTabIds.includes(pathTabId as TabId) ? (pathTabId as TabId) : baseTabs[0].id;
 };
 
 const CustomerProfilePage = () => {
 	const { id: customerId } = useParams();
 	const location = useLocation();
-	const [activeTab, setActiveTab] = useState<TabId>(tabs[0]?.id);
+	const [activeTab, setActiveTab] = useState<TabId>(baseTabs[0]?.id);
 	const navigate = useNavigate();
 
 	const { data: customer, isLoading } = useQuery({
 		queryKey: ['fetchCustomerDetails', customerId],
 		queryFn: async () => await CustomerApi.getCustomerById(customerId!),
 	});
+
+	const { data: childrenResponse } = useQuery({
+		queryKey: ['customerChildren', customerId],
+		queryFn: () => CustomerApi.getCustomerChildren(customerId!),
+		enabled: !!customerId,
+	});
+
+	const hasChildren = (childrenResponse?.items?.length ?? 0) > 0;
+	const visibleTabs = hasChildren ? [...baseTabs, hierarchyTab] : baseTabs;
 
 	const { updateBreadcrumb, setSegmentLoading } = useBreadcrumbsStore();
 	const isArchived = customer?.status === ENTITY_STATUS.ARCHIVED;
@@ -58,7 +70,7 @@ const CustomerProfilePage = () => {
 		}
 
 		// Find the tab label for the active tab
-		const activeTabData = tabs.find((tab) => tab.id === activeTab);
+		const activeTabData = visibleTabs.find((tab) => tab.id === activeTab);
 		setSegmentLoading(2, true);
 
 		if (activeTab !== '' && activeTabData) {
@@ -68,7 +80,7 @@ const CustomerProfilePage = () => {
 		if (customer?.external_id) {
 			updateBreadcrumb(2, customer.external_id);
 		}
-	}, [activeTab, updateBreadcrumb, setSegmentLoading, customer, location.pathname]);
+	}, [activeTab, updateBreadcrumb, setSegmentLoading, customer, location.pathname, hasChildren]);
 
 	const onTabChange = (tabId: TabId) => {
 		navigate(`${RouteNames.customers}/${customerId}/${tabId}`);
@@ -100,7 +112,7 @@ const CustomerProfilePage = () => {
 
 			<div className='border-b border-border mt-4 mb-6'>
 				<nav className='flex space-x-4' aria-label='Tabs'>
-					{tabs.map((tab, index) => {
+					{visibleTabs.map((tab, index) => {
 						return (
 							<button
 								key={tab.id}

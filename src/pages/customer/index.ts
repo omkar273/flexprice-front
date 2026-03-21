@@ -34,6 +34,7 @@ export { default as Subscriptions } from './subscriptions/Subscriptions';
 
 // Tabs
 export { default as CustomerAnalyticsTab } from './tabs/CustomerAnalyticsTab';
+export { default as CustomerHierarchyTab } from './tabs/CustomerHierarchyTab';
 export { default as CustomerInformationTab } from './tabs/CustomerInformationTab';
 export { default as CustomerUsageEventsTab } from './tabs/CustomerUsageEventsTab';
 export { default as CustomerInvoiceTab } from './tabs/CustomerInvoiceTab';

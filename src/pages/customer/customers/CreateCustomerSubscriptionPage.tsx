@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 import { Button, SelectOption } from '@/components/atoms';
-import { ApiDocsContent } from '@/components/molecules';
+import { ApiDocsContent, UsageCustomersTable } from '@/components/molecules';
 import { UsageTable, SubscriptionForm } from '@/components/organisms';
 import { Building, User, AlertTriangle } from 'lucide-react';
 
@@ -89,6 +89,8 @@ export type SubscriptionFormState = {
 	paymentTerms?: string;
 	hasModifiedPlanCreditGrants?: boolean;
 	addedSubscriptionLineItems: AddedSubscriptionLineItem[];
+	/** Child customer IDs whose usage is aggregated for this subscription */
+	usageCustomerIds: string[];
 };
 
 const usePlans = () => {
@@ -252,10 +254,17 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		paymentTerms: undefined,
 		hasModifiedPlanCreditGrants: false,
 		addedSubscriptionLineItems: [],
+		usageCustomerIds: [],
 	});
 
 	const { data: plans, isLoading: plansLoading, isError: plansError } = usePlans();
 	const { data: customerData } = useCustomerData(customerId);
+	const { data: childrenResponse } = useQuery({
+		queryKey: ['customerChildren', customerId],
+		queryFn: () => CustomerApi.getCustomerChildren(customerId!),
+		enabled: !!customerId && !subscription_id,
+	});
+	const childCustomers = childrenResponse?.items ?? [];
 	const { data: subscriptionData } = useSubscriptionData(subscription_id);
 	const {
 		data: planDetails,
@@ -324,6 +333,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 				entitlementOverrides: {},
 				creditGrants: (subscriptionData.details.credit_grants || []).map(creditGrantToInternal),
 				enable_true_up: (subscriptionData.details as any).enable_true_up ?? false,
+				usageCustomerIds: (subscriptionData.details as { usage_customer_ids?: string[] }).usage_customer_ids ?? [],
 			}));
 		}
 	}, [subscriptionData, customerId]);
@@ -446,6 +456,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			invoiceBillingConfig,
 			paymentTerms,
 			addedSubscriptionLineItems,
+			usageCustomerIds,
 		} = subscriptionState;
 
 		let finalStartDate: string;
@@ -544,6 +555,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			paymentTerms,
 			sanitizedAddons,
 			addedSubscriptionLineItems,
+			usageCustomerIds,
 		};
 	};
 
@@ -595,6 +607,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			commitment_duration: sanitized.commitmentDuration ? (sanitized.commitmentDuration as BILLING_PERIOD) : undefined,
 			subscription_status: isDraftParam ? SUBSCRIPTION_STATUS.DRAFT : undefined,
 			invoice_billing: sanitized.invoiceBillingConfig,
+			usage_customer_ids: sanitized.usageCustomerIds?.length > 0 ? sanitized.usageCustomerIds : undefined,
 			payment_terms:
 				sanitized.paymentTerms && sanitized.paymentTerms !== PAYMENT_TERMS_NONE ? (sanitized.paymentTerms as PAYMENT_TERMS) : undefined,
 			line_items:
@@ -663,6 +676,18 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 					}}
 					allCoupons={allCouponsData}
 				/>
+
+				{!subscription_id && subscriptionState.selectedPlan && customerData && (
+					<div className='mt-6 pt-6 border-t border-gray-200'>
+						<UsageCustomersTable
+							customer={customerData}
+							childCustomers={childCustomers}
+							value={subscriptionState.usageCustomerIds}
+							onChange={(ids) => setSubscriptionState((prev) => ({ ...prev, usageCustomerIds: ids }))}
+							disabled={!!subscription_id}
+						/>
+					</div>
+				)}
 
 				{/* Sandbox Note */}
 				{isDevelopment && subscriptionState.selectedPlan && subscriptionState.startDate && (
