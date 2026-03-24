@@ -224,6 +224,8 @@ export interface CancelSubscriptionPayload {
 	cancellation_type: SUBSCRIPTION_CANCELLATION_TYPE;
 	cancel_immediately_inovice_policy?: SUBSCRIPTION_CANCEL_IMMEDIATELY_INVOICE_POLICY;
 	reason?: string;
+	/** Required when cancellation_type is scheduled_date; must be in the future (ISO 8601). */
+	cancel_at?: string;
 }
 
 // =============================================================================
@@ -393,6 +395,8 @@ export interface CancelSubscriptionRequest {
 	cancellation_type: SUBSCRIPTION_CANCELLATION_TYPE;
 	cancel_immediately_inovice_policy?: SUBSCRIPTION_CANCEL_IMMEDIATELY_INVOICE_POLICY;
 	reason?: string;
+	/** Required when cancellation_type is scheduled_date; must be in the future (ISO 8601). */
+	cancel_at?: string;
 }
 
 export interface CancelSubscriptionResponse {

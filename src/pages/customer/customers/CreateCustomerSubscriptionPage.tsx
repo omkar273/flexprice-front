@@ -22,6 +22,7 @@ import {
 	EXPAND,
 	BILLING_CYCLE,
 	PAYMENT_TERMS,
+	SUBSCRIPTION_PRORATION_BEHAVIOR,
 	SUBSCRIPTION_STATUS,
 } from '@/models';
 import { InternalCreditGrantRequest, creditGrantToInternal, internalToCreateRequest } from '@/types/dto/CreditGrant';
@@ -88,6 +89,8 @@ export type SubscriptionFormState = {
 	/** The internal customer ID to invoice for this subscription (overrides the default) */
 	invoicingCustomer?: Customer;
 	paymentTerms?: string;
+	/** When true, create payload sends proration_behavior CREATE_PRORATIONS; when false, sends NONE */
+	prorationCreateLineItems: boolean;
 	hasModifiedPlanCreditGrants?: boolean;
 	addedSubscriptionLineItems: AddedSubscriptionLineItem[];
 };
@@ -251,6 +254,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		commitmentDuration: BILLING_PERIOD.MONTHLY.toUpperCase(),
 		invoicingCustomer: undefined,
 		paymentTerms: undefined,
+		prorationCreateLineItems: false,
 		hasModifiedPlanCreditGrants: false,
 		addedSubscriptionLineItems: [],
 	});
@@ -440,6 +444,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			invoicingCustomer,
 			paymentTerms,
 			addedSubscriptionLineItems,
+			customerId: formCustomerId,
 		} = subscriptionState;
 
 		let finalStartDate: string;
@@ -534,7 +539,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			commitmentDuration: subscriptionState.commitmentDuration,
 			entitlementOverrides,
 			creditGrants,
-			invoicingCustomerId: invoicingCustomer?.id,
+			invoicingCustomerId: invoicingCustomer?.id && invoicingCustomer.id !== formCustomerId ? invoicingCustomer.id : undefined,
 			paymentTerms,
 			sanitizedAddons,
 			addedSubscriptionLineItems,
@@ -589,6 +594,9 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			commitment_duration: sanitized.commitmentDuration ? (sanitized.commitmentDuration as BILLING_PERIOD) : undefined,
 			subscription_status: isDraftParam ? SUBSCRIPTION_STATUS.DRAFT : undefined,
 			invoicing_customer_id: sanitized.invoicingCustomerId || undefined,
+			proration_behavior: subscriptionState.prorationCreateLineItems
+				? SUBSCRIPTION_PRORATION_BEHAVIOR.CREATE_PRORATIONS
+				: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,
 			payment_terms:
 				sanitized.paymentTerms && sanitized.paymentTerms !== PAYMENT_TERMS_NONE ? (sanitized.paymentTerms as PAYMENT_TERMS) : undefined,
 			line_items:
@@ -638,6 +646,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 						}));
 					}}
 					allCoupons={allCouponsData}
+					subscriberCustomer={customerData}
 				/>
 
 				{/* Sandbox Note */}

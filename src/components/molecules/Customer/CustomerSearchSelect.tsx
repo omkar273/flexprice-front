@@ -11,6 +11,11 @@ export interface CustomerSearchSelectProps extends Omit<AsyncSearchableSelectPro
 	searchPlaceholder?: string;
 	/** Customer ID(s) to exclude from search results */
 	excludeId?: string | string[];
+	/**
+	 * When set, the first option is always this customer labeled "Self" (e.g. invoicing = subscriber).
+	 * Omits the synthetic "None" row used by default search mode.
+	 */
+	selfCustomer?: Customer;
 }
 
 /**
@@ -21,6 +26,7 @@ const CustomerSearchSelect: React.FC<CustomerSearchSelectProps> = ({
 	limit = 20,
 	searchPlaceholder = 'Search for customer...',
 	excludeId,
+	selfCustomer,
 	...props
 }) => {
 	const searchFn = async (query: string) => {
@@ -53,12 +59,23 @@ const CustomerSearchSelect: React.FC<CustomerSearchSelectProps> = ({
 			status: ENTITY_STATUS.PUBLISHED,
 		};
 
+		const selfRow: Array<SelectOption & { data: Customer }> = selfCustomer
+			? [{ value: selfCustomer.id, label: 'Self', data: selfCustomer }]
+			: [];
+
+		const noneRow: Array<SelectOption & { data: Customer }> = selfCustomer
+			? []
+			: [
+					{
+						value: rootCustomer.id,
+						label: rootCustomer.name,
+						data: rootCustomer,
+					},
+				];
+
 		const items: Array<SelectOption & { data: Customer }> = [
-			{
-				value: rootCustomer.id,
-				label: rootCustomer.name,
-				data: rootCustomer,
-			},
+			...noneRow,
+			...selfRow,
 			...filteredCustomers.map((customer) => ({
 				value: customer.id,
 				label: customer.name,
@@ -78,7 +95,7 @@ const CustomerSearchSelect: React.FC<CustomerSearchSelectProps> = ({
 			}}
 			extractors={{
 				valueExtractor: (customer) => customer.id,
-				labelExtractor: (customer) => customer.name,
+				labelExtractor: (customer) => (selfCustomer && customer.id === selfCustomer.id ? 'Self' : customer.name),
 			}}
 		/>
 	);

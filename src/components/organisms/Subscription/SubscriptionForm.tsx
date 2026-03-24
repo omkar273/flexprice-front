@@ -17,6 +17,7 @@ import {
 	ENTITLEMENT_ENTITY_TYPE,
 	ENTITY_STATUS,
 	EXPAND,
+	Customer,
 } from '@/models';
 import { BILLING_PERIOD, PAYMENT_TERMS_NONE, paymentTermsOptions } from '@/constants/constants';
 import { SubscriptionFormState } from '@/pages';
@@ -92,6 +93,7 @@ const SubscriptionForm = ({
 	phases = [],
 	onPhasesChange,
 	allCoupons = [],
+	subscriberCustomer,
 }: {
 	state: SubscriptionFormState;
 	setState: React.Dispatch<React.SetStateAction<SubscriptionFormState>>;
@@ -104,6 +106,8 @@ const SubscriptionForm = ({
 	phases?: SubscriptionPhaseCreateRequest[];
 	onPhasesChange?: (phases: SubscriptionPhaseCreateRequest[]) => void;
 	allCoupons?: Coupon[];
+	/** Subscription customer; used for invoicing "Self" option and labels */
+	subscriberCustomer?: Customer;
 }) => {
 	// Fetch plan prices via shared hook (same cache key + canonical active filter as CreateCustomerSubscriptionPage)
 	const { data: selectedPlanPrices } = usePlanPrices(state.selectedPlan);
@@ -133,14 +137,6 @@ const SubscriptionForm = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []); // Only run once on mount
-
-	// Initialize invoicing customer toggle when editing a subscription that already has invoicingCustomer set
-	useEffect(() => {
-		if (state.invoicingCustomer?.id) {
-			setShowInvoicingCustomer(true);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []); // Only on mount
 
 	// Sync price overrides with state (hook -> state)
 	// Only sync after initialization to avoid overwriting state on mount
@@ -277,8 +273,6 @@ const SubscriptionForm = ({
 	const [editedPlanGrantIds, setEditedPlanGrantIds] = useState<Set<string>>(new Set());
 	// Add subscription charge dialog open state (single-phase only)
 	const [isAddChargeDialogOpen, setAddChargeDialogOpen] = useState(false);
-	// Toggle: show override invoicing customer selector
-	const [showInvoicingCustomer, setShowInvoicingCustomer] = useState<boolean>(false);
 	// When set, dialog is in edit mode for this added line item (tempId)
 	const [editingAddedChargeTempId, setEditingAddedChargeTempId] = useState<string | null>(null);
 
@@ -833,55 +827,45 @@ const SubscriptionForm = ({
 				</div>
 			)}
 
-			{/* Payment Terms */}
+			{/* Advanced Configuration */}
 			{state.selectedPlan && !isLoadingPlanDetails && (
-				<div className='mt-6 pt-6 border-t border-gray-200'>
-					<Select
-						value={state.paymentTerms ?? PAYMENT_TERMS_NONE}
-						options={paymentTermsOptions}
-						onChange={(value) => setState((prev) => ({ ...prev, paymentTerms: value === PAYMENT_TERMS_NONE ? undefined : value }))}
-						label='Payment terms'
-						disabled={isDisabled || isLoadingPlanDetails}
-						placeholder='Select payment terms'
-					/>
-				</div>
-			)}
-
-			{/* Override Invoicing Customer */}
-			{state.selectedPlan && !isLoadingPlanDetails && (
-				<div className='mt-6 pt-6 border-t border-gray-200'>
-					<div className='flex items-center justify-between'>
-						<Label label='Invoicing Customer' />
-						<Switch
-							checked={showInvoicingCustomer}
-							onCheckedChange={(checked) => {
-								setShowInvoicingCustomer(checked);
-								if (!checked) {
-									setState((prev) => ({ ...prev, invoicingCustomer: undefined }));
-								}
+				<div className='mt-6 pt-6 border-t border-gray-200 space-y-6'>
+					<FormHeader title='Billing Configuration' variant='sub-header' />
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+						<Select
+							value={state.paymentTerms ?? PAYMENT_TERMS_NONE}
+							options={paymentTermsOptions}
+							onChange={(value) => setState((prev) => ({ ...prev, paymentTerms: value === PAYMENT_TERMS_NONE ? undefined : value }))}
+							label='Payment terms'
+							disabled={isDisabled || isLoadingPlanDetails}
+							placeholder='Select payment terms'
+						/>
+						<CustomerSearchSelect
+							selfCustomer={subscriberCustomer}
+							value={state.invoicingCustomer}
+							excludeId={state.customerId}
+							onChange={(customer) => {
+								setState((prev) => ({
+									...prev,
+									invoicingCustomer: customer?.id && customer.id !== prev.customerId ? customer : undefined,
+								}));
 							}}
+							display={{
+								label: 'Billing customer',
+								placeholder: 'Self',
+							}}
+							searchPlaceholder='Search for billing customer...'
 							disabled={isDisabled}
 						/>
 					</div>
-					{showInvoicingCustomer && (
-						<div className='mt-4'>
-							<CustomerSearchSelect
-								value={state.invoicingCustomer}
-								excludeId={state.customerId}
-								onChange={(customer) => {
-									setState((prev) => ({
-										...prev,
-										invoicingCustomer: customer || undefined,
-									}));
-								}}
-								display={{
-									label: 'Invoicing Customer',
-									placeholder: 'Select invoicing customer',
-								}}
-								searchPlaceholder='Search for invoicing customer...'
-							/>
-						</div>
-					)}
+					<div className='flex flex-col space-y-2'>
+						<Label label='Proration behavior' />
+						<Switch
+							checked={state.prorationCreateLineItems}
+							onCheckedChange={(checked) => setState((prev) => ({ ...prev, prorationCreateLineItems: checked }))}
+							disabled={isDisabled}
+						/>
+					</div>
 				</div>
 			)}
 		</div>

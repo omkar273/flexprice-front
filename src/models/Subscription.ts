@@ -300,6 +300,8 @@ export enum SUBSCRIPTION_PRORATION_BEHAVIOR {
 export enum SUBSCRIPTION_CANCELLATION_TYPE {
 	IMMEDIATE = 'immediate',
 	END_OF_PERIOD = 'end_of_period',
+	/** Cancel on a specific future date (requires `cancel_at` on the cancel request). */
+	SCHEDULED_DATE = 'scheduled_date',
 }
 
 export enum SUBSCRIPTION_CANCEL_IMMEDIATELY_INVOICE_POLICY {
