@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { Button, SelectOption } from '@/components/atoms';
 import { ApiDocsContent } from '@/components/molecules';
 import { UsageTable, SubscriptionForm } from '@/components/organisms';
-import { Building, User, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 import { AddonApi, CustomerApi, PlanApi, SubscriptionApi, TaxApi, CouponApi } from '@/api';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
@@ -17,11 +17,12 @@ import {
 	BILLING_CADENCE,
 	SubscriptionPhase,
 	Coupon,
+	Customer,
 	TAXRATE_ENTITY_TYPE,
 	EXPAND,
 	BILLING_CYCLE,
-	INVOICE_BILLING,
 	PAYMENT_TERMS,
+	SUBSCRIPTION_PRORATION_BEHAVIOR,
 	SUBSCRIPTION_STATUS,
 } from '@/models';
 import { InternalCreditGrantRequest, creditGrantToInternal, internalToCreateRequest } from '@/types/dto/CreditGrant';
@@ -85,8 +86,11 @@ export type SubscriptionFormState = {
 	creditGrants: InternalCreditGrantRequest[];
 	enable_true_up: boolean;
 	commitmentDuration: string;
-	invoiceBillingConfig?: INVOICE_BILLING;
+	/** The internal customer ID to invoice for this subscription (overrides the default) */
+	invoicingCustomer?: Customer;
 	paymentTerms?: string;
+	/** When true, create payload sends proration_behavior CREATE_PRORATIONS; when false, sends NONE */
+	prorationCreateLineItems: boolean;
 	hasModifiedPlanCreditGrants?: boolean;
 	addedSubscriptionLineItems: AddedSubscriptionLineItem[];
 };
@@ -248,8 +252,9 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		creditGrants: [],
 		enable_true_up: false,
 		commitmentDuration: BILLING_PERIOD.MONTHLY.toUpperCase(),
-		invoiceBillingConfig: undefined,
+		invoicingCustomer: undefined,
 		paymentTerms: undefined,
+		prorationCreateLineItems: false,
 		hasModifiedPlanCreditGrants: false,
 		addedSubscriptionLineItems: [],
 	});
@@ -287,13 +292,6 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 	useEffect(() => {
 		if (customerData?.external_id) {
 			updateBreadcrumb(2, customerData.external_id);
-		}
-		// Initialize invoice billing config to parent if customer has parent
-		if (customerData?.parent_customer_id) {
-			setSubscriptionState((prev) => ({
-				...prev,
-				invoiceBillingConfig: INVOICE_BILLING.INVOICED_TO_PARENT,
-			}));
 		}
 	}, [customerData, updateBreadcrumb]);
 
@@ -443,9 +441,10 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			commitmentAmount,
 			entitlementOverrides,
 			creditGrants,
-			invoiceBillingConfig,
+			invoicingCustomer,
 			paymentTerms,
 			addedSubscriptionLineItems,
+			customerId: formCustomerId,
 		} = subscriptionState;
 
 		let finalStartDate: string;
@@ -540,7 +539,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			commitmentDuration: subscriptionState.commitmentDuration,
 			entitlementOverrides,
 			creditGrants,
-			invoiceBillingConfig,
+			invoicingCustomerId: invoicingCustomer?.id && invoicingCustomer.id !== formCustomerId ? invoicingCustomer.id : undefined,
 			paymentTerms,
 			sanitizedAddons,
 			addedSubscriptionLineItems,
@@ -594,7 +593,10 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			enable_true_up: subscriptionState.enable_true_up,
 			commitment_duration: sanitized.commitmentDuration ? (sanitized.commitmentDuration as BILLING_PERIOD) : undefined,
 			subscription_status: isDraftParam ? SUBSCRIPTION_STATUS.DRAFT : undefined,
-			invoice_billing: sanitized.invoiceBillingConfig,
+			invoicing_customer_id: sanitized.invoicingCustomerId || undefined,
+			proration_behavior: subscriptionState.prorationCreateLineItems
+				? SUBSCRIPTION_PRORATION_BEHAVIOR.CREATE_PRORATIONS
+				: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,
 			payment_terms:
 				sanitized.paymentTerms && sanitized.paymentTerms !== PAYMENT_TERMS_NONE ? (sanitized.paymentTerms as PAYMENT_TERMS) : undefined,
 			line_items:
@@ -616,24 +618,6 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 	};
 
 	const navigateBack = () => navigate(`${RouteNames.customers}/${customerId}`);
-
-	const invoiceOptions = [
-		{
-			value: INVOICE_BILLING.INVOICED_TO_PARENT,
-			label: 'Invoice To Parent',
-			icon: Building,
-			description: 'Invoices will be sent to the parent customer',
-		},
-		{
-			value: INVOICE_BILLING.INVOICED_TO_SELF,
-			label: 'Invoice To Self',
-			icon: User,
-			description: 'Invoices will be sent to this customer',
-		},
-	];
-
-	const currentInvoiceValue = subscriptionState.invoiceBillingConfig || INVOICE_BILLING.INVOICED_TO_PARENT;
-	const selectedInvoiceOption = invoiceOptions.find((opt) => opt.value === currentInvoiceValue) || invoiceOptions[0];
 
 	return (
 		<div className={cn('flex gap-8 mt-5 relative mb-12')}>
@@ -662,6 +646,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 						}));
 					}}
 					allCoupons={allCouponsData}
+					subscriberCustomer={customerData}
 				/>
 
 				{/* Sandbox Note */}
@@ -699,65 +684,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 				)}
 			</div>
 
-			<div className='flex-[4]'>
-				{customerData?.parent_customer_id && subscriptionState.selectedPlan && !subscription_id && (
-					<div className='sticky top-5'>
-						<div className='bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200'>
-							<div className='mb-4'>
-								<h3 className='text-base font-semibold text-gray-900 mb-1'>Invoice Customer</h3>
-								<p className='text-sm text-gray-500'>Choose which customer will receive invoices for this subscription</p>
-							</div>
-							<div className='space-y-3 mb-4'>
-								{invoiceOptions.map((item) => {
-									const isSelected = selectedInvoiceOption.value === item.value;
-									return (
-										<div
-											key={item.value}
-											onClick={() => {
-												if (item.value) {
-													setSubscriptionState((prev) => ({
-														...prev,
-														invoiceBillingConfig: item.value as INVOICE_BILLING,
-													}));
-												}
-											}}
-											className={cn(
-												'w-full flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200',
-												isSelected
-													? 'border-[#0F172A] bg-[#0F172A]/5 shadow-sm'
-													: 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50',
-											)}>
-											<div
-												className={cn(
-													'flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-colors',
-													isSelected ? 'bg-[#0F172A] text-white' : 'bg-gray-100 text-gray-600',
-												)}>
-												{item.icon && <item.icon className='w-5 h-5' />}
-											</div>
-											<div className='flex-1 min-w-0'>
-												<p className={cn('font-semibold text-sm mb-1', isSelected ? 'text-[#0F172A]' : 'text-gray-900')}>{item.label}</p>
-												<p className='text-sm text-gray-500 leading-relaxed'>{item.description}</p>
-											</div>
-											<div
-												className={cn(
-													'flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all',
-													isSelected ? 'border-[#0F172A] bg-[#0F172A]' : 'border-gray-300 bg-white',
-												)}>
-												{isSelected && <div className='w-2 h-2 rounded-full bg-white' />}
-											</div>
-										</div>
-									);
-								})}
-							</div>
-							<div className='pt-4 border-t border-gray-100'>
-								<p className='text-xs text-gray-500 leading-relaxed'>
-									<span className='font-medium text-gray-600'>Note:</span> This setting cannot be changed after the subscription is created.
-								</p>
-							</div>
-						</div>
-					</div>
-				)}
-			</div>
+			<div className='flex-[4]'></div>
 		</div>
 	);
 };

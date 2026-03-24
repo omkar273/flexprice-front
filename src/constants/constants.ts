@@ -167,6 +167,7 @@ export const prorationBehaviorOptions = [
 export const cancellationTypeOptions = [
 	{ label: 'Immediate', value: SUBSCRIPTION_CANCELLATION_TYPE.IMMEDIATE },
 	{ label: 'End of Period', value: SUBSCRIPTION_CANCELLATION_TYPE.END_OF_PERIOD },
+	{ label: 'Scheduled date', value: SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE },
 ];
 
 export const subscriptionLineItemEntityTypeOptions = [

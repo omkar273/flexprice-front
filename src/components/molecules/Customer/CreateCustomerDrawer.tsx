@@ -10,7 +10,6 @@ import { Country, State, City, IState } from 'country-state-city';
 import { z } from 'zod';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { logger } from '@/utils/common/Logger';
-import { CustomerSearchSelect } from '@/components/molecules/Customer';
 
 interface Props {
 	data?: Customer;
@@ -22,7 +21,6 @@ interface Props {
 interface UIState {
 	internalOpen: boolean;
 	showBillingDetails: boolean;
-	parentCustomer: Customer | undefined;
 	activeState: IState | undefined;
 }
 
@@ -35,7 +33,6 @@ const CreateCustomerDrawer: FC<Props> = ({ data, onOpenChange, open, trigger }) 
 	const [uiState, setUiState] = useState<UIState>({
 		internalOpen: false,
 		showBillingDetails: false,
-		parentCustomer: undefined,
 		activeState: undefined,
 	});
 
@@ -51,7 +48,6 @@ const CreateCustomerDrawer: FC<Props> = ({ data, onOpenChange, open, trigger }) 
 		if (!data) {
 			setFormData({});
 			updateUIState({
-				parentCustomer: undefined,
 				showBillingDetails: false,
 				activeState: undefined,
 			});
@@ -72,11 +68,6 @@ const CreateCustomerDrawer: FC<Props> = ({ data, onOpenChange, open, trigger }) 
 			updateUIState({ activeState: undefined });
 			setFormData((prev) => ({ ...prev, address_state: undefined, address_city: undefined }));
 		}
-
-		// Handle parent customer
-		updateUIState({
-			parentCustomer: data.parent_customer,
-		});
 	}, [data]);
 
 	const currentOpen = isControlled ? open : uiState.internalOpen;
@@ -167,8 +158,6 @@ const CreateCustomerDrawer: FC<Props> = ({ data, onOpenChange, open, trigger }) 
 			address_state: uiState.activeState?.name || undefined,
 			address_postal_code: formData.address_postal_code || undefined,
 			address_country: formData.address_country || undefined,
-			parent_customer_id: formData.parent_customer_id,
-			parent_customer_external_id: formData.parent_customer_external_id,
 		};
 
 		// Remove undefined values
@@ -337,36 +326,6 @@ const CreateCustomerDrawer: FC<Props> = ({ data, onOpenChange, open, trigger }) 
 									onChange={(e) => handleChange('address_postal_code', e)}
 									error={errors.address_postal_code}
 									maxLength={20}
-								/>
-							</div>
-						</div>
-					)}
-
-					{isEdit && (
-						<div className='relative card !p-4'>
-							<span className='absolute -top-4 left-2 text-[#18181B] text-sm bg-white font-medium px-2 py-1'>Invoice Config</span>
-							<div className='space-y-4'>
-								<CustomerSearchSelect
-									value={uiState.parentCustomer}
-									excludeId={data?.id}
-									onChange={(customer) => {
-										// Guard against self-referential parent selection
-										const currentCustomerId = data?.id;
-										if (customer && customer.id === currentCustomerId) {
-											return;
-										}
-										updateUIState({ parentCustomer: customer || undefined });
-										setFormData((prev) => ({
-											...prev,
-											parent_customer_id: customer?.id,
-											parent_customer_external_id: undefined,
-										}));
-									}}
-									display={{
-										label: 'Parent Customer',
-										placeholder: 'Select parent customer',
-									}}
-									searchPlaceholder='Search for parent customer...'
 								/>
 							</div>
 						</div>

@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { CirclePause, CirclePlay, X, Plus, Pencil, Play } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import SubscriptionApi from '@/api/SubscriptionApi';
-import { DatePicker, Modal, Input, Button, FormHeader, Spacer, Select, Toggle } from '@/components/atoms';
+import { DatePicker, Label, Modal, Input, Button, FormHeader, Spacer, Select, Toggle } from '@/components/atoms';
 import { toast } from 'react-hot-toast';
 import DropdownMenu, { DropdownMenuOption } from '@/components/molecules/DropdownMenu/DropdownMenu';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
@@ -38,6 +38,7 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 		cancelProrationBehavior: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,
 		cancelGenerateInvoice: false,
 		cancelReason: '',
+		cancelScheduledAt: undefined as Date | undefined,
 	});
 
 	const resetCancelState = () => {
@@ -48,6 +49,7 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 			cancelProrationBehavior: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,
 			cancelGenerateInvoice: false,
 			cancelReason: '',
+			cancelScheduledAt: undefined,
 		}));
 	};
 
@@ -60,6 +62,8 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 		if (!state.pauseDays) return null;
 		return addDays(state.pauseStartDate, parseInt(state.pauseDays));
 	}, [state.pauseStartDate, state.pauseDays]);
+
+	const minCancelScheduledAt = useMemo(() => new Date(), []);
 
 	const { mutate: pauseSubscription, isPending: isPauseLoading } = useMutation({
 		mutationFn: (id: string) =>
@@ -97,6 +101,9 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 		},
 	});
 
+	const cancelScheduledInvalid =
+		state.cancelCancellationType === SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE && state.cancelScheduledAt === undefined;
+
 	const { mutate: cancelSubscription, isPending: isCancelLoading } = useMutation({
 		mutationFn: (id: string) =>
 			SubscriptionApi.cancelSubscription(id, {
@@ -104,6 +111,9 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 				cancellation_type: state.cancelCancellationType,
 				cancel_immediately_inovice_policy: getCancelImmediatelyInvoicePolicy(),
 				...(state.cancelReason.trim() ? { reason: state.cancelReason.trim() } : {}),
+				...(state.cancelCancellationType === SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE && state.cancelScheduledAt
+					? { cancel_at: state.cancelScheduledAt.toISOString() }
+					: {}),
 			}),
 		onSuccess: async () => {
 			resetCancelState();
@@ -303,14 +313,32 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 							options={[
 								{ label: 'Immediate', value: SUBSCRIPTION_CANCELLATION_TYPE.IMMEDIATE },
 								{ label: 'End of period', value: SUBSCRIPTION_CANCELLATION_TYPE.END_OF_PERIOD },
+								{ label: 'Scheduled date', value: SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE },
 							]}
-							onChange={(value) =>
+							onChange={(value) => {
+								const next = value as SUBSCRIPTION_CANCELLATION_TYPE;
 								setState((prev) => ({
 									...prev,
-									cancelCancellationType: value as SUBSCRIPTION_CANCELLATION_TYPE,
-								}))
-							}
+									cancelCancellationType: next,
+									...(next !== SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE ? { cancelScheduledAt: undefined } : {}),
+								}));
+							}}
 						/>
+						{state.cancelCancellationType === SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE && (
+							<div className='space-y-1 w-full'>
+								<Label label='Cancel on' />
+								<DatePicker
+									date={state.cancelScheduledAt}
+									setDate={(date) => setState((prev) => ({ ...prev, cancelScheduledAt: date }))}
+									className='!w-full'
+									popoverClassName='!w-full'
+									popoverTriggerClassName='!w-full'
+									popoverContentClassName='!w-full'
+									placeholder='Select cancellation date'
+									minDate={minCancelScheduledAt}
+								/>
+							</div>
+						)}
 						<Select
 							label='Proration Behavior'
 							value={state.cancelProrationBehavior}
@@ -343,7 +371,10 @@ const SubscriptionActionButton: React.FC<Props> = ({ subscription }) => {
 						<Button variant='outline' onClick={() => resetCancelState()} disabled={isCancelLoading}>
 							No, Keep It
 						</Button>
-						<Button variant='destructive' onClick={() => cancelSubscription(subscription.id)} disabled={isCancelLoading}>
+						<Button
+							variant='destructive'
+							onClick={() => cancelSubscription(subscription.id)}
+							disabled={isCancelLoading || cancelScheduledInvalid}>
 							{isCancelLoading ? 'Cancelling...' : 'Yes, Cancel'}
 						</Button>
 					</div>

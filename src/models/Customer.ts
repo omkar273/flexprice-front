@@ -12,7 +12,9 @@ export interface Customer extends BaseModel {
 	metadata: Metadata;
 	name: string;
 	environment_id: string;
+	/** @deprecated Parent customer hierarchy is replaced by invoicing_customer_id on Subscription */
 	parent_customer_id?: string;
+	/** @deprecated Parent customer hierarchy is replaced by invoicing_customer_id on Subscription */
 	parent_customer?: Customer;
 }
 

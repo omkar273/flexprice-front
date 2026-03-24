@@ -1,5 +1,5 @@
 import SubscriptionApi from '@/api/SubscriptionApi';
-import { Button, FormHeader, Input, Modal, Select, Toggle } from '@/components/atoms';
+import { Button, DatePicker, FormHeader, Input, Label, Modal, Select, Toggle } from '@/components/atoms';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { ServerError } from '@/core/axios/types';
 import {
@@ -23,12 +23,16 @@ const SubscriptionCancelDialog = ({ isOpen, onOpenChange, subscriptionId, refetc
 	const [prorationBehavior, setProrationBehavior] = useState<SUBSCRIPTION_PRORATION_BEHAVIOR>(SUBSCRIPTION_PRORATION_BEHAVIOR.NONE);
 	const [generateInvoice, setGenerateInvoice] = useState(false);
 	const [reason, setReason] = useState('');
+	const [cancelAtDate, setCancelAtDate] = useState<Date | undefined>(undefined);
+
+	const minCancelAtDate = useMemo(() => new Date(), []);
 
 	const resetState = () => {
 		setCancellationType(SUBSCRIPTION_CANCELLATION_TYPE.IMMEDIATE);
 		setProrationBehavior(SUBSCRIPTION_PRORATION_BEHAVIOR.NONE);
 		setGenerateInvoice(false);
 		setReason('');
+		setCancelAtDate(undefined);
 	};
 
 	const cancelImmediatelyInvoicePolicy = useMemo(
@@ -39,6 +43,8 @@ const SubscriptionCancelDialog = ({ isOpen, onOpenChange, subscriptionId, refetc
 		[generateInvoice],
 	);
 
+	const scheduledCancelInvalid = cancellationType === SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE && cancelAtDate === undefined;
+
 	const { mutate: cancelSubscription, isPending } = useMutation({
 		mutationFn: async () => {
 			if (!subscriptionId) return;
@@ -47,6 +53,9 @@ const SubscriptionCancelDialog = ({ isOpen, onOpenChange, subscriptionId, refetc
 				proration_behavior: prorationBehavior,
 				cancel_immediately_inovice_policy: cancelImmediatelyInvoicePolicy,
 				...(reason.trim() ? { reason: reason.trim() } : {}),
+				...(cancellationType === SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE && cancelAtDate
+					? { cancel_at: cancelAtDate.toISOString() }
+					: {}),
 			});
 		},
 		onSuccess: async () => {
@@ -98,8 +107,19 @@ const SubscriptionCancelDialog = ({ isOpen, onOpenChange, subscriptionId, refetc
 									value: SUBSCRIPTION_CANCELLATION_TYPE.END_OF_PERIOD,
 									description: 'Keep service active until period end, then cancel automatically.',
 								},
+								{
+									label: 'Scheduled date',
+									value: SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE,
+									description: 'Cancel on a specific future date you choose.',
+								},
 							]}
-							onChange={(value) => setCancellationType(value as SUBSCRIPTION_CANCELLATION_TYPE)}
+							onChange={(value) => {
+								const next = value as SUBSCRIPTION_CANCELLATION_TYPE;
+								setCancellationType(next);
+								if (next !== SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE) {
+									setCancelAtDate(undefined);
+								}
+							}}
 						/>
 						<Select
 							label='Proration behavior'
@@ -119,6 +139,21 @@ const SubscriptionCancelDialog = ({ isOpen, onOpenChange, subscriptionId, refetc
 							onChange={(value) => setProrationBehavior(value as SUBSCRIPTION_PRORATION_BEHAVIOR)}
 						/>
 					</div>
+					{cancellationType === SUBSCRIPTION_CANCELLATION_TYPE.SCHEDULED_DATE && (
+						<div className='space-y-1 pt-1 w-full'>
+							<Label label='Cancel on' />
+							<DatePicker
+								date={cancelAtDate}
+								setDate={setCancelAtDate}
+								placeholder='Select cancellation date'
+								minDate={minCancelAtDate}
+								className='!w-full'
+								popoverClassName='!w-full'
+								popoverTriggerClassName='!w-full'
+								popoverContentClassName='!w-full'
+							/>
+						</div>
+					)}
 				</div>
 
 				<div className='rounded-md border border-border p-4 space-y-3'>
@@ -145,7 +180,10 @@ const SubscriptionCancelDialog = ({ isOpen, onOpenChange, subscriptionId, refetc
 					<Button variant='outline' onClick={() => onOpenChange(false)} disabled={isPending}>
 						Keep subscription
 					</Button>
-					<Button variant='destructive' onClick={() => cancelSubscription()} disabled={isPending || !subscriptionId}>
+					<Button
+						variant='destructive'
+						onClick={() => cancelSubscription()}
+						disabled={isPending || !subscriptionId || scheduledCancelInvalid}>
 						{isPending ? 'Cancelling...' : 'Cancel subscription'}
 					</Button>
 				</div>

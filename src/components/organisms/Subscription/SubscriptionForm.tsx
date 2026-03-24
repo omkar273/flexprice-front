@@ -17,6 +17,7 @@ import {
 	ENTITLEMENT_ENTITY_TYPE,
 	ENTITY_STATUS,
 	EXPAND,
+	Customer,
 } from '@/models';
 import { BILLING_PERIOD, PAYMENT_TERMS_NONE, paymentTermsOptions } from '@/constants/constants';
 import { SubscriptionFormState } from '@/pages';
@@ -33,6 +34,7 @@ import PhaseList from './PhaseList';
 import { SubscriptionPhaseCreateRequest, EntitlementOverrideRequest } from '@/types/dto/Subscription';
 import SubscriptionPriceTable from './SubscriptionPriceTable';
 import AddSubscriptionChargeDialog from './AddSubscriptionChargeDialog';
+import { CustomerSearchSelect } from '@/components/molecules/Customer';
 import { usePriceOverrides } from '@/hooks/usePriceOverrides';
 import { Coupon } from '@/models/Coupon';
 import { InternalCreditGrantRequest, creditGrantToInternal } from '@/types/dto/CreditGrant';
@@ -91,6 +93,7 @@ const SubscriptionForm = ({
 	phases = [],
 	onPhasesChange,
 	allCoupons = [],
+	subscriberCustomer,
 }: {
 	state: SubscriptionFormState;
 	setState: React.Dispatch<React.SetStateAction<SubscriptionFormState>>;
@@ -103,6 +106,8 @@ const SubscriptionForm = ({
 	phases?: SubscriptionPhaseCreateRequest[];
 	onPhasesChange?: (phases: SubscriptionPhaseCreateRequest[]) => void;
 	allCoupons?: Coupon[];
+	/** Subscription customer; used for invoicing "Self" option and labels */
+	subscriberCustomer?: Customer;
 }) => {
 	// Fetch plan prices via shared hook (same cache key + canonical active filter as CreateCustomerSubscriptionPage)
 	const { data: selectedPlanPrices } = usePlanPrices(state.selectedPlan);
@@ -807,20 +812,6 @@ const SubscriptionForm = ({
 				</div>
 			)}
 
-			{/* Payment Terms */}
-			{state.selectedPlan && !isLoadingPlanDetails && (
-				<div className='mt-6 pt-6 border-t border-gray-200'>
-					<Select
-						value={state.paymentTerms ?? PAYMENT_TERMS_NONE}
-						options={paymentTermsOptions}
-						onChange={(value) => setState((prev) => ({ ...prev, paymentTerms: value === PAYMENT_TERMS_NONE ? undefined : value }))}
-						label='Payment terms'
-						disabled={isDisabled || isLoadingPlanDetails}
-						placeholder='Select payment terms'
-					/>
-				</div>
-			)}
-
 			{/* Entitlements Section */}
 			{state.selectedPlan && !isLoadingPlanDetails && allEntitlements.length > 0 && (
 				<div className='space-y-4 mt-4 pt-3 border-t border-gray-200'>
@@ -831,6 +822,48 @@ const SubscriptionForm = ({
 							overrides={state.entitlementOverrides}
 							onOverrideChange={handleEntitlementOverride}
 							onOverrideReset={handleEntitlementOverrideReset}
+						/>
+					</div>
+				</div>
+			)}
+
+			{/* Advanced Configuration */}
+			{state.selectedPlan && !isLoadingPlanDetails && (
+				<div className='mt-6 pt-6 border-t border-gray-200 space-y-6'>
+					<FormHeader title='Billing Configuration' variant='sub-header' />
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+						<Select
+							value={state.paymentTerms ?? PAYMENT_TERMS_NONE}
+							options={paymentTermsOptions}
+							onChange={(value) => setState((prev) => ({ ...prev, paymentTerms: value === PAYMENT_TERMS_NONE ? undefined : value }))}
+							label='Payment terms'
+							disabled={isDisabled || isLoadingPlanDetails}
+							placeholder='Select payment terms'
+						/>
+						<CustomerSearchSelect
+							selfCustomer={subscriberCustomer}
+							value={state.invoicingCustomer}
+							excludeId={state.customerId}
+							onChange={(customer) => {
+								setState((prev) => ({
+									...prev,
+									invoicingCustomer: customer?.id && customer.id !== prev.customerId ? customer : undefined,
+								}));
+							}}
+							display={{
+								label: 'Billing customer',
+								placeholder: 'Self',
+							}}
+							searchPlaceholder='Search for billing customer...'
+							disabled={isDisabled}
+						/>
+					</div>
+					<div className='flex flex-col space-y-2'>
+						<Label label='Proration behavior' />
+						<Switch
+							checked={state.prorationCreateLineItems}
+							onCheckedChange={(checked) => setState((prev) => ({ ...prev, prorationCreateLineItems: checked }))}
+							disabled={isDisabled}
 						/>
 					</div>
 				</div>

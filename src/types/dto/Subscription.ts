@@ -224,6 +224,8 @@ export interface CancelSubscriptionPayload {
 	cancellation_type: SUBSCRIPTION_CANCELLATION_TYPE;
 	cancel_immediately_inovice_policy?: SUBSCRIPTION_CANCEL_IMMEDIATELY_INVOICE_POLICY;
 	reason?: string;
+	/** Required when cancellation_type is scheduled_date; must be in the future (ISO 8601). */
+	cancel_at?: string;
 }
 
 // =============================================================================
@@ -234,7 +236,20 @@ export interface CreateSubscriptionRequest {
 	// Customer identification - prioritized over external_customer_id if both provided
 	customer_id?: string;
 	external_customer_id?: string;
+	/** @deprecated Use invoicing_customer_id or invoicing_customer_external_id instead. Cannot be combined with those fields. */
 	invoice_billing?: INVOICE_BILLING;
+	/**
+	 * The internal customer ID to use for invoicing this subscription.
+	 * Overrides the default (the subscription's own customer).
+	 * Mutually exclusive with invoicing_customer_external_id — provide only one.
+	 */
+	invoicing_customer_id?: string;
+	/**
+	 * The external customer ID to use for invoicing this subscription.
+	 * Resolved to an internal ID by the backend via external_id lookup.
+	 * Mutually exclusive with invoicing_customer_id — provide only one.
+	 */
+	invoicing_customer_external_id?: string;
 
 	// Plan and billing configuration
 	plan_id: string;
@@ -380,6 +395,8 @@ export interface CancelSubscriptionRequest {
 	cancellation_type: SUBSCRIPTION_CANCELLATION_TYPE;
 	cancel_immediately_inovice_policy?: SUBSCRIPTION_CANCEL_IMMEDIATELY_INVOICE_POLICY;
 	reason?: string;
+	/** Required when cancellation_type is scheduled_date; must be in the future (ISO 8601). */
+	cancel_at?: string;
 }
 
 export interface CancelSubscriptionResponse {

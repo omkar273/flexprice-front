@@ -54,7 +54,7 @@ export interface CustomerFilter extends Pagination {
 	external_id?: string;
 	/** Filter by email */
 	email?: string;
-	/** Filter by parent customer IDs */
+	/** @deprecated Parent customer hierarchy is being removed. Do not use. */
 	parent_customer_ids?: string[];
 	/** Time range (if supported by backend) */
 	start_time?: string;
@@ -89,7 +89,9 @@ export interface CreateCustomerRequest {
 	skip_onboarding_workflow?: boolean;
 	/** Provider integration mappings for this customer */
 	integration_entity_mapping?: IntegrationEntityMapping[];
+	/** @deprecated Parent customer hierarchy is replaced by invoicing_customer_id on subscriptions. Do not use. */
 	parent_customer_id?: string;
+	/** @deprecated Parent customer hierarchy is replaced by invoicing_customer_id on subscriptions. Do not use. */
 	parent_customer_external_id?: string;
 }
 
@@ -106,7 +108,9 @@ export interface UpdateCustomerRequest {
 	metadata?: Metadata;
 	/** Provider integration mappings for this customer */
 	integration_entity_mapping?: IntegrationEntityMapping[];
+	/** @deprecated Parent customer hierarchy is replaced by invoicing_customer_id on subscriptions. Do not use. */
 	parent_customer_id?: string;
+	/** @deprecated Parent customer hierarchy is replaced by invoicing_customer_id on subscriptions. Do not use. */
 	parent_customer_external_id?: string;
 }
 

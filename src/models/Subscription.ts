@@ -161,6 +161,10 @@ export enum BILLING_CYCLE {
 	CALENDAR = 'calendar',
 }
 
+/**
+ * @deprecated Use invoicing_customer_id or invoicing_customer_external_id on CreateSubscriptionRequest instead.
+ * This enum controlled whether invoices went to a parent customer via the now-deprecated parent_customer_id hierarchy.
+ */
 // InvoiceBillingConfig determines which customer should receive invoices for a subscription
 export enum INVOICE_BILLING {
 	INVOICED_TO_PARENT = 'invoice_to_parent',
@@ -296,6 +300,8 @@ export enum SUBSCRIPTION_PRORATION_BEHAVIOR {
 export enum SUBSCRIPTION_CANCELLATION_TYPE {
 	IMMEDIATE = 'immediate',
 	END_OF_PERIOD = 'end_of_period',
+	/** Cancel on a specific future date (requires `cancel_at` on the cancel request). */
+	SCHEDULED_DATE = 'scheduled_date',
 }
 
 export enum SUBSCRIPTION_CANCEL_IMMEDIATELY_INVOICE_POLICY {
