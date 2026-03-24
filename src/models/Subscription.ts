@@ -60,6 +60,7 @@ export interface Subscription extends BaseModel {
 	readonly invoicing_customer_id?: string;
 	/** Parent subscription ID when this subscription is a child (e.g. in parent-child subscription hierarchy) */
 	readonly parent_subscription_id?: string;
+	readonly subscription_type?: SUBSCRIPTION_TYPE;
 	readonly plan_id: string;
 	readonly environment_id: string;
 	readonly tenant_id: string;
@@ -154,6 +155,12 @@ export interface Charge extends BaseModel {
 	readonly display_amount: string;
 	readonly quantity: number;
 	readonly meter_display_name: string;
+}
+
+export enum SUBSCRIPTION_TYPE {
+	STANDALONE = 'standalone',
+	PARENT = 'parent',
+	INHERITED = 'inherited',
 }
 
 export enum BILLING_CYCLE {
