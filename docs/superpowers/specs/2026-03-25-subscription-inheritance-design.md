@@ -34,6 +34,7 @@ export enum SUBSCRIPTION_TYPE {
 ### 1a. Model changes (`src/models/Subscription.ts`)
 - Add `SUBSCRIPTION_TYPE` enum (above).
 - Add `subscription_type?: SUBSCRIPTION_TYPE` to the `Subscription` interface.
+- **Note:** `SubscriptionResponse extends Subscription`, so `subscription_type` is automatically available on `SubscriptionResponse` — do NOT add it again on `SubscriptionResponse` to avoid a conflicting duplicate declaration.
 
 ### 1b. DTO changes (`src/types/dto/Subscription.ts`)
 
@@ -41,10 +42,14 @@ export enum SUBSCRIPTION_TYPE {
 ```ts
 export interface SubscriptionInheritanceConfig {
   customer_ids_to_inherit_subscription?: string[];
-  external_customer_ids_to_inherit_subscription?: string[];
+  // external_customer_ids_to_inherit_subscription is intentionally NOT sent from the frontend;
+  // the frontend always has access to internal customer IDs via the Customer object.
   parent_subscription_id?: string;
+  // parent_subscription_id is intentionally NOT set by the frontend;
+  // it is set internally by the backend when creating inherited child subscriptions.
   invoicing_customer_id?: string;
-  invoicing_customer_external_id?: string;
+  // invoicing_customer_external_id is intentionally NOT sent from the frontend;
+  // the frontend always has access to internal customer IDs.
 }
 ```
 
@@ -55,16 +60,20 @@ export interface ExecuteSubscriptionInheritanceRequest {
 }
 ```
 
-**`CreateSubscriptionRequest` changes:**
-- Remove flat fields: `parent_subscription_id`, `invoicing_customer_id`, `invoicing_customer_external_id`
-- Add: `inheritance?: SubscriptionInheritanceConfig`
+**`CreateSubscriptionRequest` breaking changes:**
+- **Remove** the following flat fields entirely (replaced by nested `inheritance`):
+  - `parent_subscription_id?: string | null`
+  - `invoicing_customer_id?: string`
+  - `invoicing_customer_external_id?: string`
+- **Add:** `inheritance?: SubscriptionInheritanceConfig`
+- The payload builder in `CreateCustomerSubscriptionPage.tsx` must be updated to write `invoicingCustomer.id` into `inheritance.invoicing_customer_id` instead of the top-level field.
 - If `inheritedCustomers` is empty and no invoicing override is needed, omit `inheritance` entirely (backend defaults to standalone).
-
-**`SubscriptionResponse` changes:**
-- Add `subscription_type?: SUBSCRIPTION_TYPE`
 
 **`ListSubscriptionsPayload` changes:**
 - Add `subscription_types?: SUBSCRIPTION_TYPE[]`
+
+**`SubscriptionFilter` changes (`SubscriptionFilter` interface, which mirrors `ListSubscriptionsPayload`):**
+- Also add `subscription_types?: SUBSCRIPTION_TYPE[]` — both interfaces must stay in sync since they are used interchangeably across list and search endpoints.
 
 ### 1c. API client (`src/api/SubscriptionApi.ts`)
 
@@ -89,16 +98,28 @@ Add to `SubscriptionFormState`:
 inheritedCustomers: Customer[];  // full objects for table display; default []
 ```
 
-**Payload mapping on submit:**
+**Payload mapping on submit — full `inheritance` object:**
 ```ts
-inheritance: {
-  ...(inheritedCustomers.length > 0 && {
-    customer_ids_to_inherit_subscription: inheritedCustomers.map(c => c.id),
-  }),
-  ...(invoicingCustomer && { invoicing_customer_id: invoicingCustomer.id }),
+// Only include inheritance object if there's something to put in it
+const inheritancePayload: SubscriptionInheritanceConfig | undefined =
+  inheritedCustomers.length > 0 || invoicingCustomer
+    ? {
+        ...(inheritedCustomers.length > 0 && {
+          customer_ids_to_inherit_subscription: inheritedCustomers.map(c => c.id),
+        }),
+        ...(invoicingCustomer && { invoicing_customer_id: invoicingCustomer.id }),
+      }
+    : undefined;
+
+// In CreateSubscriptionRequest:
+{
+  ...(inheritancePayload && { inheritance: inheritancePayload }),
+  // NOTE: top-level invoicing_customer_id, invoicing_customer_external_id,
+  // and parent_subscription_id fields are REMOVED from CreateSubscriptionRequest.
 }
 ```
-The flat `invoicingCustomer` UI state field on `SubscriptionFormState` stays unchanged; only the outgoing payload shape changes.
+
+The flat `invoicingCustomer` UI state field on `SubscriptionFormState` stays unchanged — it holds a full `Customer` object for UI display. Only the outgoing API payload shape changes.
 
 ---
 
@@ -114,7 +135,7 @@ interface AddInheritedCustomersDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: (customers: Customer[]) => void;
-  excludeIds?: string[];   // already-added customer IDs — excluded from search
+  excludeIds?: string[];   // already-added customer IDs — excluded from search results
   isLoading?: boolean;     // submit spinner while API call is in-flight
 }
 ```
@@ -122,7 +143,7 @@ interface AddInheritedCustomersDialogProps {
 **Internals:**
 - Local `selectedCustomers: Customer[]` state, reset on close.
 - Async customer search input using `CustomerApi.searchCustomers` with 300ms debounce. Search results exclude `excludeIds`.
-- Do **not** modify `CustomerSearchSelect` (it's single-select only). Instead, wrap the search in a local async input + results dropdown, allowing multiple selections.
+- Do **not** modify `CustomerSearchSelect` (it's single-select only). Instead, implement a local async search input + results dropdown that supports multiple selections.
 - Selected customers shown as removable chips/tags below the search input.
 - Confirm button disabled when `selectedCustomers.length === 0` or `isLoading`.
 - On confirm: calls `onConfirm(selectedCustomers)` then `onOpenChange(false)`.
@@ -139,18 +160,28 @@ interface AddInheritedCustomersDialogProps {
 ```ts
 interface InheritedCustomersTableProps {
   parentSubscriptionId: string;
-  onAddCustomers: () => void;  // triggers dialog open in parent
+  onAddCustomers: () => void;            // triggers dialog open in parent
+  onCustomerIdsLoaded?: (ids: string[]) => void;  // callback to lift loaded customer IDs to parent
 }
 ```
 
+**`onCustomerIdsLoaded` usage:** After the subscription list is fetched, call `onCustomerIdsLoaded` with the customer IDs of all loaded inherited subscriptions. `CustomerSubscriptionEditPage` uses this to populate its `excludeIds` state, which is then passed to `AddInheritedCustomersDialog`. This avoids duplicating the query in the parent page and keeps `InheritedCustomersTable` as the single source of truth for that data.
+
+**Query key:** The `useQuery` call inside `InheritedCustomersTable` **must** use `['inheritedSubscriptions', parentSubscriptionId]` as its query key. The `executeInheritance` mutation's `onSuccess` handler in `CustomerSubscriptionEditPage` calls `refetchQueries(['inheritedSubscriptions', subscriptionId])` to trigger a table refresh — if any other key is used, the refetch will silently do nothing.
+
 **Data fetch:**
 ```ts
-SubscriptionApi.searchSubscriptions({
-  parent_subscription_ids: [parentSubscriptionId],
-  subscription_types: [SUBSCRIPTION_TYPE.INHERITED],
-  subscription_status: [SUBSCRIPTION_STATUS.ACTIVE],
+useQuery({
+  queryKey: ['inheritedSubscriptions', parentSubscriptionId],
+  queryFn: () => SubscriptionApi.searchSubscriptions({
+    parent_subscription_ids: [parentSubscriptionId],
+    subscription_types: [SUBSCRIPTION_TYPE.INHERITED],
+    subscription_status: [SUBSCRIPTION_STATUS.ACTIVE],
+  }),
 })
 ```
+
+> **Note on active-only filter:** Only active inherited subscriptions are shown. If a child subscription was previously cancelled, it will not appear. This is intentional — the table represents currently active inheritance relationships. Future requirements may add a toggle to show cancelled children.
 
 **Columns (using `FlexpriceTable`):**
 
@@ -184,6 +215,7 @@ state.selectedPlan && !isLoadingPlanDetails && !isDisabled
 - `FormHeader` title: "Inherited Customers"
 - Inline table of `state.inheritedCustomers` — columns: Customer Name/External ID + Remove button
 - "Add Customers" button → opens `AddInheritedCustomersDialog`
+- Dialog `excludeIds`: `state.inheritedCustomers.map(c => c.id)` — prevents re-selecting already-added customers
 - Dialog `onConfirm`: dedupe incoming customers against existing list by `id`, append new entries to `state.inheritedCustomers`
 - Remove: filter customer out of `state.inheritedCustomers`
 
@@ -193,19 +225,25 @@ state.selectedPlan && !isLoadingPlanDetails && !isDisabled
 
 ### 4b. `CustomerSubscriptionEditPage.tsx`
 
-**Inherited customers panel** (shown when `subscription_type === SUBSCRIPTION_TYPE.PARENT`):
+**Inherited customers panel** — shown when `subscriptionDetails.subscription_type === SUBSCRIPTION_TYPE.PARENT`.
+
+**`excludeIds` derivation:** `CustomerSubscriptionEditPage` maintains local state `inheritedCustomerIds: string[]` (default `[]`). `InheritedCustomersTable` calls `onCustomerIdsLoaded` after each successful fetch, which sets this state. This state is then passed as `excludeIds` to `AddInheritedCustomersDialog`.
+
+**Page insertion point:** After `SubscriptionEditCreditGrantsSection` (line ~293 in the current file), before `SubscriptionEntitlementsSection` (line ~312). In the current file order: `SubscriptionEditDetailsHeader` → `SubscriptionEditChargesSection` → `SubscriptionEditCreditGrantsSection` → **[insert here]** → `SubscriptionEntitlementsSection` → `SubscriptionAddonsSection`.
+
 ```tsx
 {subscriptionDetails.subscription_type === SUBSCRIPTION_TYPE.PARENT && (
   <>
     <InheritedCustomersTable
       parentSubscriptionId={subscriptionId!}
       onAddCustomers={() => setIsAddCustomersDialogOpen(true)}
+      onCustomerIdsLoaded={setInheritedCustomerIds}
     />
     <AddInheritedCustomersDialog
       isOpen={isAddCustomersDialogOpen}
       onOpenChange={setIsAddCustomersDialogOpen}
       onConfirm={handleAddInheritedCustomers}
-      excludeIds={/* derived from InheritedCustomersTable fetch */}
+      excludeIds={inheritedCustomerIds}
       isLoading={isExecutingInheritance}
     />
   </>
@@ -216,17 +254,27 @@ state.selectedPlan && !isLoadingPlanDetails && !isDisabled
 ```ts
 const handleAddInheritedCustomers = useCallback((customers: Customer[]) => {
   executeInheritance({
-    id: subscriptionId!,
-    payload: { customer_ids_to_inherit_subscription: customers.map(c => c.id) },
+    customer_ids_to_inherit_subscription: customers.map(c => c.id),
   });
-}, [executeInheritance, subscriptionId]);
+}, [executeInheritance]);
 ```
 
 **`executeInheritance` mutation:**
-- `onSuccess`: `toast.success('Customers added successfully')`, refetch inherited table query, close dialog
-- `onError`: `toast.error(message)`, dialog stays open
-
-**Placement in page:** After `SubscriptionEditCreditGrantsSection`, before entitlements.
+```ts
+const { mutate: executeInheritance, isPending: isExecutingInheritance } = useMutation({
+  mutationFn: (payload: ExecuteSubscriptionInheritanceRequest) =>
+    SubscriptionApi.executeInheritance(subscriptionId!, payload),
+  onSuccess: () => {
+    toast.success('Customers added successfully');
+    refetchQueries(['inheritedSubscriptions', subscriptionId]);
+    setIsAddCustomersDialogOpen(false);
+  },
+  onError: (error: { error?: { message?: string } }) => {
+    toast.error(error?.error?.message || 'Failed to add customers');
+    // Dialog stays open
+  },
+});
+```
 
 ---
 
@@ -237,20 +285,18 @@ const handleAddInheritedCustomers = useCallback((customers: Customer[]) => {
 2. `src/components/molecules/SubscriptionTable/SubscriptionTable.tsx`
 3. `src/pages/customer/subscriptions/Subscriptions.tsx`
 
-**Pattern (same in all three):**
+**Pattern (same logic in all three, but property names differ per component's action menu API):**
 ```ts
 const isInherited = subscription.subscription_type === SUBSCRIPTION_TYPE.INHERITED;
-
-// Cancel menu item / button:
-{
-  label: 'Cancel',
-  disabled: isInherited,
-  tooltip: isInherited ? 'Inherited subscriptions cannot be cancelled directly' : undefined,
-  onClick: () => !isInherited && openCancelModal(),
-}
 ```
 
-Use existing `Tooltip` component from atoms for the tooltip display.
+- `SubscriptionActionButton.tsx` — uses a `DropdownMenuOption` shape; apply `disabled: isInherited` on the cancel option object and wrap in a `Tooltip` when `isInherited`.
+- `SubscriptionTable.tsx` — uses an `enabled` boolean on action items; apply `enabled: !isInherited`. Check the existing action menu API for tooltip support and apply consistently.
+- `Subscriptions.tsx` — same pattern as `SubscriptionTable`; check action item API for correct prop name.
+
+Tooltip message for all three: `"Inherited subscriptions cannot be cancelled directly"`. Use the existing `Tooltip` component from atoms.
+
+> **Important:** Do not assume `disabled` vs `enabled` — each component's action menu API uses a different prop. Inspect the existing cancel action item in each file and apply the guard with the correct property.
 
 ---
 
@@ -261,16 +307,20 @@ Use existing `Tooltip` component from atoms for the tooltip display.
 User selects customers in SubscriptionForm
 → stored in state.inheritedCustomers (full Customer objects)
 → on submit: mapped to inheritance.customer_ids_to_inherit_subscription
-→ POST /subscriptions → returns parent subscription
+   (along with invoicing_customer_id if set, inside the same inheritance object)
+→ POST /subscriptions → backend creates parent subscription + inherited children
 ```
 
 ### Edit / Add Children flow
 ```
-User clicks "Add Customers" on Edit page
-→ AddInheritedCustomersDialog opens (excludeIds = existing inherited customer IDs)
+User visits CustomerSubscriptionEditPage for a PARENT subscription
+→ InheritedCustomersTable fetches active inherited subscriptions
+→ onCustomerIdsLoaded fires → page sets inheritedCustomerIds state
+→ User clicks "Add Customers" → AddInheritedCustomersDialog opens
+   (excludeIds = inheritedCustomerIds)
 → User selects new customers → confirms
 → POST /subscriptions/:id/inheritance/execute
-→ on success: refetch InheritedCustomersTable, toast.success
+→ on success: refetch InheritedCustomersTable, toast.success, close dialog
 → on error: toast.error, dialog stays open
 ```
 
@@ -280,11 +330,12 @@ User clicks "Add Customers" on Edit page
 
 | Scenario | Handling |
 |----------|----------|
-| `subscription_type` is undefined (legacy records) | Treat as `STANDALONE` — no cancel guard, no parent panel |
+| `subscription_type` is undefined (legacy records) | Treat as `STANDALONE` — no cancel guard, no parent panel shown |
 | User tries to submit empty customer list | Confirm button disabled client-side |
 | Already-inherited customers appear in search | Excluded via `excludeIds`; backend also skips silently as safety net |
 | API error on executeInheritance | `toast.error` with backend message; dialog stays open |
 | Large customer lists | Search debounced 300ms; paginated results |
+| Cancelled inherited subscription | Not shown in table (active-only filter); intentional for now |
 
 ---
 
@@ -292,15 +343,16 @@ User clicks "Add Customers" on Edit page
 
 | File | Change |
 |------|--------|
-| `src/models/Subscription.ts` | Add `SUBSCRIPTION_TYPE` enum + `subscription_type` field on `Subscription` |
-| `src/types/dto/Subscription.ts` | Add `SubscriptionInheritanceConfig`, `ExecuteSubscriptionInheritanceRequest`; update `CreateSubscriptionRequest`, `SubscriptionResponse`, `ListSubscriptionsPayload` |
+| `src/models/Subscription.ts` | Add `SUBSCRIPTION_TYPE` enum + `subscription_type?: SUBSCRIPTION_TYPE` on `Subscription` interface |
+| `src/types/dto/Subscription.ts` | Add `SubscriptionInheritanceConfig`, `ExecuteSubscriptionInheritanceRequest`; update `CreateSubscriptionRequest` (remove 3 flat fields, add `inheritance`); add `subscription_types` to both `ListSubscriptionsPayload` and `SubscriptionFilter` |
+| `src/types/dto/index.ts` (barrel) | Re-export `SubscriptionInheritanceConfig` and `ExecuteSubscriptionInheritanceRequest` if the barrel file re-exports from `Subscription.ts` |
 | `src/api/SubscriptionApi.ts` | Add `executeInheritance` method |
-| `src/pages/customer/customers/CreateCustomerSubscriptionPage.tsx` | Add `inheritedCustomers` to `SubscriptionFormState`; update payload builder |
+| `src/pages/customer/customers/CreateCustomerSubscriptionPage.tsx` | Add `inheritedCustomers: Customer[]` to `SubscriptionFormState`; update payload builder to use `inheritance` nested object |
 | `src/components/molecules/AddInheritedCustomersDialog/AddInheritedCustomersDialog.tsx` | **New** — reusable multi-select customer dialog |
-| `src/components/molecules/InheritedCustomersTable/InheritedCustomersTable.tsx` | **New** — inherited subscriptions table for Edit page |
+| `src/components/molecules/InheritedCustomersTable/InheritedCustomersTable.tsx` | **New** — inherited subscriptions table with `onCustomerIdsLoaded` callback |
 | `src/components/molecules/index.ts` | Export both new components |
-| `src/components/organisms/Subscription/SubscriptionForm.tsx` | Add Inheritance section (create mode only) |
-| `src/pages/customer/customers/CustomerSubscriptionEditPage.tsx` | Add `InheritedCustomersTable` + `AddInheritedCustomersDialog` for parent subscriptions |
-| `src/components/organisms/Subscription/SubscriptionActionButton.tsx` | Cancel guard for inherited subscriptions |
-| `src/components/molecules/SubscriptionTable/SubscriptionTable.tsx` | Cancel guard for inherited subscriptions |
-| `src/pages/customer/subscriptions/Subscriptions.tsx` | Cancel guard for inherited subscriptions |
+| `src/components/organisms/Subscription/SubscriptionForm.tsx` | Add Inheritance section (create mode only, hidden when `isDisabled`) |
+| `src/pages/customer/customers/CustomerSubscriptionEditPage.tsx` | Add `InheritedCustomersTable` + `AddInheritedCustomersDialog` for parent subscriptions; `executeInheritance` mutation |
+| `src/components/organisms/Subscription/SubscriptionActionButton.tsx` | Cancel guard for `SUBSCRIPTION_TYPE.INHERITED` |
+| `src/components/molecules/SubscriptionTable/SubscriptionTable.tsx` | Cancel guard for `SUBSCRIPTION_TYPE.INHERITED` |
+| `src/pages/customer/subscriptions/Subscriptions.tsx` | Cancel guard for `SUBSCRIPTION_TYPE.INHERITED` |
