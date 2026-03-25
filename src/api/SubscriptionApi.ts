@@ -30,6 +30,7 @@ import {
 	PreviewSubscriptionChangeResponse,
 	ExecuteSubscriptionChangeRequest,
 	ExecuteSubscriptionChangeResponse,
+	ExecuteSubscriptionInheritanceRequest,
 } from '@/types/dto/Subscription';
 import { ListCreditGrantApplicationsResponse } from '@/types/dto';
 import { generateQueryParams } from '@/utils/common/api_helper';
@@ -273,6 +274,18 @@ class SubscriptionApi {
 		payload: ExecuteSubscriptionChangeRequest,
 	): Promise<ExecuteSubscriptionChangeResponse> {
 		return await AxiosClient.post<ExecuteSubscriptionChangeResponse>(`${this.baseUrl}/${id}/change/execute`, payload);
+	}
+
+	// =============================================================================
+	// INHERITANCE METHODS
+	// =============================================================================
+
+	/**
+	 * Add child customers to an existing parent subscription
+	 * POST /subscriptions/:id/inheritance/execute
+	 */
+	public static async executeInheritance(id: string, payload: ExecuteSubscriptionInheritanceRequest): Promise<SubscriptionResponse> {
+		return await AxiosClient.post<SubscriptionResponse>(`${this.baseUrl}/${id}/inheritance/execute`, payload);
 	}
 }
 
