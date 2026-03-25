@@ -598,18 +598,18 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			commitment_duration: sanitized.commitmentDuration ? (sanitized.commitmentDuration as BILLING_PERIOD) : undefined,
 			subscription_status: isDraftParam ? SUBSCRIPTION_STATUS.DRAFT : undefined,
 			// Build inheritance config — only include if there's something to put in it
-			...(() => {
-				const hasInheritedCustomers = subscriptionState.inheritedCustomers.length > 0;
-				const hasInvoicingOverride = !!sanitized.invoicingCustomerId;
-				if (!hasInheritedCustomers && !hasInvoicingOverride) return {};
-				const inheritanceConfig: SubscriptionInheritanceConfig = {
-					...(hasInheritedCustomers && {
-						customer_ids_to_inherit_subscription: subscriptionState.inheritedCustomers.map((c) => c.id),
-					}),
-					...(hasInvoicingOverride && { invoicing_customer_id: sanitized.invoicingCustomerId }),
-				};
-				return { inheritance: inheritanceConfig };
-			})(),
+			...(subscriptionState.inheritedCustomers.length > 0 || !!sanitized.invoicingCustomerId
+				? {
+						inheritance: {
+							...(subscriptionState.inheritedCustomers.length > 0 && {
+								customer_ids_to_inherit_subscription: subscriptionState.inheritedCustomers.map((c) => c.id),
+							}),
+							...(sanitized.invoicingCustomerId && {
+								invoicing_customer_id: sanitized.invoicingCustomerId,
+							}),
+						} as SubscriptionInheritanceConfig,
+					}
+				: {}),
 			proration_behavior: subscriptionState.prorationCreateLineItems
 				? SUBSCRIPTION_PRORATION_BEHAVIOR.CREATE_PRORATIONS
 				: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,
