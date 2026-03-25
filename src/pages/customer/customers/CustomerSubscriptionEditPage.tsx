@@ -5,6 +5,8 @@ import {
 	SubscriptionEditDetailsHeader,
 	SubscriptionEditChargesSection,
 	SubscriptionEditCreditGrantsSection,
+	InheritedCustomersTable,
+	AddInheritedCustomersDialog,
 } from '@/components/molecules';
 import { useBreadcrumbsStore } from '@/store/useBreadcrumbsStore';
 import CustomerApi from '@/api/CustomerApi';
@@ -14,7 +16,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
-import { LineItem, SUBSCRIPTION_STATUS } from '@/models/Subscription';
+import { LineItem, SUBSCRIPTION_STATUS, SUBSCRIPTION_TYPE } from '@/models/Subscription';
 import PriceOverrideDialog from '@/components/molecules/PriceOverrideDialog/PriceOverrideDialog';
 import AddSubscriptionChargeDialog, {
 	type AddedSubscriptionLineItem,
@@ -24,6 +26,7 @@ import {
 	DeleteSubscriptionLineItemRequest,
 	UpdateSubscriptionLineItemRequest,
 	UpdateSubscriptionRequest,
+	ExecuteSubscriptionInheritanceRequest,
 } from '@/types/dto/Subscription';
 import { ExtendedPriceOverride } from '@/utils/common/price_override_helpers';
 import { convertPriceOverrideToLineItemUpdate } from '@/utils/subscription/priceOverrideToLineItemUpdate';
@@ -31,7 +34,7 @@ import { lineItemToPrice } from '@/utils/subscription/lineItemToPrice';
 import { useSubscriptionLineItemsGrouped } from '@/hooks/useSubscriptionLineItemsGrouped';
 import { RouteNames } from '@/core/routes/Routes';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
-import { ENTITY_STATUS, CreditGrant } from '@/models';
+import { ENTITY_STATUS, CreditGrant, Customer } from '@/models';
 
 type Params = {
 	id: string;
@@ -47,6 +50,8 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 
 	const [updateSubscriptionDrawerOpen, setUpdateSubscriptionDrawerOpen] = useState(false);
 	const [isAddChargeDialogOpen, setIsAddChargeDialogOpen] = useState(false);
+	const [isAddCustomersDialogOpen, setIsAddCustomersDialogOpen] = useState(false);
+	const [inheritedCustomerIds, setInheritedCustomerIds] = useState<string[]>([]);
 
 	const { updateBreadcrumb } = useBreadcrumbsStore();
 
@@ -173,6 +178,18 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 		},
 	});
 
+	const { mutate: executeInheritance, isPending: isExecutingInheritance } = useMutation({
+		mutationFn: (payload: ExecuteSubscriptionInheritanceRequest) => SubscriptionApi.executeInheritance(subscriptionId!, payload),
+		onSuccess: () => {
+			toast.success('Customers added successfully');
+			refetchQueries(['inheritedSubscriptions', subscriptionId!]);
+			setIsAddCustomersDialogOpen(false);
+		},
+		onError: (error: { error?: { message?: string } }) => {
+			toast.error(error?.error?.message || 'Failed to add customers');
+		},
+	});
+
 	useEffect(() => {
 		if (subscriptionDetails?.plan?.name) {
 			updateBreadcrumb(2, `Subscription`, `${RouteNames.customers}/${customer?.id}/subscription/${subscriptionId}`);
@@ -250,6 +267,15 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 		[createLineItem],
 	);
 
+	const handleAddInheritedCustomers = useCallback(
+		(customers: Customer[]) => {
+			executeInheritance({
+				customer_ids_to_inherit_subscription: customers.map((c) => c.id),
+			});
+		},
+		[executeInheritance],
+	);
+
 	if (isSubscriptionDetailsLoading) {
 		return <Loader />;
 	}
@@ -308,6 +334,24 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 					onConfirmCancelCreditGrant={handleConfirmCancelCreditGrant}
 					onCloseCancelModal={handleCloseCancelModal}
 				/>
+
+				{/* Inherited customers panel — only shown for parent subscriptions */}
+				{subscriptionDetails?.subscription_type === SUBSCRIPTION_TYPE.PARENT && subscriptionId && (
+					<>
+						<InheritedCustomersTable
+							parentSubscriptionId={subscriptionId}
+							onAddCustomers={() => setIsAddCustomersDialogOpen(true)}
+							onCustomerIdsLoaded={setInheritedCustomerIds}
+						/>
+						<AddInheritedCustomersDialog
+							isOpen={isAddCustomersDialogOpen}
+							onOpenChange={setIsAddCustomersDialogOpen}
+							onConfirm={handleAddInheritedCustomers}
+							excludeIds={inheritedCustomerIds}
+							isLoading={isExecutingInheritance}
+						/>
+					</>
+				)}
 
 				{subscriptionId && <SubscriptionEntitlementsSection subscriptionId={subscriptionId} />}
 
