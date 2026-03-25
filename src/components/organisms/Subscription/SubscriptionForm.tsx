@@ -1,4 +1,5 @@
-import { Select, FormHeader, Label, DecimalUsageInput, DatePicker } from '@/components/atoms';
+import { Select, FormHeader, Label, DecimalUsageInput, DatePicker, AddButton } from '@/components/atoms';
+import { X } from 'lucide-react';
 import { Switch } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { toSentenceCase } from '@/utils/common/helper_functions';
@@ -27,7 +28,7 @@ import CreditGrantApi from '@/api/CreditGrantApi';
 import EntitlementApi from '@/api/EntitlementApi';
 import AddonApi from '@/api/AddonApi';
 import { AddAddonToSubscriptionRequest } from '@/types/dto/Addon';
-import { SubscriptionDiscountTable, EntitlementOverridesTable } from '@/components/molecules';
+import { SubscriptionDiscountTable, EntitlementOverridesTable, AddInheritedCustomersDialog } from '@/components/molecules';
 import { DataType, FilterOperator } from '@/types/common/QueryBuilder';
 import SubscriptionTaxAssociationTable from '@/components/molecules/SubscriptionTaxAssociationTable';
 import PhaseList from './PhaseList';
@@ -275,6 +276,7 @@ const SubscriptionForm = ({
 	const [isAddChargeDialogOpen, setAddChargeDialogOpen] = useState(false);
 	// When set, dialog is in edit mode for this added line item (tempId)
 	const [editingAddedChargeTempId, setEditingAddedChargeTempId] = useState<string | null>(null);
+	const [isAddInheritanceDialogOpen, setIsAddInheritanceDialogOpen] = useState(false);
 
 	// Combine plan credit grants with user-added credit grants (all editable now)
 	const relevantCreditGrants = useMemo(() => {
@@ -824,6 +826,69 @@ const SubscriptionForm = ({
 							onOverrideReset={handleEntitlementOverrideReset}
 						/>
 					</div>
+				</div>
+			)}
+
+			{/* Inherited Customers Section — create mode only */}
+			{state.selectedPlan && !isLoadingPlanDetails && !isDisabled && (
+				<div className='space-y-4 mt-4 pt-3 border-t border-gray-200'>
+					<div className='flex items-center justify-between'>
+						<FormHeader className='mb-0' title='Inherited Customers' variant='sub-header' />
+						<AddButton onClick={() => setIsAddInheritanceDialogOpen(true)} label='Add Customers' />
+					</div>
+
+					{state.inheritedCustomers.length > 0 && (
+						<div className='rounded-[6px] border border-gray-300 overflow-hidden'>
+							<table className='w-full text-sm'>
+								<thead className='bg-gray-50'>
+									<tr>
+										<th className='text-left px-4 py-2 font-medium text-gray-600'>Customer</th>
+										<th className='text-left px-4 py-2 font-medium text-gray-600'>External ID</th>
+										<th className='w-10' />
+									</tr>
+								</thead>
+								<tbody>
+									{state.inheritedCustomers.map((customer) => (
+										<tr key={customer.id} className='border-t border-gray-200'>
+											<td className='px-4 py-2 text-gray-900'>{customer.name}</td>
+											<td className='px-4 py-2 text-gray-500'>{customer.external_id}</td>
+											<td className='px-4 py-2'>
+												<button
+													type='button'
+													onClick={() =>
+														setState((prev) => ({
+															...prev,
+															inheritedCustomers: prev.inheritedCustomers.filter((c) => c.id !== customer.id),
+														}))
+													}
+													className='text-gray-400 hover:text-red-500 transition-colors'
+													aria-label={`Remove ${customer.name}`}>
+													<X className='h-4 w-4' />
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					)}
+
+					<AddInheritedCustomersDialog
+						isOpen={isAddInheritanceDialogOpen}
+						onOpenChange={setIsAddInheritanceDialogOpen}
+						excludeIds={state.inheritedCustomers.map((c) => c.id)}
+						onConfirm={(customers) => {
+							setState((prev) => {
+								const existingIds = new Set(prev.inheritedCustomers.map((c) => c.id));
+								const newCustomers = customers.filter((c) => !existingIds.has(c.id));
+								return {
+									...prev,
+									inheritedCustomers: [...prev.inheritedCustomers, ...newCustomers],
+								};
+							});
+							setIsAddInheritanceDialogOpen(false);
+						}}
+					/>
 				</div>
 			)}
 
