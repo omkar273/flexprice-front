@@ -34,6 +34,7 @@ import {
 	TaxRateOverride,
 	EntitlementOverrideRequest,
 	SearchPricesResponse,
+	SubscriptionInheritanceConfig,
 } from '@/types/dto';
 import { FilterOperator, DataType } from '@/types/common/QueryBuilder';
 import { OverrideLineItemRequest, SubscriptionPhaseCreateRequest } from '@/types/dto/Subscription';
@@ -88,6 +89,8 @@ export type SubscriptionFormState = {
 	commitmentDuration: string;
 	/** The internal customer ID to invoice for this subscription (overrides the default) */
 	invoicingCustomer?: Customer;
+	/** Full Customer objects selected to inherit this subscription (create flow only) */
+	inheritedCustomers: Customer[];
 	paymentTerms?: string;
 	/** When true, create payload sends proration_behavior CREATE_PRORATIONS; when false, sends NONE */
 	prorationCreateLineItems: boolean;
@@ -253,6 +256,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		enable_true_up: false,
 		commitmentDuration: BILLING_PERIOD.MONTHLY.toUpperCase(),
 		invoicingCustomer: undefined,
+		inheritedCustomers: [],
 		paymentTerms: undefined,
 		prorationCreateLineItems: false,
 		hasModifiedPlanCreditGrants: false,
@@ -593,7 +597,19 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			enable_true_up: subscriptionState.enable_true_up,
 			commitment_duration: sanitized.commitmentDuration ? (sanitized.commitmentDuration as BILLING_PERIOD) : undefined,
 			subscription_status: isDraftParam ? SUBSCRIPTION_STATUS.DRAFT : undefined,
-			inheritance: sanitized.invoicingCustomerId ? { invoicing_customer_id: sanitized.invoicingCustomerId } : undefined,
+			// Build inheritance config — only include if there's something to put in it
+			...(() => {
+				const hasInheritedCustomers = subscriptionState.inheritedCustomers.length > 0;
+				const hasInvoicingOverride = !!sanitized.invoicingCustomerId;
+				if (!hasInheritedCustomers && !hasInvoicingOverride) return {};
+				const inheritanceConfig: SubscriptionInheritanceConfig = {
+					...(hasInheritedCustomers && {
+						customer_ids_to_inherit_subscription: subscriptionState.inheritedCustomers.map((c) => c.id),
+					}),
+					...(hasInvoicingOverride && { invoicing_customer_id: sanitized.invoicingCustomerId }),
+				};
+				return { inheritance: inheritanceConfig };
+			})(),
 			proration_behavior: subscriptionState.prorationCreateLineItems
 				? SUBSCRIPTION_PRORATION_BEHAVIOR.CREATE_PRORATIONS
 				: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,
