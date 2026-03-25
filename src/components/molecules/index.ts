@@ -49,6 +49,8 @@ export { SubscriptionEntitlementsSection } from './SubscriptionEntitlementsSecti
 export { default as SubscriptionAddonsSection } from './SubscriptionAddonsSection/SubscriptionAddonsSection';
 export { SubscriptionEditDetailsHeader, SubscriptionEditChargesSection, SubscriptionEditCreditGrantsSection } from './Subscription';
 export { UpdateSubscriptionDrawer } from './UpdateSubscriptionDrawer';
+export { default as AddInheritedCustomersDialog } from './AddInheritedCustomersDialog/AddInheritedCustomersDialog';
+export { default as InheritedCustomersTable } from './InheritedCustomersTable/InheritedCustomersTable';
 
 // Invoice & Billing
 export {
