@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { Customer } from '@/models';
 import { Modal, Button, FormHeader } from '@/components/atoms';
-import CustomerApi from '@/api/CustomerApi';
-import { X, Search } from 'lucide-react';
+import CustomerMultiSearchSelect from '@/components/molecules/Customer/CustomerMultiSearchSelect';
+import { X, Search, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface AddInheritedCustomersDialogProps {
@@ -22,51 +22,13 @@ const AddInheritedCustomersDialog: React.FC<AddInheritedCustomersDialogProps> = 
 	excludeIds = [],
 	isLoading = false,
 }) => {
-	const [query, setQuery] = useState('');
-	const [searchResults, setSearchResults] = useState<Customer[]>([]);
-	const [isSearching, setIsSearching] = useState(false);
 	const [selectedCustomers, setSelectedCustomers] = useState<Customer[]>([]);
-	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	const handleQueryChange = useCallback(
-		(value: string) => {
-			setQuery(value);
-			if (debounceRef.current) clearTimeout(debounceRef.current);
-			if (!value.trim()) {
-				setSearchResults([]);
-				return;
-			}
-			debounceRef.current = setTimeout(async () => {
-				setIsSearching(true);
-				try {
-					const response = await CustomerApi.searchCustomers(value.trim(), 20);
-					const filtered = (response.items ?? []).filter(
-						(c) => !excludeIds.includes(c.id) && !selectedCustomers.some((s) => s.id === c.id),
-					);
-					setSearchResults(filtered);
-				} catch {
-					setSearchResults([]);
-				} finally {
-					setIsSearching(false);
-				}
-			}, 300);
-		},
-		[excludeIds, selectedCustomers],
-	);
-
-	const handleSelect = useCallback((customer: Customer) => {
-		setSelectedCustomers((prev) => (prev.some((c) => c.id === customer.id) ? prev : [...prev, customer]));
-		setQuery('');
-		setSearchResults([]);
-	}, []);
 
 	const handleRemove = useCallback((customerId: string) => {
 		setSelectedCustomers((prev) => prev.filter((c) => c.id !== customerId));
 	}, []);
 
 	const handleClose = useCallback(() => {
-		setQuery('');
-		setSearchResults([]);
 		setSelectedCustomers([]);
 		onOpenChange(false);
 	}, [onOpenChange]);
@@ -75,6 +37,8 @@ const AddInheritedCustomersDialog: React.FC<AddInheritedCustomersDialogProps> = 
 		if (selectedCustomers.length === 0 || isLoading) return;
 		onConfirm(selectedCustomers);
 	}, [selectedCustomers, isLoading, onConfirm]);
+
+	const searchPlaceholder = 'Search by name, email, or ID...';
 
 	return (
 		<Modal
@@ -86,41 +50,45 @@ const AddInheritedCustomersDialog: React.FC<AddInheritedCustomersDialogProps> = 
 			<div className='space-y-4'>
 				<FormHeader title='Add Customers to Inherit Subscription' variant='sub-header' />
 
-				{/* Search input */}
 				<div className='space-y-2'>
-					<div className='relative'>
-						<Search className='absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400' />
-						<input
-							className='w-full pl-9 pr-3 py-2 border border-gray-300 rounded-[6px] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary'
-							placeholder='Search by name, email, or ID...'
-							value={query}
-							onChange={(e) => handleQueryChange(e.target.value)}
-						/>
-					</div>
-
-					{/* Search results dropdown */}
-					{(searchResults.length > 0 || (isSearching && query)) && (
-						<div className='border border-gray-200 rounded-[6px] bg-white shadow-sm max-h-48 overflow-y-auto'>
-							{isSearching && <div className='px-3 py-2 text-sm text-gray-400'>Searching...</div>}
-							{!isSearching &&
-								searchResults.map((customer) => (
-									<button
-										key={customer.id}
-										type='button'
-										className='w-full text-left px-3 py-2 hover:bg-gray-50 transition-colors'
-										onClick={() => handleSelect(customer)}>
-										<p className='text-sm font-medium text-gray-900'>{customer.name}</p>
-										<p className='text-xs text-gray-500'>{customer.external_id}</p>
-									</button>
-								))}
-							{!isSearching && searchResults.length === 0 && query && (
-								<div className='px-3 py-2 text-sm text-gray-400'>No customers found</div>
-							)}
-						</div>
-					)}
+					<CustomerMultiSearchSelect
+						value={selectedCustomers}
+						onChange={setSelectedCustomers}
+						excludeIds={excludeIds}
+						fetchWhenQueryEmpty={false}
+						minSearchLength={1}
+						shortQueryHint='Type to search…'
+						disabled={isLoading}
+						searchPlaceholder={searchPlaceholder}
+						display={{
+							placeholder: searchPlaceholder,
+							className: 'rounded-[6px] border-gray-300 justify-start gap-2',
+							trigger: (
+								<>
+									<Search className='h-4 w-4 text-gray-400 shrink-0' />
+									<span
+										className={cn(
+											'truncate flex-1 text-left text-sm',
+											selectedCustomers.length === 0 ? 'text-muted-foreground' : 'text-foreground',
+										)}>
+										{selectedCustomers.length === 0
+											? searchPlaceholder
+											: selectedCustomers.length === 1
+												? selectedCustomers[0].name
+												: `${selectedCustomers.length} selected`}
+									</span>
+									<ChevronDown className='h-4 w-4 opacity-50 shrink-0' />
+								</>
+							),
+						}}
+						options={{
+							noOptionsText: 'No customers found',
+							emptyText: 'No customers found',
+							hideSelectedTick: false,
+						}}
+					/>
 				</div>
 
-				{/* Selected customers chips */}
 				{selectedCustomers.length > 0 && (
 					<div className='space-y-2'>
 						<p className='text-sm font-medium text-gray-700'>Selected customers</p>
@@ -146,7 +114,6 @@ const AddInheritedCustomersDialog: React.FC<AddInheritedCustomersDialogProps> = 
 					</div>
 				)}
 
-				{/* Footer actions */}
 				<div className='flex justify-end gap-2 pt-2'>
 					<Button variant='outline' onClick={handleClose} disabled={isLoading}>
 						Cancel
