@@ -15,7 +15,7 @@ import {
 } from '@/types/common/QueryBuilder';
 import { BILLING_CADENCE } from '@/models/Invoice';
 import { BILLING_PERIOD } from '@/constants/constants';
-import { SUBSCRIPTION_STATUS } from '@/models/Subscription';
+import { SUBSCRIPTION_STATUS, SUBSCRIPTION_TYPE } from '@/models/Subscription';
 import { toSentenceCase } from '@/utils/common/helper_functions';
 import { EXPAND } from '@/models/expand';
 import { generateExpandQueryParams } from '@/utils/common/api_helper';
@@ -193,7 +193,7 @@ const SubscriptionsPage = () => {
 							{
 								text: 'Cancel',
 								icon: <Trash2 />,
-								enabled: row.subscription_status !== SUBSCRIPTION_STATUS.CANCELLED,
+								enabled: row.subscription_status !== SUBSCRIPTION_STATUS.CANCELLED && row.subscription_type !== SUBSCRIPTION_TYPE.INHERITED,
 								onClick: () => setCancelSubscriptionId(row.id),
 							},
 						]}

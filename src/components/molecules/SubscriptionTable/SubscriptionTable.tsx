@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { ActionButton, Chip } from '@/components/atoms';
 import FlexpriceTable, { ColumnData } from '../Table';
 import formatDate from '@/utils/common/format_date';
-import { Subscription, SUBSCRIPTION_STATUS } from '@/models/Subscription';
+import { Subscription, SUBSCRIPTION_STATUS, SUBSCRIPTION_TYPE } from '@/models/Subscription';
 import { useNavigate } from 'react-router';
 import { RouteNames } from '@/core/routes/Routes';
 import RedirectCell from '../Table/RedirectCell';
@@ -81,7 +81,7 @@ const SubscriptionTable: FC<Props> = ({ data, onEdit }) => {
 						{
 							text: 'Cancel',
 							icon: <Trash2 />,
-							enabled: row.subscription_status !== SUBSCRIPTION_STATUS.CANCELLED,
+							enabled: row.subscription_status !== SUBSCRIPTION_STATUS.CANCELLED && row.subscription_type !== SUBSCRIPTION_TYPE.INHERITED,
 							onClick: () => setCancelSubscriptionId(row.id),
 						},
 					]}
