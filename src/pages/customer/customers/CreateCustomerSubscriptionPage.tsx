@@ -593,7 +593,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			enable_true_up: subscriptionState.enable_true_up,
 			commitment_duration: sanitized.commitmentDuration ? (sanitized.commitmentDuration as BILLING_PERIOD) : undefined,
 			subscription_status: isDraftParam ? SUBSCRIPTION_STATUS.DRAFT : undefined,
-			invoicing_customer_id: sanitized.invoicingCustomerId || undefined,
+			inheritance: sanitized.invoicingCustomerId ? { invoicing_customer_id: sanitized.invoicingCustomerId } : undefined,
 			proration_behavior: subscriptionState.prorationCreateLineItems
 				? SUBSCRIPTION_PRORATION_BEHAVIOR.CREATE_PRORATIONS
 				: SUBSCRIPTION_PRORATION_BEHAVIOR.NONE,

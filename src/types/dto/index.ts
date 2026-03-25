@@ -159,6 +159,7 @@ export type {
 	EntitlementOverrideRequest,
 	SubscriptionPriceCreateRequest,
 } from './Subscription';
+export type { SubscriptionInheritanceConfig, ExecuteSubscriptionInheritanceRequest } from './Subscription';
 
 export type { GetBillingdetailsResponse, UpdateTenantRequest } from './Tenant';
 

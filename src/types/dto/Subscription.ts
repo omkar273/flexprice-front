@@ -23,6 +23,7 @@ import {
 	PRICE_UNIT_TYPE,
 	INVOICE_CADENCE,
 } from '@/models';
+import { SUBSCRIPTION_TYPE } from '@/models/Subscription';
 import { PriceUnitConfig } from '@/types/dto/Price';
 import { BILLING_PERIOD } from '@/constants/constants';
 import { QueryFilter, TimeRangeFilter } from './base';
@@ -53,6 +54,8 @@ export interface ListSubscriptionsPayload extends Omit<QueryFilter, 'sort'>, Tim
 	parent_subscription_ids?: string[];
 	/** Filters by invoicing customer IDs (backend: invoicing_customer_ids) */
 	invoicing_customer_ids?: string[];
+	/** Filter by subscription types (standalone, parent, inherited) */
+	subscription_types?: SUBSCRIPTION_TYPE[];
 }
 
 import { TaxRateOverride } from './tax';
@@ -232,6 +235,25 @@ export interface CancelSubscriptionPayload {
 // ENHANCED SUBSCRIPTION REQUEST/RESPONSE TYPES
 // =============================================================================
 
+export interface SubscriptionInheritanceConfig {
+	/** Internal customer IDs to create inherited child subscriptions for */
+	customer_ids_to_inherit_subscription?: string[];
+	/**
+	 * Parent subscription ID — intentionally NOT set by the frontend;
+	 * the backend sets this internally when creating inherited children.
+	 */
+	parent_subscription_id?: string;
+	/**
+	 * Internal customer ID to use for invoicing.
+	 * External ID variant intentionally omitted — frontend always has internal IDs.
+	 */
+	invoicing_customer_id?: string;
+}
+
+export interface ExecuteSubscriptionInheritanceRequest {
+	customer_ids_to_inherit_subscription?: string[];
+}
+
 export interface CreateSubscriptionRequest {
 	// Customer identification - prioritized over external_customer_id if both provided
 	customer_id?: string;
@@ -239,17 +261,10 @@ export interface CreateSubscriptionRequest {
 	/** @deprecated Use invoicing_customer_id or invoicing_customer_external_id instead. Cannot be combined with those fields. */
 	invoice_billing?: INVOICE_BILLING;
 	/**
-	 * The internal customer ID to use for invoicing this subscription.
-	 * Overrides the default (the subscription's own customer).
-	 * Mutually exclusive with invoicing_customer_external_id — provide only one.
+	 * Inheritance configuration. Omit entirely when creating a standalone subscription.
+	 * If customer_ids_to_inherit_subscription is non-empty, the subscription becomes type=parent.
 	 */
-	invoicing_customer_id?: string;
-	/**
-	 * The external customer ID to use for invoicing this subscription.
-	 * Resolved to an internal ID by the backend via external_id lookup.
-	 * Mutually exclusive with invoicing_customer_id — provide only one.
-	 */
-	invoicing_customer_external_id?: string;
+	inheritance?: SubscriptionInheritanceConfig;
 
 	// Plan and billing configuration
 	plan_id: string;
@@ -321,9 +336,6 @@ export interface CreateSubscriptionRequest {
 
 	// Extra line items at creation (in addition to plan prices). Each has price_id or inline price.
 	line_items?: CreateSubscriptionLineItemRequest[];
-
-	// Parent subscription ID when this subscription is a child in a hierarchy
-	parent_subscription_id?: string | null;
 }
 
 export interface SubscriptionPhaseCreateRequest {
@@ -642,6 +654,7 @@ export interface SubscriptionFilter extends Omit<QueryFilter, 'sort'>, TimeRange
 	parent_subscription_ids?: string[];
 	/** Filters by invoicing customer IDs (backend: invoicing_customer_ids) */
 	invoicing_customer_ids?: string[];
+	subscription_types?: SUBSCRIPTION_TYPE[];
 }
 
 // =============================================================================
