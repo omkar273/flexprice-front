@@ -1,4 +1,4 @@
-import { Loader, Page, Spacer } from '@/components/atoms';
+import { FormHeader, Loader, Page, Spacer } from '@/components/atoms';
 import {
 	SubscriptionEntitlementsSection,
 	SubscriptionAddonsSection,
@@ -11,7 +11,8 @@ import CustomerApi from '@/api/CustomerApi';
 import SubscriptionApi from '@/api/SubscriptionApi';
 import CreditGrantApi from '@/api/CreditGrantApi';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import FlexpriceTable, { ColumnData, RedirectCell } from '@/components/molecules/Table';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
 import { LineItem, SUBSCRIPTION_STATUS } from '@/models/Subscription';
@@ -24,7 +25,12 @@ import {
 	DeleteSubscriptionLineItemRequest,
 	UpdateSubscriptionLineItemRequest,
 	UpdateSubscriptionRequest,
+	SubscriptionResponse,
 } from '@/types/dto/Subscription';
+import { DataType, FilterOperator } from '@/types/common/QueryBuilder';
+import { EXPAND } from '@/models';
+import { generateExpandQueryParams } from '@/utils/common/api_helper';
+import formatDate from '@/utils/common/format_date';
 import { ExtendedPriceOverride } from '@/utils/common/price_override_helpers';
 import { convertPriceOverrideToLineItemUpdate } from '@/utils/subscription/priceOverrideToLineItemUpdate';
 import { lineItemToPrice } from '@/utils/subscription/lineItemToPrice';
@@ -34,11 +40,15 @@ import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { ENTITY_STATUS, CreditGrant } from '@/models';
 
 type Params = {
-	id: string;
+	/** Global route: `/billing/subscriptions/:id/edit` */
+	id?: string;
+	/** Customer nested route: `.../subscription/:subscription_id/edit` */
+	subscription_id?: string;
 };
 
 const CustomerSubscriptionEditPage: React.FC = () => {
-	const { id: subscriptionId } = useParams<Params>();
+	const params = useParams<Params>();
+	const subscriptionId = params.subscription_id ?? params.id;
 	const [editingLineItem, setEditingLineItem] = useState<LineItem | null>(null);
 	const [overriddenPrices, setOverriddenPrices] = useState<Record<string, ExtendedPriceOverride>>({});
 
@@ -82,6 +92,55 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 			subscriptionDetails.subscription_status !== SUBSCRIPTION_STATUS.TRIALING &&
 			!!subscriptionId,
 	});
+
+	const { data: inheritedSubscriptionsData } = useQuery({
+		queryKey: ['inheritedSubscriptions', subscriptionId, 'plan+customer'],
+		queryFn: async () =>
+			SubscriptionApi.searchSubscriptions({
+				filters: [
+					{
+						field: 'parent_subscription_id',
+						operator: FilterOperator.EQUAL,
+						data_type: DataType.STRING,
+						value: { string: subscriptionId! },
+					},
+				],
+				limit: 100,
+				offset: 0,
+				expand: generateExpandQueryParams([EXPAND.PLAN, EXPAND.CUSTOMER]),
+			}),
+		enabled: !!subscriptionId && !!subscriptionDetails,
+	});
+
+	const inheritedSubscriptionRows = inheritedSubscriptionsData?.items ?? [];
+
+	const inheritedSubscriptionsColumns = useMemo<ColumnData<SubscriptionResponse>[]>(
+		() => [
+			{
+				title: 'Customer',
+				render: (row) => (
+					<RedirectCell redirectUrl={`${RouteNames.customers}/${row.customer_id}`}>{row.customer?.name ?? '—'}</RedirectCell>
+				),
+			},
+			{
+				title: 'Plan',
+				render: (row) => (
+					<RedirectCell redirectUrl={`${RouteNames.customers}/${row.customer_id}/subscription/${row.id}`}>
+						{row.plan?.name ?? '—'}
+					</RedirectCell>
+				),
+			},
+			{
+				title: 'Start date',
+				render: (row) => <span className='text-muted-foreground'>{formatDate(row.start_date)}</span>,
+			},
+			{
+				title: 'Renewal date',
+				render: (row) => <span className='text-muted-foreground'>{formatDate(row.current_period_end)}</span>,
+			},
+		],
+		[],
+	);
 
 	const { mutate: updateLineItem } = useMutation({
 		mutationFn: async ({ lineItemId, updateData }: { lineItemId: string; updateData: UpdateSubscriptionLineItemRequest }) => {
@@ -275,6 +334,15 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 					updateDrawerOpen={updateSubscriptionDrawerOpen}
 					onUpdateDrawerOpenChange={setUpdateSubscriptionDrawerOpen}
 				/>
+
+				{inheritedSubscriptionRows.length > 0 && (
+					<div className='space-y-4'>
+						<FormHeader className='mb-0' title='Inherited subscriptions' variant='sub-header' />
+						<div className='rounded-[6px] border border-gray-300'>
+							<FlexpriceTable data={inheritedSubscriptionRows} columns={inheritedSubscriptionsColumns} />
+						</div>
+					</div>
+				)}
 
 				<SubscriptionEditChargesSection
 					groupedLineItems={groupedLineItems}
