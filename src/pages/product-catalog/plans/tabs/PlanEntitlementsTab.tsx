@@ -7,7 +7,7 @@ import { EntitlementApi } from '@/api';
 import { FlexpriceTable, ColumnData, RedirectCell, AddEntitlementDrawer } from '@/components/molecules';
 import { getFeatureTypeChips } from '@/components/molecules/CustomerUsageTable/CustomerUsageTable';
 import { formatAmount } from '@/components/atoms/Input/Input';
-import { Entitlement, ENTITY_STATUS, FEATURE_TYPE, ENTITLEMENT_ENTITY_TYPE, EXPAND } from '@/models';
+import { Entitlement, ENTITY_STATUS, FEATURE_TYPE, ENTITLEMENT_ENTITY_TYPE, EXPAND, ENTITLEMENT_USAGE_RESET_PERIOD } from '@/models';
 import { EntitlementResponse } from '@/types';
 import { RouteNames } from '@/core/routes/Routes';
 import { ActionButton } from '@/components/atoms';
@@ -73,6 +73,13 @@ const PlanEntitlementsTab = () => {
 			title: 'Type',
 			render(row) {
 				return getFeatureTypeChips({ type: row?.feature_type || '', showIcon: true, showLabel: true });
+			},
+		},
+		{
+			title: 'Usage Reset',
+			render(row) {
+				const period = row?.usage_reset_period as ENTITLEMENT_USAGE_RESET_PERIOD | '' | null;
+				return period && Object.values(ENTITLEMENT_USAGE_RESET_PERIOD).includes(period as ENTITLEMENT_USAGE_RESET_PERIOD) ? period : '--';
 			},
 		},
 		{
