@@ -27,40 +27,31 @@ const FILTER_OPTIONS = [
 
 const getDateRangeForPeriod = (period: RevenueFilterValue) => {
 	const now = new Date();
+	const y = now.getUTCFullYear();
+	const m = now.getUTCMonth();
 
-	const startOfMonth = (year: number, month: number) => new Date(year, month, 1, 0, 0, 0, 0);
-	const endOfMonth = (year: number, month: number) => new Date(year, month + 1, 0, 23, 59, 59, 999);
-	const startOfQuarter = (year: number, quarter: number) => new Date(year, quarter * 3, 1, 0, 0, 0, 0);
-	const endOfQuarter = (year: number, quarter: number) => new Date(year, quarter * 3 + 3, 0, 23, 59, 59, 999);
+	// 1st of the given month at 00:00:00.000Z
+	const utc1st = (year: number, month: number) => new Date(Date.UTC(year, month, 1));
 
 	switch (period) {
 		case 'this_month':
-			return { start: startOfMonth(now.getFullYear(), now.getMonth()), end: now };
-		case 'last_month': {
-			const lastMonth = now.getMonth() - 1;
-			const year = lastMonth < 0 ? now.getFullYear() - 1 : now.getFullYear();
-			const month = (lastMonth + 12) % 12;
-			return { start: startOfMonth(year, month), end: endOfMonth(year, month) };
-		}
+			return { start: utc1st(y, m), end: utc1st(y, m + 1) };
+		case 'last_month':
+			return { start: utc1st(y, m - 1), end: utc1st(y, m) };
 		case 'this_quarter': {
-			const quarter = Math.floor(now.getMonth() / 3);
-			return { start: startOfQuarter(now.getFullYear(), quarter), end: now };
+			const qStart = Math.floor(m / 3) * 3;
+			return { start: utc1st(y, qStart), end: utc1st(y, qStart + 3) };
 		}
 		case 'last_quarter': {
-			const currentQuarter = Math.floor(now.getMonth() / 3);
-			const quarter = currentQuarter === 0 ? 3 : currentQuarter - 1;
-			const year = currentQuarter === 0 ? now.getFullYear() - 1 : now.getFullYear();
-			return { start: startOfQuarter(year, quarter), end: endOfQuarter(year, quarter) };
+			const qStart = Math.floor(m / 3) * 3;
+			return { start: utc1st(y, qStart - 3), end: utc1st(y, qStart) };
 		}
 		case 'this_year':
-			return { start: new Date(now.getFullYear(), 0, 1, 0, 0, 0, 0), end: now };
+			return { start: utc1st(y, 0), end: utc1st(y + 1, 0) };
 		case 'last_year':
-			return {
-				start: new Date(now.getFullYear() - 1, 0, 1, 0, 0, 0, 0),
-				end: new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59, 999),
-			};
+			return { start: utc1st(y - 1, 0), end: utc1st(y, 0) };
 		default:
-			return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: now };
+			return { start: utc1st(y, m), end: utc1st(y, m + 1) };
 	}
 };
 
@@ -246,9 +237,9 @@ const Revenue = () => {
 									</p>
 								)}
 								<p className='text-[12px] text-gray-400'>
-									{start.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+									{start.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
 									{' – '}
-									{end.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+									{end.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
 								</p>
 							</div>
 						</div>
