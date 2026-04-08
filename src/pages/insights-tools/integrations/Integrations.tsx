@@ -1,13 +1,9 @@
-import { Loader, Page } from '@/components/atoms';
+import { Loader, Page, Dialog, Card, Button, Divider } from '@/components/atoms';
 import { Integration, integrations } from './integrationsData';
 import { cn } from '@/lib/utils';
 import { PremiumFeature, ApiDocsContent } from '@/components/molecules';
 import { useMutation, useQueryClient, useQueries } from '@tanstack/react-query';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { ExternalLinkIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -323,8 +319,8 @@ const IntegrationCard = ({ integration, connected, connection, isPreviewConnecti
 
 	return (
 		<PremiumFeature isPremiumFeature={integration.premium}>
-			<Card className={cn('min-w-0 overflow-hidden border-slate-200 shadow-sm rounded-xl')}>
-				<CardContent className='min-w-0 overflow-hidden p-6'>
+			<Card className={cn('min-w-0 overflow-hidden border-slate-200 shadow-sm rounded-xl')} noPadding>
+				<div className='min-w-0 overflow-hidden p-6'>
 					<div className='flex gap-5'>
 						<div className='flex size-14 shrink-0 items-center justify-center rounded-lg bg-slate-100'>
 							<img src={integration.logo} alt={integration.name} className='size-8 object-contain' />
@@ -370,9 +366,9 @@ const IntegrationCard = ({ integration, connected, connection, isPreviewConnecti
 							)}
 						</div>
 					</div>
-				</CardContent>
-				<Separator className='bg-slate-100' />
-				<CardFooter className='flex flex-row items-center justify-between px-6 py-4'>
+				</div>
+				<Divider color='#f1f5f9' className='w-full' />
+				<div className='flex flex-row items-center justify-between px-6 py-4'>
 					<div className='flex items-center gap-2'>
 						{connected ? (
 							<>
@@ -406,26 +402,23 @@ const IntegrationCard = ({ integration, connected, connection, isPreviewConnecti
 							'data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500',
 						)}
 					/>
-				</CardFooter>
+				</div>
 			</Card>
 
-			<Dialog open={disconnectDialogOpen} onOpenChange={setDisconnectDialogOpen}>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>Disconnect {integration.name}?</DialogTitle>
-						<DialogDescription>
-							This will remove the connection. You can reconnect from the integrations page at any time.
-						</DialogDescription>
-					</DialogHeader>
-					<DialogFooter>
-						<Button variant='outline' onClick={() => setDisconnectDialogOpen(false)} disabled={isDeletingConnection}>
-							Cancel
-						</Button>
-						<Button variant='destructive' onClick={handleConfirmDisconnect} disabled={isDeletingConnection || !connection?.id}>
-							{isDeletingConnection ? 'Disconnecting…' : 'Disconnect'}
-						</Button>
-					</DialogFooter>
-				</DialogContent>
+			<Dialog
+				isOpen={disconnectDialogOpen}
+				onOpenChange={setDisconnectDialogOpen}
+				title={`Disconnect ${integration.name}?`}
+				description='This will remove the connection. You can reconnect from the integrations page at any time.'
+				descriptionClassName='mt-2'>
+				<div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-2'>
+					<Button variant='outline' onClick={() => setDisconnectDialogOpen(false)} disabled={isDeletingConnection}>
+						Cancel
+					</Button>
+					<Button variant='destructive' onClick={handleConfirmDisconnect} disabled={isDeletingConnection || !connection?.id}>
+						{isDeletingConnection ? 'Disconnecting…' : 'Disconnect'}
+					</Button>
+				</div>
 			</Dialog>
 		</PremiumFeature>
 	);

@@ -236,7 +236,7 @@ export const integrations: Integration[] = [
 	},
 	{
 		name: 'Nomod',
-		docsUrl: 'https://docs.flexprice.io/integrations/nomod/c',
+		docsUrl: 'https://docs.flexprice.io/integrations/nomod',
 		description: 'Send invoices and collect payments using payment links through Nomod integration.',
 		logo: '/assets/logo/nomod-logo.svg',
 		tags: ['Payments', 'Invoices'],
