@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { memo, useCallback, useMemo, useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { QueryBuilder } from '@/components/molecules';
 import { ColumnData } from '@/components/molecules/Table';
 import usePagination from '@/hooks/usePagination';
@@ -57,6 +57,11 @@ export interface DataConfig<T> {
 	}) => Promise<{ items: T[]; pagination: { total?: number } }>;
 	/** Additional query parameters to pass to fetch functions */
 	additionalQueryParams?: Record<string, any>;
+	/**
+	 * Called whenever the main query result changes, including when served from cache
+	 * (e.g. pagination or filter changes). Use to sync UI like dynamic table columns.
+	 */
+	onMainDataChange?: (data: { items: T[]; pagination: { total?: number } } | undefined) => void;
 }
 
 /**
@@ -326,6 +331,13 @@ const QueryableDataArea = <T = any,>({
 		},
 		shouldProbe: (mainData) => mainData?.items.length === 0,
 	});
+
+	const onMainDataChangeRef = useRef(dataConfig.onMainDataChange);
+	onMainDataChangeRef.current = dataConfig.onMainDataChange;
+
+	useLayoutEffect(() => {
+		onMainDataChangeRef.current?.(data);
+	}, [data]);
 
 	// Consolidated effect: detect query changes and manage loading states
 	useEffect(() => {
