@@ -2,10 +2,15 @@ import { FC, useMemo } from 'react';
 import FlexpriceTable, { ColumnData, RedirectCell } from '../Table';
 import { getCurrencySymbol } from '@/utils/common/helper_functions';
 import { formatBillingPeriod } from '@/utils/common/format_date';
-import { Invoice } from '@/models/Invoice';
+import { Invoice, INVOICE_TYPE } from '@/models/Invoice';
 import { getPaymentStatusChip, getStatusChip } from './InvoiceTable';
 import Customer from '@/models/Customer';
 import { RouteNames } from '@/core/routes/Routes';
+
+const getPlanDisplayName = (invoice: Invoice): string => {
+	if (invoice.invoice_type !== INVOICE_TYPE.SUBSCRIPTION) return '--';
+	return invoice.line_items?.find((item) => item.plan_display_name)?.plan_display_name ?? '--';
+};
 
 import InvoiceTableMenu from './InvoiceTableMenu';
 
@@ -30,6 +35,10 @@ const CustomerInvoiceTable: FC<Props> = ({ data, onRowClick }) => {
 			{
 				title: 'Invoice Number',
 				render: (row) => <>{row.invoice_number || '--'}</>,
+			},
+			{
+				title: 'Plan',
+				render: (row) => <>{getPlanDisplayName(row)}</>,
 			},
 			{
 				title: 'Status',
