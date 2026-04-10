@@ -945,7 +945,7 @@ Plans:
 		label: 'Cursor',
 		subtitle: 'Agentic AI',
 		icon: '⌘',
-		iconSrc: '/assets/cursor logo.png',
+		iconSrc: '/assets/cursor-logo.png',
 		displayPrompt: `Please build me Cursor's pricing.
 
 - Free plan: 50 agent requests/month, 200 tab completions/month. Overage at $0.08/request and $0.01/completion.
@@ -958,7 +958,7 @@ Plans:
 		label: 'Gemini',
 		subtitle: 'Model Provider',
 		icon: '✦',
-		iconSrc: '/assets/gemini logo.png',
+		iconSrc: '/assets/gemini-logo.png',
 		displayPrompt: `Please build me Google Gemini's API pricing.
 
 There is a free tier with free input and output tokens on Gemini 2.5 Flash-Lite and Gemini 2.5 Flash.
@@ -973,7 +973,7 @@ There is a free tier with free input and output tokens on Gemini 2.5 Flash-Lite 
 		label: 'Apollo',
 		subtitle: 'Credits + Sales',
 		icon: '◎',
-		iconSrc: '/assets/apollo logo.png',
+		iconSrc: '/assets/apollo-logo.png',
 		displayPrompt: `Please build me Apollo.io-style credit-based pricing.
 
 - Starter at $49/month with 1,200 credits per month.
