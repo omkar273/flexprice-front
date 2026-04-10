@@ -1,17 +1,12 @@
 import { FC } from 'react';
 import { Card, AddButton, NoDataCard } from '@/components/atoms';
 import SubscriptionLineItemTable from '@/components/molecules/SubscriptionLineItemTable/SubscriptionLineItemTable';
-import type { LineItem } from '@/models/Subscription';
+import type { LineItem, SubscriptionCommitmentInfo } from '@/models/Subscription';
 import formatDate from '@/utils/common/format_date';
 import type { GroupedLineItems } from '@/hooks/useSubscriptionLineItemsGrouped';
 import type { PhaseDetail } from '@/hooks/useSubscriptionLineItemsGrouped';
 
-export interface SubscriptionCommitmentInfo {
-	enable_true_up?: boolean;
-	commitment_amount?: number;
-	overage_factor?: number;
-	commitment_duration?: string;
-}
+export type { SubscriptionCommitmentInfo };
 
 /** Subscription edit page: charges (line items) with and without phase. */
 export interface SubscriptionEditChargesSectionProps {
@@ -76,6 +71,7 @@ const SubscriptionEditChargesSection: FC<SubscriptionEditChargesSectionProps> = 
 						onTerminate={onTerminateLineItem}
 						hideCardWrapper={true}
 						commitmentInfo={commitmentInfo}
+						paginationPrefix='sub_line_items'
 					/>
 				</Card>
 			)}
@@ -95,6 +91,7 @@ const SubscriptionEditChargesSection: FC<SubscriptionEditChargesSectionProps> = 
 					onEdit={onEditLineItem}
 					onTerminate={onTerminateLineItem}
 					commitmentInfo={commitmentInfo}
+					paginationPrefix='sub_line_items'
 				/>
 			)}
 
@@ -122,6 +119,7 @@ const SubscriptionEditChargesSection: FC<SubscriptionEditChargesSectionProps> = 
 									onTerminate={onTerminateLineItem}
 									hideCardWrapper={true}
 									commitmentInfo={commitmentInfo}
+									paginationPrefix={`sub_line_items_phase_${index}`}
 								/>
 							</Card>
 						);

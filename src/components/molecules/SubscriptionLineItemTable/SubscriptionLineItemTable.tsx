@@ -1,5 +1,5 @@
 import { Card, CardHeader, NoDataCard, Chip, Tooltip, ShortPagination } from '@/components/atoms';
-import type { SubscriptionCommitmentInfo } from '@/components/molecules/Subscription/SubscriptionEditChargesSection';
+import type { SubscriptionCommitmentInfo } from '@/models/Subscription';
 import { ChargeValueCell, ColumnData, FlexpriceTable, TerminateLineItemModal, DropdownMenu } from '@/components/molecules';
 import { PriceTooltip } from '@/components/molecules/PriceTooltip';
 import { LineItem, SUBSCRIPTION_LINE_ITEM_ENTITY_TYPE } from '@/models/Subscription';
@@ -18,6 +18,7 @@ interface Props {
 	isLoading?: boolean;
 	hideCardWrapper?: boolean;
 	commitmentInfo?: SubscriptionCommitmentInfo;
+	paginationPrefix?: string;
 }
 
 interface LineItemWithStatus extends LineItem {
@@ -229,10 +230,18 @@ const formatCommitmentTooltip = (info: SubscriptionCommitmentInfo): React.ReactN
 
 const PAGE_SIZE = 10;
 
-const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoading, hideCardWrapper = false, commitmentInfo }) => {
+const SubscriptionLineItemTable: FC<Props> = ({
+	data,
+	onEdit,
+	onTerminate,
+	isLoading,
+	hideCardWrapper = false,
+	commitmentInfo,
+	paginationPrefix = PAGINATION_PREFIX.SUBSCRIPTION_LINE_ITEMS,
+}) => {
 	const [showTerminateModal, setShowTerminateModal] = useState(false);
 	const [selectedLineItem, setSelectedLineItem] = useState<LineItem | null>(null);
-	const { page, limit } = usePagination({ initialLimit: PAGE_SIZE, prefix: PAGINATION_PREFIX.SUBSCRIPTION_LINE_ITEMS });
+	const { page, limit } = usePagination({ initialLimit: PAGE_SIZE, prefix: paginationPrefix });
 
 	const handleEditClick = useCallback(
 		(lineItem: LineItem) => {
@@ -311,9 +320,9 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 								delayDuration={0}
 								sideOffset={5}
 								className='bg-white border border-gray-200 shadow-lg text-sm text-gray-900 px-4 py-3 rounded-[6px] max-w-[320px]'>
-								<span data-interactive='true' className='inline-flex items-center'>
-									<Info className='h-4 w-4 text-blue-500 cursor-pointer flex-shrink-0' />
-								</span>
+								<button type='button' data-interactive='true' className='inline-flex items-center focus:outline-none'>
+									<Info className='h-4 w-4 text-blue-500 flex-shrink-0' />
+								</button>
 							</Tooltip>
 						)}
 					</div>
@@ -438,13 +447,13 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 			{hideCardWrapper ? (
 				<>
 					<FlexpriceTable showEmptyRow={false} data={paginatedLineItems} columns={columns} />
-					<ShortPagination totalItems={processedLineItems.length} pageSize={PAGE_SIZE} prefix={PAGINATION_PREFIX.SUBSCRIPTION_LINE_ITEMS} />
+					<ShortPagination totalItems={processedLineItems.length} pageSize={PAGE_SIZE} prefix={paginationPrefix} />
 				</>
 			) : (
 				<Card variant='notched'>
 					<CardHeader title='Charges' />
 					<FlexpriceTable showEmptyRow={false} data={paginatedLineItems} columns={columns} />
-					<ShortPagination totalItems={processedLineItems.length} pageSize={PAGE_SIZE} prefix={PAGINATION_PREFIX.SUBSCRIPTION_LINE_ITEMS} />
+					<ShortPagination totalItems={processedLineItems.length} pageSize={PAGE_SIZE} prefix={paginationPrefix} />
 				</Card>
 			)}
 		</>

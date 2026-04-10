@@ -6,6 +6,13 @@ import { CreditGrant } from './CreditGrant';
 import { BaseModel, ENTITY_STATUS, Metadata } from './base';
 import { Price } from './Price';
 
+export interface SubscriptionCommitmentInfo {
+	enable_true_up?: boolean;
+	commitment_amount?: number;
+	overage_factor?: number;
+	commitment_duration?: string;
+}
+
 export interface LineItem extends BaseModel {
 	readonly subscription_id: string;
 	readonly customer_id: string;
@@ -101,6 +108,7 @@ export interface Subscription extends BaseModel {
 	commitment_amount?: number;
 	overage_factor?: number;
 	enable_true_up?: boolean;
+
 	/** Payment terms (e.g. 15 NET, 30 NET) used to compute invoice due date from period end */
 	readonly payment_terms?: string;
 
