@@ -368,6 +368,13 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 						subscriptionDetails?.subscription_status === SUBSCRIPTION_STATUS.CANCELLED ||
 						subscriptionDetails?.subscription_status === SUBSCRIPTION_STATUS.TRIALING
 					}
+					commitmentInfo={{
+						enable_true_up: subscriptionDetails?.enable_true_up,
+						commitment_amount: subscriptionDetails?.commitment_amount,
+						overage_factor: subscriptionDetails?.overage_factor,
+						commitment_duration: subscriptionDetails?.commitment_duration,
+						currency: subscriptionDetails?.currency,
+					}}
 				/>
 
 				<SubscriptionEditCreditGrantsSection

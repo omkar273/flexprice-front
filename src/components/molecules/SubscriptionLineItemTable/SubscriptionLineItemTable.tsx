@@ -1,11 +1,12 @@
 import { Card, CardHeader, NoDataCard, Chip, Tooltip } from '@/components/atoms';
+import type { SubscriptionCommitmentInfo } from '@/models/Subscription';
 import { ChargeValueCell, ColumnData, FlexpriceTable, TerminateLineItemModal, DropdownMenu } from '@/components/molecules';
 import { PriceTooltip } from '@/components/molecules/PriceTooltip';
 import { LineItem, SUBSCRIPTION_LINE_ITEM_ENTITY_TYPE } from '@/models/Subscription';
 import { FC, useState, useCallback, useMemo } from 'react';
-import { Trash2, Pencil } from 'lucide-react';
+import { Trash2, Pencil, Info } from 'lucide-react';
 import { ENTITY_STATUS } from '@/models/base';
-import { formatBillingPeriodForDisplay, getPriceTypeLabel } from '@/utils/common/helper_functions';
+import { formatBillingPeriodForDisplay, getCurrencySymbol, getPriceTypeLabel } from '@/utils/common/helper_functions';
 import { PRICE_ENTITY_TYPE, PRICE_STATUS } from '@/models/Price';
 import { formatDateTimeWithSecondsAndTimezone } from '@/utils/common/format_date';
 
@@ -15,6 +16,7 @@ interface Props {
 	onTerminate?: (lineItemId: string, endDate?: string) => void;
 	isLoading?: boolean;
 	hideCardWrapper?: boolean;
+	commitmentInfo?: SubscriptionCommitmentInfo;
 }
 
 interface LineItemWithStatus extends LineItem {
@@ -77,25 +79,20 @@ const getLineItemStatus = (lineItem: LineItem): PRICE_STATUS => {
 	const now = new Date();
 	const defaultEndDate = '0001-01-01T00:00:00Z';
 
-	// Check if start_date is in the future
 	if (lineItem.start_date && lineItem.start_date.trim() !== '') {
 		const startDate = new Date(lineItem.start_date);
-		// Check if date is valid (not NaN)
 		if (!isNaN(startDate.getTime()) && startDate > now) {
 			return PRICE_STATUS.UPCOMING;
 		}
 	}
 
-	// Check if end_date is in the past
 	if (lineItem.end_date && lineItem.end_date.trim() !== '' && lineItem.end_date !== defaultEndDate) {
 		const endDate = new Date(lineItem.end_date);
-		// Check if date is valid (not NaN)
 		if (!isNaN(endDate.getTime()) && endDate < now) {
 			return PRICE_STATUS.INACTIVE;
 		}
 	}
 
-	// Default to active
 	return PRICE_STATUS.ACTIVE;
 };
 
@@ -185,11 +182,54 @@ const formatLineItemDateTooltip = (lineItem: LineItem): React.ReactNode => {
 	return <div className='flex flex-col gap-2'>{dateItems}</div>;
 };
 
-const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoading, hideCardWrapper = false }) => {
+// Show icon only on USAGE line items when subscription has enable_true_up = true
+const shouldShowCommitmentIcon = (lineItem: LineItem, commitmentInfo?: SubscriptionCommitmentInfo): boolean => {
+	return commitmentInfo?.enable_true_up === true && lineItem.price_type?.toUpperCase() === 'USAGE';
+};
+
+const formatCommitmentTooltip = (info: SubscriptionCommitmentInfo): React.ReactNode => {
+	const rows: React.ReactNode[] = [];
+
+	if (info.commitment_amount != null) {
+		rows.push(
+			<div key='amount' className='flex items-center gap-2'>
+				<span className='text-xs font-medium text-gray-500'>Commitment Amount</span>
+				<span className='text-sm font-medium'>{`${getCurrencySymbol(info.currency ?? '')}${info.commitment_amount}`}</span>
+			</div>,
+		);
+	}
+	if (info.overage_factor != null) {
+		rows.push(
+			<div key='overage' className='flex items-center gap-2'>
+				<span className='text-xs font-medium text-gray-500'>Overage Factor</span>
+				<span className='text-sm font-medium'>{info.overage_factor}×</span>
+			</div>,
+		);
+	}
+	if (info.enable_true_up != null) {
+		rows.push(
+			<div key='trueup' className='flex items-center gap-2'>
+				<span className='text-xs font-medium text-gray-500'>True-up</span>
+				<span className='text-sm font-medium'>{info.enable_true_up ? 'Enabled' : 'Disabled'}</span>
+			</div>,
+		);
+	}
+	if (info.commitment_duration) {
+		rows.push(
+			<div key='duration' className='flex items-center gap-2'>
+				<span className='text-xs font-medium text-gray-500'>Duration</span>
+				<span className='text-sm font-medium capitalize'>{info.commitment_duration.toLowerCase()}</span>
+			</div>,
+		);
+	}
+
+	return <div className='flex flex-col gap-2'>{rows}</div>;
+};
+
+const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoading, hideCardWrapper = false, commitmentInfo }) => {
 	const [showTerminateModal, setShowTerminateModal] = useState(false);
 	const [selectedLineItem, setSelectedLineItem] = useState<LineItem | null>(null);
 
-	// ===== HANDLERS =====
 	const handleEditClick = useCallback(
 		(lineItem: LineItem) => {
 			onEdit?.(lineItem);
@@ -203,9 +243,7 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 	}, []);
 
 	const handleTerminateConfirm = (endDate: string | undefined) => {
-		if (selectedLineItem) {
-			onTerminate?.(selectedLineItem.id, endDate);
-		}
+		if (selectedLineItem) onTerminate?.(selectedLineItem.id, endDate);
 		setShowTerminateModal(false);
 		setSelectedLineItem(null);
 	};
@@ -222,51 +260,58 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 		}
 	};
 
-	// ===== PROCESSED LINE ITEMS WITH PRECOMPUTED STATUS =====
 	const processedLineItems = useMemo<LineItemWithStatus[]>(() => {
 		if (!data || data.length === 0) return [];
 
-		// Precompute status and related data for each line item
 		const lineItemsWithStatus: LineItemWithStatus[] = data.map((lineItem) => {
 			const status = getLineItemStatus(lineItem);
-			const variant = getStatusChipVariant(status);
-			const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
-			const tooltipContent = formatLineItemDateTooltip(lineItem);
-
 			return {
 				...lineItem,
 				precomputedStatus: status,
-				statusVariant: variant,
-				statusLabel,
-				tooltipContent,
+				statusVariant: getStatusChipVariant(status),
+				statusLabel: status.charAt(0).toUpperCase() + status.slice(1),
+				tooltipContent: formatLineItemDateTooltip(lineItem),
 			};
 		});
 
-		// Sort: active first, then upcoming, then inactive
 		const statusOrder: Record<PRICE_STATUS, number> = {
 			[PRICE_STATUS.ACTIVE]: 0,
 			[PRICE_STATUS.UPCOMING]: 1,
 			[PRICE_STATUS.INACTIVE]: 2,
 		};
 
-		return lineItemsWithStatus.sort((a, b) => {
-			return statusOrder[a.precomputedStatus] - statusOrder[b.precomputedStatus];
-		});
+		return lineItemsWithStatus.sort((a, b) => statusOrder[a.precomputedStatus] - statusOrder[b.precomputedStatus]);
 	}, [data]);
 
-	// Show Entity column only when data has multiple different entity types
 	const hasMultipleEntityTypes = useMemo(() => {
 		if (!data?.length) return false;
 		const types = new Set(data.map((item) => (item.entity_type ?? '').toLowerCase()).filter(Boolean));
 		return types.size > 1;
 	}, [data]);
 
-	// ===== TABLE COLUMNS =====
 	const columns: ColumnData<LineItemWithStatus>[] = useMemo(
 		() => [
 			{
 				title: 'Display Name',
-				fieldName: 'display_name',
+				render: (row: LineItemWithStatus) => (
+					<div className='flex items-center gap-1'>
+						<span>{row.display_name}</span>
+						{shouldShowCommitmentIcon(row, commitmentInfo) && (
+							<Tooltip
+								content={formatCommitmentTooltip(commitmentInfo!)}
+								delayDuration={0}
+								sideOffset={5}
+								className='bg-white border border-gray-200 shadow-lg text-sm text-gray-900 px-4 py-3 rounded-[6px] max-w-[320px]'>
+								<button
+									type='button'
+									data-interactive='true'
+									className='inline-flex items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500'>
+									<Info className='h-4 w-4 text-blue-500 flex-shrink-0' />
+								</button>
+							</Tooltip>
+						)}
+					</div>
+				),
 			},
 			{
 				title: 'Price Type',
@@ -339,7 +384,7 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 				},
 			},
 		],
-		[hasMultipleEntityTypes, handleEditClick, handleTerminateClick],
+		[hasMultipleEntityTypes, commitmentInfo, handleEditClick, handleTerminateClick],
 	);
 
 	if (isLoading) {
@@ -369,15 +414,11 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 	}
 
 	if (!processedLineItems || processedLineItems.length === 0) {
-		if (hideCardWrapper) {
-			return <NoDataCard title='Charges' subtitle='No charges found for this subscription' />;
-		}
 		return <NoDataCard title='Charges' subtitle='No charges found for this subscription' />;
 	}
 
 	return (
 		<>
-			{/* Terminate Line Item Modal */}
 			{selectedLineItem && (
 				<TerminateLineItemModal
 					isOpen={showTerminateModal}

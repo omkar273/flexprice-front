@@ -687,6 +687,12 @@ export interface SubscriptionLineItemResponse {
 	metadata: Metadata;
 	created_at: string;
 	updated_at: string;
+	// Commitment fields
+	commitment_quantity?: string;
+	commitment_type?: string;
+	commitment_overage_factor?: string;
+	commitment_true_up_enabled?: boolean;
+	commitment_windowed?: boolean;
 }
 
 // =============================================================================

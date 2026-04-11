@@ -8,7 +8,7 @@ interface ShortPaginationProps {
 	pageSize?: number;
 	showPages?: boolean;
 	unit?: string;
-	prefix?: PAGINATION_PREFIX;
+	prefix?: PAGINATION_PREFIX | string;
 }
 
 const ShortPagination = ({
