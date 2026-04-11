@@ -174,8 +174,7 @@ export const integrations: Integration[] = [
 	{
 		name: 'Zoho',
 		logo: 'https://www.zohowebstatic.com/sites/zweb/images/commonroot/zoho-logo-web.svg',
-		tags: ['CRM', 'Accounting'],
-		premium: true,
+		tags: ['Accounting', 'Invoices'],
 		type: 'available',
 		description: 'The Zoho Books integration lets you manage critical accounting tasks directly from Flexprice. ',
 		info: [
@@ -305,7 +304,7 @@ export const integrations: Integration[] = [
 	{
 		name: 'Paddle',
 		description: 'Send invoices and collect payments using Paddle payment gateway integration.',
-		logo: '/assets/paddlelogo.png',
+		logo: '/assets/logo/paddle.png',
 		tags: ['Payments', 'Invoices'],
 		type: 'available',
 		info: [

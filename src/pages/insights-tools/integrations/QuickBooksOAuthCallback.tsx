@@ -5,73 +5,54 @@ import toast from 'react-hot-toast';
 import { useMutation } from '@tanstack/react-query';
 import OAuthApi from '@/api/OAuthApi';
 
-/**
- * QuickBooksOAuthCallback
- *
- * Handles the OAuth callback from QuickBooks after user authorization.
- *
- * NEW SECURE FLOW:
- * 1. QuickBooks redirects here with: code, realmId, state
- * 2. Retrieve session_id from sessionStorage (non-sensitive)
- * 3. Send ALL data to backend via /v1/oauth/complete
- * 4. Backend validates CSRF state, retrieves credentials from cache
- * 5. Backend exchanges code for tokens (NO frontend involvement)
- * 6. Backend encrypts and stores tokens in database
- * 7. Connection created successfully
- *
- * SECURITY:
- * - NO client_secret in frontend (never stored in sessionStorage)
- * - NO access_token in frontend (never exposed)
- * - NO refresh_token in frontend (never exposed)
- * - ONLY session_id stored (non-sensitive, expires in 5 minutes)
- */
 const QuickBooksOAuthCallback = () => {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const [error, setError] = useState<string | null>(null);
-	const hasProcessed = useRef(false); // Prevent double processing
+	const hasProcessed = useRef(false);
 
-	// Parse OAuth callback parameters
 	const code = searchParams.get('code');
 	const realmId = searchParams.get('realmId');
 	const state = searchParams.get('state');
 	const errorParam = searchParams.get('error');
+	const location = searchParams.get('location');
+	const accountsServer = searchParams.get('accounts-server');
 
-	// Retrieve ONLY session_id from sessionStorage (non-sensitive)
-	const sessionId = sessionStorage.getItem('qb_oauth_session_id');
+	const providerHint = sessionStorage.getItem('oauth_provider');
+	const provider = providerHint || (realmId ? 'quickbooks' : 'zoho_books');
+	const isQuickBooks = provider === 'quickbooks';
+	const providerRoute = isQuickBooks ? '/tools/integrations/quickbooks' : '/tools/integrations/zoho';
+	const providerName = isQuickBooks ? 'QuickBooks' : 'Zoho Books';
+	const sessionIdKey = isQuickBooks ? 'qb_oauth_session_id' : 'zoho_books_oauth_session_id';
+	const sessionId = sessionStorage.getItem(sessionIdKey);
+	const zohoOrganizationId = sessionStorage.getItem('zoho_books_organization_id');
+	const zohoOrganizationName = sessionStorage.getItem('zoho_books_organization_name');
 
-	// Debug logging (safe - no sensitive data)
+	const cleanupSession = () => {
+		sessionStorage.removeItem('qb_oauth_session_id');
+		sessionStorage.removeItem('zoho_books_oauth_session_id');
+		sessionStorage.removeItem('zoho_books_organization_id');
+		sessionStorage.removeItem('zoho_books_organization_name');
+		sessionStorage.removeItem('oauth_provider');
+	};
+
 	useEffect(() => {
-		console.log('🔍 QuickBooks OAuth Callback:', {
-			hasCode: !!code,
-			hasRealmId: !!realmId,
-			hasState: !!state,
-			hasSessionId: !!sessionId,
-			hasError: !!errorParam,
-			hasProcessed: hasProcessed.current,
-		});
-	}, [code, realmId, state, sessionId, errorParam]);
-
-	// Handle OAuth errors
-	useEffect(() => {
-		if (hasProcessed.current) {
-			return;
-		}
+		if (hasProcessed.current) return;
 
 		if (errorParam) {
 			setError(`OAuth error: ${errorParam}`);
-			toast.error(`QuickBooks authorization failed: ${errorParam}`);
+			toast.error(`${providerName} authorization failed: ${errorParam}`);
 			setTimeout(() => {
-				navigate('/tools/integrations/quickbooks');
+				navigate(providerRoute);
 			}, 3000);
 			return;
 		}
 
-		if (!code || !realmId || !state) {
+		if (!code || !state) {
 			setError('Missing required OAuth parameters');
-			toast.error('QuickBooks authorization failed: Missing required parameters');
+			toast.error(`${providerName} authorization failed: Missing required parameters`);
 			setTimeout(() => {
-				navigate('/tools/integrations/quickbooks');
+				navigate(providerRoute);
 			}, 3000);
 			return;
 		}
@@ -80,68 +61,92 @@ const QuickBooksOAuthCallback = () => {
 			setError('Session expired or not found');
 			toast.error('OAuth session expired. Please try connecting again.');
 			setTimeout(() => {
-				navigate('/tools/integrations/quickbooks');
+				navigate(providerRoute);
 			}, 3000);
 			return;
 		}
-	}, [code, realmId, state, sessionId, errorParam, navigate]);
 
-	// Complete OAuth flow via backend
+		if (isQuickBooks && !realmId) {
+			setError('Missing QuickBooks realm ID');
+			toast.error('QuickBooks authorization failed: Missing realm ID');
+			setTimeout(() => {
+				navigate(providerRoute);
+			}, 3000);
+			return;
+		}
+
+		if (!isQuickBooks && !zohoOrganizationId) {
+			setError('Zoho organization ID is missing. Please restart the connection flow.');
+			toast.error('Zoho organization ID not found. Please reconnect.');
+			setTimeout(() => {
+				navigate(providerRoute);
+			}, 3000);
+			return;
+		}
+	}, [code, state, sessionId, realmId, errorParam, navigate, providerRoute, providerName, isQuickBooks, zohoOrganizationId]);
+
 	const { mutate: completeOAuth, isPending } = useMutation({
 		mutationFn: async () => {
-			if (!code || !realmId || !state || !sessionId) {
+			if (!code || !state || !sessionId) {
 				throw new Error('Missing required parameters');
 			}
 
-			// Send to backend - backend handles EVERYTHING securely:
-			// - Validates CSRF state
-			// - Retrieves encrypted credentials from cache
-			// - Exchanges code for tokens
-			// - Encrypts tokens
-			// - Stores in database
-			// - Deletes cache session
-			return await OAuthApi.CompleteOAuth({
-				provider: 'quickbooks',
+			if (isQuickBooks && !realmId) {
+				throw new Error('Missing QuickBooks realm ID');
+			}
+
+			if (!isQuickBooks && !zohoOrganizationId) {
+				throw new Error('Missing Zoho organization ID');
+			}
+
+			const payload: any = {
+				provider,
 				session_id: sessionId,
-				code: code,
-				realm_id: realmId,
-				state: state,
-			});
+				code,
+				state,
+			};
+
+			if (isQuickBooks) {
+				payload.realm_id = realmId;
+			} else {
+				payload.organization_id = zohoOrganizationId;
+				payload.organization_name = zohoOrganizationName || undefined;
+				payload.location = location || undefined;
+				payload.accounts_server = accountsServer || undefined;
+			}
+
+			return await OAuthApi.CompleteOAuth(payload);
 		},
-		onSuccess: (response) => {
-			// Clean up sessionStorage
-			sessionStorage.removeItem('qb_oauth_session_id');
-
-			console.log('✅ QuickBooks connection created:', {
-				connection_id: response.connection_id,
-			});
-
-			toast.success('QuickBooks connected successfully!');
-			navigate('/tools/integrations/quickbooks');
+		onSuccess: () => {
+			cleanupSession();
+			toast.success(`${providerName} connected successfully!`);
+			navigate(providerRoute);
 		},
 		onError: (error: unknown) => {
-			// Clean up sessionStorage on error
-			sessionStorage.removeItem('qb_oauth_session_id');
-
+			cleanupSession();
 			const errorMessage = error instanceof Error ? error.message : 'Failed to complete OAuth';
 			setError(errorMessage);
 			toast.error(errorMessage);
 			setTimeout(() => {
-				navigate('/tools/integrations/quickbooks');
+				navigate(providerRoute);
 			}, 3000);
 		},
 	});
 
-	// Trigger OAuth completion when component mounts and validation passes
 	useEffect(() => {
-		if (code && realmId && state && sessionId && !errorParam && !isPending && !error && !hasProcessed.current) {
-			hasProcessed.current = true; // Mark as processed
-			console.log('✅ Starting OAuth completion');
-			completeOAuth();
+		if (!code || !state || !sessionId || errorParam || isPending || error || hasProcessed.current) {
+			return;
 		}
-	}, [code, realmId, state, sessionId, errorParam, completeOAuth, isPending, error]);
+		if (isQuickBooks && !realmId) {
+			return;
+		}
+		if (!isQuickBooks && !zohoOrganizationId) {
+			return;
+		}
+		hasProcessed.current = true;
+		completeOAuth();
+	}, [code, realmId, state, sessionId, errorParam, completeOAuth, isPending, error, isQuickBooks, zohoOrganizationId]);
 
-	// Error state
 	if (error) {
 		return (
 			<Page>
@@ -154,12 +159,11 @@ const QuickBooksOAuthCallback = () => {
 		);
 	}
 
-	// Loading state
 	return (
 		<Page>
 			<div className='flex flex-col items-center justify-center min-h-[400px]'>
 				<Loader />
-				<div className='mt-4 text-gray-600'>Completing QuickBooks authorization...</div>
+				<div className='mt-4 text-gray-600'>Completing {providerName} authorization...</div>
 				<div className='mt-2 text-sm text-gray-500'>🔒 Securely exchanging authorization code for tokens</div>
 			</div>
 		</Page>

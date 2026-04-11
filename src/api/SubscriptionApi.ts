@@ -30,6 +30,8 @@ import {
 	PreviewSubscriptionChangeResponse,
 	ExecuteSubscriptionChangeRequest,
 	ExecuteSubscriptionChangeResponse,
+	ExecuteSubscriptionModifyRequest,
+	SubscriptionModifyResponse,
 } from '@/types/dto/Subscription';
 import { ListCreditGrantApplicationsResponse } from '@/types/dto';
 import { generateQueryParams } from '@/utils/common/api_helper';
@@ -273,6 +275,32 @@ class SubscriptionApi {
 		payload: ExecuteSubscriptionChangeRequest,
 	): Promise<ExecuteSubscriptionChangeResponse> {
 		return await AxiosClient.post<ExecuteSubscriptionChangeResponse>(`${this.baseUrl}/${id}/change/execute`, payload);
+	}
+
+	// =============================================================================
+	// SUBSCRIPTION MODIFY METHODS (mid-cycle inheritance / quantity)
+	// =============================================================================
+
+	/**
+	 * Preview mid-cycle subscription modification without committing.
+	 * POST /subscriptions/:id/modify/preview
+	 */
+	public static async previewSubscriptionModify(
+		id: string,
+		payload: ExecuteSubscriptionModifyRequest,
+	): Promise<SubscriptionModifyResponse> {
+		return await AxiosClient.post<SubscriptionModifyResponse>(`${this.baseUrl}/${id}/modify/preview`, payload);
+	}
+
+	/**
+	 * Execute mid-cycle subscription modification (inheritance or quantity change).
+	 * POST /subscriptions/:id/modify/execute
+	 */
+	public static async executeSubscriptionModify(
+		id: string,
+		payload: ExecuteSubscriptionModifyRequest,
+	): Promise<SubscriptionModifyResponse> {
+		return await AxiosClient.post<SubscriptionModifyResponse>(`${this.baseUrl}/${id}/modify/execute`, payload);
 	}
 }
 

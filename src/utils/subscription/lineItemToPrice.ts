@@ -24,6 +24,11 @@ function toPriceType(value: string | undefined): PRICE_TYPE {
 	return upper && PRICE_TYPE_VALUES.has(upper) ? (upper as PRICE_TYPE) : PRICE_TYPE.USAGE;
 }
 
+/** Normalized `price_type` for branching (e.g. FIXED vs USAGE). */
+export function getPriceTypeFromLineItem(lineItem: Pick<LineItem, 'price_type'>): PRICE_TYPE {
+	return toPriceType(lineItem.price_type);
+}
+
 /**
  * Converts a subscription LineItem to a Price object for use in PriceOverrideDialog
  * when the line item does not have an embedded price.

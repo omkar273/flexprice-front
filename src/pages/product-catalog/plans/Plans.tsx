@@ -6,7 +6,7 @@ import { Plan } from '@/models/Plan';
 import { QueryableDataArea } from '@/components/organisms';
 import GUIDES from '@/constants/guides';
 import { useState, useMemo } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { PlanApi } from '@/api/PlanApi';
 import {
 	FilterField,
@@ -24,7 +24,7 @@ import { RouteNames } from '@/core/routes/Routes';
 import formatChips from '@/utils/common/format_chips';
 import formatDate from '@/utils/common/format_date';
 import toast from 'react-hot-toast';
-import { Copy, EllipsisVertical, EyeOff, Pencil } from 'lucide-react';
+import { Copy, EllipsisVertical, EyeOff, Pencil, WandSparkles } from 'lucide-react';
 import { ServerError } from '@/core/axios/types';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 
@@ -122,6 +122,17 @@ const PlansPage = () => {
 	const [planToArchive, setPlanToArchive] = useState<Plan | null>(null);
 	const navigate = useNavigate();
 
+	/** When the account has at least one plan, show Create with AI in the header; hide it on the true empty state to avoid duplicating the in-panel CTA. */
+	const { data: hasAnyPlanInSystem } = useQuery({
+		queryKey: ['fetchPlans', 'header-probe-has-plans'],
+		queryFn: async () => {
+			const response = await PlanApi.getPlansByFilter({ limit: 1, offset: 0, filters: [], sort: [] });
+			const total = response.pagination?.total;
+			if (typeof total === 'number') return total > 0;
+			return (response.items?.length ?? 0) > 0;
+		},
+	});
+
 	const { mutate: archivePlan, isPending: isArchiving } = useMutation({
 		mutationFn: (id: string) => PlanApi.deletePlan(id),
 		onSuccess: async () => {
@@ -209,7 +220,22 @@ const PlansPage = () => {
 	);
 
 	return (
-		<Page heading='Plans' headingCTA={<AddButton onClick={handleOnAdd} />}>
+		<Page
+			heading='Plans'
+			headingCTA={
+				<div className='flex items-center gap-2'>
+					{hasAnyPlanInSystem ? (
+						<Button
+							variant='outline'
+							prefixIcon={<WandSparkles className='text-indigo-600' />}
+							onClick={() => navigate(RouteNames.pricingSetup, { state: { from: 'plans' } })}
+							className='border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700'>
+							<span className='analyzing-prompt-shimmer font-medium'>Create with AI</span>
+						</Button>
+					) : null}
+					<AddButton onClick={handleOnAdd} />
+				</div>
+			}>
 			<PlanDrawer data={activePlan} open={planDrawerOpen} onOpenChange={setPlanDrawerOpen} refetchQueryKeys={['fetchPlans']} />
 			<DuplicatePlanDialog
 				planId={planToDuplicate?.id ?? ''}
@@ -279,10 +305,21 @@ const PlansPage = () => {
 						unit: 'Pricing Plans',
 					}}
 					emptyStateConfig={{
-						heading: 'Plans',
-						description: 'Create a plan to display pricing and start billing customers.',
-						buttonLabel: 'Create Plan',
-						buttonAction: handleOnAdd,
+						customComponent: (
+							<div className='mx-auto flex h-[360px] w-full flex-col items-center justify-center rounded-[6px] border border-[#E9E9E9] bg-[#fafafa] px-4'>
+								<div className='mb-4 text-center text-[20px] font-medium leading-normal text-gray-700'>Plans</div>
+								<div className='mb-8 max-w-[350px] bg-[#F9F9F9] text-center text-[16px] font-normal leading-normal text-gray-400'>
+									Create a plan to display pricing and start billing customers.
+								</div>
+								<Button
+									variant='outline'
+									prefixIcon={<WandSparkles className='text-black' />}
+									onClick={() => navigate(RouteNames.pricingSetup, { state: { from: 'plans' } })}
+									className='!border-indigo-200 !bg-white !p-5 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700'>
+									<span className='analyzing-prompt-shimmer text-sm font-medium'>Create with AI</span>
+								</Button>
+							</div>
+						),
 						tags: ['Plans'],
 						tutorials: GUIDES.plans.tutorials,
 					}}

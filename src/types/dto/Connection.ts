@@ -61,6 +61,16 @@ export interface CreateConnectionPayload {
 				income_account_id?: string;
 		  }
 		| {
+				provider_type: CONNECTION_PROVIDER_TYPE.ZOHO_BOOKS;
+				client_id?: string;
+				client_secret?: string;
+				organization_id?: string;
+				organization_name?: string;
+				accounts_server?: string;
+				location?: string;
+				webhook_secret?: string;
+		  }
+		| {
 				provider_type: CONNECTION_PROVIDER_TYPE.NOMOD;
 				api_key?: string;
 				webhook_secret?: string;

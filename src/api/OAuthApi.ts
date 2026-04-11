@@ -11,6 +11,14 @@ export interface InitiateOAuthRequest {
 			inbound: boolean;
 			outbound: boolean;
 		};
+		customer?: {
+			inbound: boolean;
+			outbound: boolean;
+		};
+		payment?: {
+			inbound: boolean;
+			outbound: boolean;
+		};
 	};
 }
 
@@ -25,6 +33,10 @@ export interface CompleteOAuthRequest {
 	code: string;
 	state: string;
 	realm_id?: string;
+	organization_id?: string;
+	organization_name?: string;
+	location?: string;
+	accounts_server?: string;
 }
 
 export interface CompleteOAuthResponse {

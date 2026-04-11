@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router';
 import AuthService from '@/core/auth/AuthService';
 import { getCommandPaletteActionEventName, CommandPaletteActionId } from '@/core/actions';
 import useUser from '@/hooks/useUser';
+import { useShouldShowSidebarPricingPromo } from '@/hooks/useShouldShowSidebarPricingPromo';
+import SidebarPricingPromoCard from './SidebarPricingPromoCard';
 
 const SidebarFooter = () => {
 	const navigate = useNavigate();
@@ -25,6 +27,7 @@ const SidebarFooter = () => {
 
 	const { loading, user } = useUser();
 	const { open: sidebarOpen } = useSidebar();
+	const showPricingPromo = useShouldShowSidebarPricingPromo();
 
 	if (loading) return <Skeleton className='w-full h-10' />;
 
@@ -45,6 +48,8 @@ const SidebarFooter = () => {
 
 	return (
 		<div className='flex flex-col gap-2 w-full'>
+			{showPricingPromo && <SidebarPricingPromoCard className='mb-4' onCreateWithAI={() => navigate(RouteNames.pricingSetup)} />}
+
 			<SidebarMenuButton
 				onClick={() => {
 					window.open('https://docs.flexprice.io', '_blank');

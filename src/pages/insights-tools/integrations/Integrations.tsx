@@ -14,6 +14,7 @@ import RazorpayConnectionDrawer from '@/components/molecules/RazorpayConnectionD
 import ChargebeeConnectionDrawer from '@/components/molecules/ChargebeeConnectionDrawer';
 import HubSpotConnectionDrawer from '@/components/molecules/HubSpotConnectionDrawer';
 import QuickBooksConnectionDrawer from '@/components/molecules/QuickBooksConnectionDrawer/QuickBooksConnectionDrawer';
+import ZohoBooksConnectionDrawer from '@/components/molecules/ZohoBooksConnectionDrawer/ZohoBooksConnectionDrawer';
 import NomodConnectionDrawer from '@/components/molecules/NomodConnectionDrawer';
 import MoyasarConnectionDrawer from '@/components/molecules/MoyasarConnectionDrawer';
 import IntegrationDrawer from '@/components/molecules/IntegrationDrawer/IntegrationDrawer';
@@ -22,29 +23,36 @@ import IntegrationDrawer from '@/components/molecules/IntegrationDrawer/Integrat
 const PREVIEW_CONNECTED_PROVIDER: string | null = null;
 const PREVIEW_MOCK_CONNECTION_ID = '__preview__';
 
+/** API provider_type for List(); Zoho card uses name "Zoho" but backend expects zoho_books */
+const getProviderTypeForIntegration = (integrationName: string): CONNECTION_PROVIDER_TYPE => {
+	const n = integrationName.toLowerCase();
+	return n === 'zoho' ? CONNECTION_PROVIDER_TYPE.ZOHO_BOOKS : (n as CONNECTION_PROVIDER_TYPE);
+};
+
 const Integrations = () => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [activeIntegration, setActiveIntegration] = useState<Integration | null>(null);
 	const [editingConnection, setEditingConnection] = useState<any | null>(null);
 
+	const availableIntegrations = integrations.filter((i) => !i.premium && i.type === 'available');
+
 	const connectionQueries = useQueries({
-		queries: integrations
-			.filter((i) => !i.premium && i.type === 'available')
-			.map((integration) => {
-				const provider = integration.name.toLowerCase() as CONNECTION_PROVIDER_TYPE;
-				return {
-					queryKey: ['connections', provider],
-					queryFn: () => ConnectionApi.List({ provider_type: provider }),
-				};
-			}),
+		queries: availableIntegrations.map((integration) => {
+			const listKey = integration.name.toLowerCase();
+			const providerType = getProviderTypeForIntegration(integration.name);
+			return {
+				queryKey: ['connections', listKey],
+				queryFn: () => ConnectionApi.List({ provider_type: providerType }),
+			};
+		}),
 	});
 
 	const connectionByProvider = new Map<string, any[]>();
-	const providerList = integrations.filter((i) => !i.premium && i.type === 'available').map((i) => i.name.toLowerCase());
-	for (let idx = 0; idx < providerList.length; idx++) {
-		const provider = providerList[idx];
+	for (let idx = 0; idx < availableIntegrations.length; idx++) {
+		const integration = availableIntegrations[idx];
+		const listKey = integration.name.toLowerCase();
 		const q = connectionQueries[idx];
-		connectionByProvider.set(provider, q?.data?.connections ?? []);
+		connectionByProvider.set(listKey, q?.data?.connections ?? []);
 	}
 
 	const isLoading = connectionQueries.some((q) => q.isLoading);
@@ -189,6 +197,24 @@ const Integrations = () => {
 						/>
 					) : activeIntegration.name.toLowerCase() === CONNECTION_PROVIDER_TYPE.QUICKBOOKS ? (
 						<QuickBooksConnectionDrawer
+							isOpen={isDrawerOpen}
+							onOpenChange={(open) => {
+								setIsDrawerOpen(open);
+								if (!open) {
+									setEditingConnection(null);
+									setActiveIntegration(null);
+								}
+							}}
+							connection={editingConnection}
+							onSave={() => {
+								connectionQueries.forEach((q) => q.refetch?.());
+								setIsDrawerOpen(false);
+								setEditingConnection(null);
+								setActiveIntegration(null);
+							}}
+						/>
+					) : getProviderTypeForIntegration(activeIntegration.name) === CONNECTION_PROVIDER_TYPE.ZOHO_BOOKS ? (
+						<ZohoBooksConnectionDrawer
 							isOpen={isDrawerOpen}
 							onOpenChange={(open) => {
 								setIsDrawerOpen(open);

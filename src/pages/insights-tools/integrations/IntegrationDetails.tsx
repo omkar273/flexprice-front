@@ -9,6 +9,7 @@ import RazorpayConnectionDrawer from '@/components/molecules/RazorpayConnectionD
 import ChargebeeConnectionDrawer from '@/components/molecules/ChargebeeConnectionDrawer';
 import HubSpotConnectionDrawer from '@/components/molecules/HubSpotConnectionDrawer';
 import QuickBooksConnectionDrawer from '@/components/molecules/QuickBooksConnectionDrawer/QuickBooksConnectionDrawer';
+import ZohoBooksConnectionDrawer from '@/components/molecules/ZohoBooksConnectionDrawer/ZohoBooksConnectionDrawer';
 import NomodConnectionDrawer from '@/components/molecules/NomodConnectionDrawer';
 import MoyasarConnectionDrawer from '@/components/molecules/MoyasarConnectionDrawer';
 import PaddleConnectionDrawer from '@/components/molecules/PaddleConnectionDrawer';
@@ -23,6 +24,8 @@ import { CONNECTION_PROVIDER_TYPE } from '@/models/Connection';
 const IntegrationDetails = () => {
 	const { id: name } = useParams() as { id: string };
 	const integration = integrations.find((integration) => integration.name.toLocaleLowerCase() === name.toLocaleLowerCase());
+	const providerType =
+		name.toLowerCase() === 'zoho' ? CONNECTION_PROVIDER_TYPE.ZOHO_BOOKS : (name.toLowerCase() as CONNECTION_PROVIDER_TYPE);
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [editingConnection, setEditingConnection] = useState<any | null>(null);
@@ -32,7 +35,7 @@ const IntegrationDetails = () => {
 	// Fetch connections from API
 	const { data: connectionsResponse, refetch: refetchConnections } = useQuery({
 		queryKey: ['connections', name],
-		queryFn: () => ConnectionApi.List({ provider_type: name.toLowerCase() as CONNECTION_PROVIDER_TYPE }),
+		queryFn: () => ConnectionApi.List({ provider_type: providerType }),
 		enabled: !!name,
 	});
 
@@ -175,6 +178,16 @@ const IntegrationDetails = () => {
 				/>
 			) : name.toLowerCase() === CONNECTION_PROVIDER_TYPE.QUICKBOOKS ? (
 				<QuickBooksConnectionDrawer
+					isOpen={isDrawerOpen}
+					onOpenChange={(open) => {
+						setIsDrawerOpen(open);
+						if (!open) setEditingConnection(null);
+					}}
+					connection={editingConnection}
+					onSave={handleSaveConnection}
+				/>
+			) : providerType === CONNECTION_PROVIDER_TYPE.ZOHO_BOOKS ? (
+				<ZohoBooksConnectionDrawer
 					isOpen={isDrawerOpen}
 					onOpenChange={(open) => {
 						setIsDrawerOpen(open);

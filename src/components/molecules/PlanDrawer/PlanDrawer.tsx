@@ -4,7 +4,8 @@ import { FC, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { PlanApi } from '@/api/PlanApi';
 import toast from 'react-hot-toast';
-import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
+import { queryClient, refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
+import { SIDEBAR_PRICING_PROMO_QUERY_KEY } from '@/hooks/useShouldShowSidebarPricingPromo';
 import { useNavigate } from 'react-router';
 import { RouteNames } from '@/core/routes/Routes';
 import { CreatePlanRequest, UpdatePlanRequest, PlanResponse, CreatePlanResponse } from '@/types/dto';
@@ -46,6 +47,7 @@ const PlanDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQuery
 			toast.success(isEdit ? 'Plan updated successfully' : 'Plan created successfully');
 			onOpenChange?.(false);
 			refetchQueries(refetchQueryKeys);
+			void queryClient.invalidateQueries({ queryKey: [SIDEBAR_PRICING_PROMO_QUERY_KEY], exact: false });
 			navigate(`${RouteNames.plan}/${data.id}`);
 		},
 		onError: (error: ServerError) => {

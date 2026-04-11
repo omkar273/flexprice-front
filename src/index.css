@@ -209,3 +209,84 @@ div[data-hot-toast-container] {
 .animate-command-palette-out {
 	animation: command-palette-out 0.18s ease-in both;
 }
+
+/* Pricing setup preview reveal (shimmer + dissolve) */
+@keyframes pricing-shimmer-sweep {
+	0% {
+		transform: translateX(-120%);
+	}
+	100% {
+		transform: translateX(120%);
+	}
+}
+@keyframes pricing-dissolve {
+	from {
+		opacity: 1;
+		filter: blur(0px);
+	}
+	to {
+		opacity: 0;
+		filter: blur(6px);
+	}
+}
+.pricing-shimmer-overlay {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	overflow: hidden;
+	pointer-events: none;
+	background:
+		radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.05) 1px, transparent 1.6px) 0 0 / 14px 14px,
+		linear-gradient(0deg, rgba(248, 248, 249, 1), rgba(248, 248, 249, 1));
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+}
+.pricing-shimmer-overlay::before {
+	content: '';
+	position: absolute;
+	inset: -40%;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+	animation: pricing-shimmer-sweep 1.25s ease-in-out infinite;
+	transform: translateX(-120%);
+}
+.pricing-shimmer-fadeout {
+	animation: pricing-dissolve 0.55s ease-in forwards;
+}
+
+/* Slightly cool grey-white dotted canvas for pricing preview */
+.pricing-preview-canvas {
+	background:
+		radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.05) 1px, transparent 1.6px) 0 0 / 14px 14px,
+		linear-gradient(0deg, rgba(248, 248, 249, 1), rgba(248, 248, 249, 1));
+}
+
+.pricing-preview-canvas-frame {
+	box-shadow: none;
+}
+
+/* Pricing setup — analyzing overlay label (gradient text shimmer) */
+@keyframes analyzing-prompt-shimmer {
+	0% {
+		background-position: 0% 50%;
+	}
+	100% {
+		background-position: 200% 50%;
+	}
+}
+.analyzing-prompt-shimmer {
+	background: linear-gradient(90deg, #374151 0%, #374151 35%, #6366f1 50%, #374151 65%, #374151 100%);
+	background-size: 200% 100%;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: analyzing-prompt-shimmer 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+	.analyzing-prompt-shimmer {
+		animation: none;
+		color: #374151;
+		background: none;
+		-webkit-background-clip: unset;
+		background-clip: unset;
+	}
+}

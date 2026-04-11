@@ -477,6 +477,14 @@ export const commandPaletteCommands: CommandPaletteCommand[] = [
 		icon: Puzzle,
 	},
 	{
+		id: CommandPaletteCommandId.navIntegrationZoho,
+		label: 'Integrations → Zoho Books',
+		group: CommandPaletteGroup.GoTo,
+		path: P['tools-integrations-zoho'],
+		keywords: ['zoho', 'zoho books', 'accounting', 'invoices', 'integrations'],
+		icon: Puzzle,
+	},
+	{
 		id: CommandPaletteCommandId.navIntegrationNomod,
 		label: 'Integrations → Nomod',
 		group: CommandPaletteGroup.GoTo,

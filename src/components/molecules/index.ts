@@ -47,7 +47,15 @@ export { default as SubscriptionCoupon } from './SubscriptionCoupon/Subscription
 export { SubscriptionDiscountTable } from './SubscriptionDiscountTable';
 export { SubscriptionEntitlementsSection } from './SubscriptionEntitlementsSection';
 export { default as SubscriptionAddonsSection } from './SubscriptionAddonsSection/SubscriptionAddonsSection';
-export { SubscriptionEditDetailsHeader, SubscriptionEditChargesSection, SubscriptionEditCreditGrantsSection } from './Subscription';
+export {
+	SubscriptionEditDetailsHeader,
+	SubscriptionEditChargesSection,
+	SubscriptionEditCreditGrantsSection,
+	SubscriptionLineItemQuantityModifyDialog,
+	type SubscriptionLineItemQuantityModifyDialogProps,
+	SubscriptionModifyPreviewSummary,
+	type SubscriptionModifyPreviewSummaryProps,
+} from './Subscription';
 export { UpdateSubscriptionDrawer } from './UpdateSubscriptionDrawer';
 
 // Invoice & Billing

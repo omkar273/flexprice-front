@@ -5,7 +5,8 @@ import SelectGroup from '@/components/organisms/PlanForm/SelectGroup';
 import { AddChargesButton } from '@/components/organisms/PlanForm/SetupChargesSection';
 import { GROUP_ENTITY_TYPE } from '@/models/Group';
 import { RouteNames } from '@/core/routes/Routes';
-import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
+import { queryClient, refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
+import { SIDEBAR_PRICING_PROMO_QUERY_KEY } from '@/hooks/useShouldShowSidebarPricingPromo';
 import { cn } from '@/lib/utils';
 import { FEATURE_TYPE } from '@/models/Feature';
 import { BUCKET_SIZE, METER_AGGREGATION_TYPE, METER_USAGE_RESET_PERIOD } from '@/models/Meter';
@@ -919,6 +920,7 @@ const AddFeaturePage = () => {
 		},
 		onSuccess: async () => {
 			await refetchQueries(['fetchFeatures']);
+			void queryClient.invalidateQueries({ queryKey: [SIDEBAR_PRICING_PROMO_QUERY_KEY], exact: false });
 			navigate(RouteNames.features);
 			toast.success('Feature created successfully');
 		},

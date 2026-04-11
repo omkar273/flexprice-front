@@ -1,0 +1,7 @@
+export enum PlanType {
+	FREE = 'FREE',
+	FIXED = 'FIXED',
+	HYBRID_FREE = 'HYBRID_FREE',
+	HYBRID_PAID = 'HYBRID_PAID',
+	USAGE_ONLY = 'USAGE_ONLY',
+}

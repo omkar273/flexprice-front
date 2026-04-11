@@ -5,6 +5,7 @@ import {
 	SubscriptionEditDetailsHeader,
 	SubscriptionEditChargesSection,
 	SubscriptionEditCreditGrantsSection,
+	SubscriptionLineItemQuantityModifyDialog,
 } from '@/components/molecules';
 import { useBreadcrumbsStore } from '@/store/useBreadcrumbsStore';
 import CustomerApi from '@/api/CustomerApi';
@@ -15,7 +16,8 @@ import FlexpriceTable, { ColumnData, RedirectCell } from '@/components/molecules
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
-import { LineItem, SUBSCRIPTION_STATUS } from '@/models/Subscription';
+import { LineItem, SUBSCRIPTION_LINE_ITEM_EDIT_MODE, SUBSCRIPTION_STATUS } from '@/models/Subscription';
+import { PRICE_TYPE } from '@/models/Price';
 import PriceOverrideDialog from '@/components/molecules/PriceOverrideDialog/PriceOverrideDialog';
 import AddSubscriptionChargeDialog, {
 	type AddedSubscriptionLineItem,
@@ -33,11 +35,16 @@ import { generateExpandQueryParams } from '@/utils/common/api_helper';
 import formatDate from '@/utils/common/format_date';
 import { ExtendedPriceOverride } from '@/utils/common/price_override_helpers';
 import { convertPriceOverrideToLineItemUpdate } from '@/utils/subscription/priceOverrideToLineItemUpdate';
-import { lineItemToPrice } from '@/utils/subscription/lineItemToPrice';
+import { getPriceTypeFromLineItem, lineItemToPrice } from '@/utils/subscription/lineItemToPrice';
 import { useSubscriptionLineItemsGrouped } from '@/hooks/useSubscriptionLineItemsGrouped';
 import { RouteNames } from '@/core/routes/Routes';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
 import { ENTITY_STATUS, CreditGrant } from '@/models';
+
+type EditingLineItemState =
+	| { mode: SUBSCRIPTION_LINE_ITEM_EDIT_MODE.USAGE_OVERRIDE; lineItem: LineItem }
+	| { mode: SUBSCRIPTION_LINE_ITEM_EDIT_MODE.FIXED_QUANTITY; lineItem: LineItem }
+	| null;
 
 type Params = {
 	/** Global route: `/billing/subscriptions/:id/edit` */
@@ -49,7 +56,7 @@ type Params = {
 const CustomerSubscriptionEditPage: React.FC = () => {
 	const params = useParams<Params>();
 	const subscriptionId = params.subscription_id ?? params.id;
-	const [editingLineItem, setEditingLineItem] = useState<LineItem | null>(null);
+	const [editingLineItem, setEditingLineItem] = useState<EditingLineItemState>(null);
 	const [overriddenPrices, setOverriddenPrices] = useState<Record<string, ExtendedPriceOverride>>({});
 
 	const [isAddCreditGrantModalOpen, setIsAddCreditGrantModalOpen] = useState(false);
@@ -245,7 +252,12 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 	const { groupedLineItems, phaseDetails } = useSubscriptionLineItemsGrouped(subscriptionDetails ?? undefined);
 
 	const handleEditLineItem = useCallback((lineItem: LineItem) => {
-		setEditingLineItem(lineItem);
+		const priceType = getPriceTypeFromLineItem(lineItem);
+		if (priceType === PRICE_TYPE.FIXED) {
+			setEditingLineItem({ mode: SUBSCRIPTION_LINE_ITEM_EDIT_MODE.FIXED_QUANTITY, lineItem });
+		} else {
+			setEditingLineItem({ mode: SUBSCRIPTION_LINE_ITEM_EDIT_MODE.USAGE_OVERRIDE, lineItem });
+		}
 	}, []);
 
 	const handleTerminateLineItem = useCallback(
@@ -257,9 +269,9 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 
 	const handlePriceOverride = useCallback(
 		(priceId: string, override: Partial<ExtendedPriceOverride>) => {
-			if (!editingLineItem) return;
+			if (!editingLineItem || editingLineItem.mode !== SUBSCRIPTION_LINE_ITEM_EDIT_MODE.USAGE_OVERRIDE) return;
 			const updateData = convertPriceOverrideToLineItemUpdate(priceId, override);
-			updateLineItem({ lineItemId: editingLineItem.id, updateData });
+			updateLineItem({ lineItemId: editingLineItem.lineItem.id, updateData });
 			setEditingLineItem(null);
 		},
 		[editingLineItem, updateLineItem],
@@ -356,6 +368,13 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 						subscriptionDetails?.subscription_status === SUBSCRIPTION_STATUS.CANCELLED ||
 						subscriptionDetails?.subscription_status === SUBSCRIPTION_STATUS.TRIALING
 					}
+					commitmentInfo={{
+						enable_true_up: subscriptionDetails?.enable_true_up,
+						commitment_amount: subscriptionDetails?.commitment_amount,
+						overage_factor: subscriptionDetails?.overage_factor,
+						commitment_duration: subscriptionDetails?.commitment_duration,
+						currency: subscriptionDetails?.currency,
+					}}
 				/>
 
 				<SubscriptionEditCreditGrantsSection
@@ -381,15 +400,26 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 
 				{subscriptionId && <SubscriptionAddonsSection subscriptionId={subscriptionId} />}
 
-				{editingLineItem && (
+				{editingLineItem?.mode === SUBSCRIPTION_LINE_ITEM_EDIT_MODE.USAGE_OVERRIDE && (
 					<PriceOverrideDialog
 						isOpen={true}
-						onOpenChange={(open) => !open && setEditingLineItem(null)}
-						price={lineItemToPrice(editingLineItem)}
+						onOpenChange={(open: boolean) => !open && setEditingLineItem(null)}
+						price={lineItemToPrice(editingLineItem.lineItem)}
 						onPriceOverride={handlePriceOverride}
 						onResetOverride={handleResetOverride}
 						overriddenPrices={overriddenPrices}
 						showEffectiveFrom={true}
+					/>
+				)}
+
+				{editingLineItem?.mode === SUBSCRIPTION_LINE_ITEM_EDIT_MODE.FIXED_QUANTITY && subscriptionId && subscriptionDetails && (
+					<SubscriptionLineItemQuantityModifyDialog
+						isOpen={true}
+						onOpenChange={(open: boolean) => !open && setEditingLineItem(null)}
+						subscriptionId={subscriptionId}
+						lineItem={editingLineItem.lineItem}
+						currentPeriodStart={subscriptionDetails.current_period_start}
+						currentPeriodEnd={subscriptionDetails.current_period_end}
 					/>
 				)}
 

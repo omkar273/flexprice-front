@@ -19,6 +19,7 @@ export interface GetAllPlansResponse {
 export interface GetPlansByFilterPayload extends Omit<QueryFilter, 'sort'>, TimeRangeFilter, Pagination {
 	filters?: TypedBackendFilter[];
 	sort?: TypedBackendSort[];
+	lookup_key?: string;
 }
 
 export class PlanApi {

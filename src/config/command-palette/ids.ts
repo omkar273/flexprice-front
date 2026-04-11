@@ -62,6 +62,7 @@ export const CommandPaletteCommandId = {
 	navIntegrationChargebee: 'nav-integration-chargebee',
 	navIntegrationHubspot: 'nav-integration-hubspot',
 	navIntegrationQuickbooks: 'nav-integration-quickbooks',
+	navIntegrationZoho: 'nav-integration-zoho',
 	navIntegrationNomod: 'nav-integration-nomod',
 	navIntegrationMoyasar: 'nav-integration-moyasar',
 	navIntegrationPaddle: 'nav-integration-paddle',

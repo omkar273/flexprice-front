@@ -70,6 +70,7 @@ import {
 	WorkflowDetailsPage,
 	// Onboarding pages
 	OnboardingTenant,
+	PricingSetupPage,
 	// Webhooks pages
 	WebhookDashboard,
 	// Settings pages
@@ -182,6 +183,7 @@ export const RouteNames = {
 
 	// footer
 	onboarding: '/onboarding',
+	pricingSetup: '/onboarding/pricing-setup',
 	settings: '/settings',
 	customerBilling: '/settings/billing',
 
@@ -229,6 +231,10 @@ export const MainRouter = createBrowserRouter([
 	{
 		path: RouteNames.onboarding,
 		element: <OnboardingTenant />,
+	},
+	{
+		path: RouteNames.pricingSetup,
+		element: <PricingSetupPage />,
 	},
 	{
 		path: RouteNames.checkout,

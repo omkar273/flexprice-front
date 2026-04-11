@@ -31,13 +31,8 @@ type PriceType = {
 	tiers: any;
 };
 
-export enum PlanType {
-	FREE = 'FREE',
-	HYBRID_FREE = 'HYBRID_FREE',
-	HYBRID_PAID = 'HYBRID_PAID',
-	USAGE_ONLY = 'USAGE_ONLY',
-	FIXED = 'FIXED',
-}
+import { PlanType } from '@/constants/planTypes';
+export { PlanType };
 
 const parseAmount = (amount: string | undefined): number => {
 	if (!amount) return 0;

@@ -3,7 +3,7 @@ import { useEffect, useCallback } from 'react';
 
 interface UsePaginationProps {
 	initialLimit?: number;
-	prefix?: PAGINATION_PREFIX;
+	prefix?: PAGINATION_PREFIX | string;
 }
 
 export enum PAGINATION_PREFIX {
@@ -13,6 +13,7 @@ export enum PAGINATION_PREFIX {
 	GROUP_CHARGES = 'group_charges',
 	SETTINGS_MEMBERS = 'settings_members',
 	CUSTOMER_SUBSCRIPTIONS = 'customer_subscriptions',
+	SUBSCRIPTION_LINE_ITEMS = 'subscription_line_items',
 }
 
 const usePagination = ({ initialLimit = 10, prefix }: UsePaginationProps = {}) => {

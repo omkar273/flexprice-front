@@ -255,6 +255,7 @@ const QuickBooksConnectionDrawer: FC<QuickBooksConnectionDrawerProps> = ({ isOpe
 			// Store ONLY non-sensitive session_id in sessionStorage
 			// NO client_secret, NO access_token - SECURE!
 			sessionStorage.setItem('qb_oauth_session_id', response.session_id);
+			sessionStorage.setItem('oauth_provider', 'quickbooks');
 
 			// Debug logging (safe - no sensitive data)
 			console.log('🚀 QuickBooks OAuth initiated:', {
