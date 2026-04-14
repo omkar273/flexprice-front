@@ -118,8 +118,13 @@ const CouponDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetchQue
 		if (!validateForm()) {
 			return;
 		}
+		// For percentage coupons, do not send currency in payload.
+		const normalizedFormData: Partial<CreateCouponRequest> = {
+			...formData,
+			...(formData.type === COUPON_TYPE.PERCENTAGE ? { currency: undefined } : {}),
+		};
 		// For edit, include the id from the original data
-		const dataToSubmit: MutationData = isEdit ? { ...formData, id: data?.id } : formData;
+		const dataToSubmit: MutationData = isEdit ? { ...normalizedFormData, id: data?.id } : normalizedFormData;
 		updateCoupon(dataToSubmit);
 	};
 
