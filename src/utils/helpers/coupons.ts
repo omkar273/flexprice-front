@@ -1,4 +1,5 @@
 import { Coupon } from '@/models/Coupon';
+import { COUPON_TYPE } from '@/types';
 
 const filterValidCoupons = (coupons: Coupon[], currency?: string) => {
 	const validCoupons = coupons.filter((coupon) => {
@@ -17,7 +18,9 @@ const filterValidCoupons = (coupons: Coupon[], currency?: string) => {
 
 	// Filter by currency if provided
 	const validCouponsWithCurrency = currency
-		? validCouponsWithRedemptions.filter((coupon) => coupon.currency.toLowerCase() === currency.toLowerCase())
+		? validCouponsWithRedemptions.filter((coupon) =>
+				coupon.type === COUPON_TYPE.PERCENTAGE ? true : coupon.currency.toLowerCase() === currency.toLowerCase(),
+			)
 		: validCouponsWithRedemptions;
 
 	return validCouponsWithCurrency;

@@ -72,6 +72,7 @@ export type SubscriptionFormState = {
 	currency: string;
 	billingPeriodOptions: SelectOption[];
 	billingCycle: BILLING_CYCLE;
+	billingAnchor?: string;
 	commitmentAmount: string;
 	overageFactor: string;
 	startDate: string;
@@ -240,6 +241,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		currency: '',
 		billingPeriodOptions: [],
 		billingCycle: BILLING_CYCLE.ANNIVERSARY,
+		billingAnchor: undefined,
 		commitmentAmount: '',
 		overageFactor: '',
 		startDate: new Date().toISOString(),
@@ -312,6 +314,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 				billingPeriod: subscriptionData.details.billing_period.toLowerCase() as BILLING_PERIOD,
 				currency: subscriptionData.details.currency,
 				billingCycle: subscriptionData.details.billing_cycle || BILLING_CYCLE.ANNIVERSARY,
+				billingAnchor: undefined,
 				startDate: subscriptionData.details.start_date,
 				endDate: subscriptionData.details.end_date || undefined,
 				commitmentAmount: subscriptionData.details.commitment_amount?.toString() ?? '',
@@ -438,6 +441,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			selectedPlan,
 			currency,
 			billingCycle,
+			billingAnchor,
 			startDate,
 			endDate,
 			phases,
@@ -538,6 +542,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			selectedPlan,
 			currency,
 			billingCycle,
+			billingAnchor: billingAnchor ? new Date(billingAnchor) : undefined,
 			finalStartDate,
 			finalEndDate,
 			finalCoupons,
@@ -606,6 +611,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			billing_period: sanitized.billingPeriod.toUpperCase() as BILLING_PERIOD,
 			billing_period_count: 1,
 			billing_cycle: sanitized.billingCycle,
+			billing_anchor: sanitized.billingAnchor,
 			currency: sanitized.currency.toLowerCase(),
 			customer_id: customerId!,
 			plan_id: sanitized.selectedPlan,

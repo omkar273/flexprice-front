@@ -474,10 +474,17 @@ const SubscriptionForm = ({
 			{state.selectedPlan && !isLoadingPlanDetails && (
 				<BillingCycleSelector
 					value={state.billingCycle}
-					onChange={(value) => setState((prev) => ({ ...prev, billingCycle: value }))}
+					onChange={(value) =>
+						setState((prev) => ({
+							...prev,
+							billingCycle: value,
+							billingAnchor: value === BILLING_CYCLE.CALENDAR ? undefined : prev.billingAnchor,
+						}))
+					}
 					disabled={isDisabled || isLoadingPlanDetails}
 				/>
 			)}
+
 			{/* Add subscription charge dialog (single-phase only) */}
 			{state.selectedPlan && !isLoadingPlanDetails && phases.length === 0 && (
 				<AddSubscriptionChargeDialog
@@ -541,6 +548,18 @@ const SubscriptionForm = ({
 							/>
 						</div>
 					</div>
+
+					{state.selectedPlan && !isLoadingPlanDetails && phases.length === 0 && state.billingCycle === BILLING_CYCLE.ANNIVERSARY && (
+						<div className=''>
+							<DatePicker
+								label='Billing Date'
+								date={state.billingAnchor ? new Date(state.billingAnchor) : undefined}
+								setDate={(date) => setState((prev) => ({ ...prev, billingAnchor: date ? date.toISOString() : undefined }))}
+								disabled={isDisabled}
+								placeholder='Select billing date'
+							/>
+						</div>
+					)}
 
 					{/* Subscription Level Price Table (always show in single-phase so Add charge is available) */}
 					<div className='mt-6 pt-6 border-t border-gray-200'>

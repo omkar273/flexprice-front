@@ -345,6 +345,8 @@ export interface CreateSubscriptionRequest {
 	// Tax rate overrides
 	tax_rate_overrides?: TaxRateOverride[];
 
+	billing_anchor?: Date;
+
 	// Coupons
 	coupons?: string[];
 	line_item_coupons?: Record<string, string[]>;
