@@ -101,7 +101,6 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 				...prev,
 				currency: priceUnit.base_currency.toLowerCase(),
 				conversion_rate: parseFloat(priceUnit.conversion_rate),
-				topup_conversion_rate: prev.topup_conversion_rate || parseFloat(priceUnit.conversion_rate),
 				price_unit: priceUnit.code,
 			}));
 		} else {
@@ -110,7 +109,6 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 				...prev,
 				currency: currency.code.toLowerCase(),
 				conversion_rate: 1,
-				topup_conversion_rate: prev.topup_conversion_rate || 1,
 				price_unit: undefined,
 			}));
 		}
@@ -124,7 +122,9 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 				currency: walletPayload.currency,
 				initial_credits_to_load: walletPayload.initial_credits_to_load,
 				conversion_rate: walletPayload.conversion_rate || 1,
-				topup_conversion_rate: walletPayload.topup_conversion_rate || walletPayload.conversion_rate || 1,
+				...(walletPayload.topup_conversion_rate !== undefined && {
+					topup_conversion_rate: walletPayload.topup_conversion_rate,
+				}),
 				initial_credits_expiry_date_utc: walletPayload.initial_credits_expiry_date_utc,
 				...(walletPayload.price_unit && { price_unit: walletPayload.price_unit }),
 				wallet_type: walletPayload.wallet_type,
@@ -248,7 +248,7 @@ const CreateCustomerWalletModal: FC<Props> = ({ customerId, onSuccess = () => {}
 									className='w-full'
 									variant='number'
 									suffix={getCurrencySymbol(walletPayload.currency || '')}
-									value={walletPayload.topup_conversion_rate || walletPayload.conversion_rate}
+									value={walletPayload.topup_conversion_rate ?? walletPayload.conversion_rate}
 									onChange={(e) => {
 										setwalletPayload({
 											...walletPayload,

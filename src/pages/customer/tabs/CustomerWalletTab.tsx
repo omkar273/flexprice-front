@@ -376,6 +376,12 @@ const CustomerWalletTab = () => {
 										label: 'Conversion Rate',
 										value: <span>{`1 Credit = ${activeWallet?.conversion_rate}${getCurrencySymbol(activeWallet?.currency ?? '')}`}</span>,
 									},
+									{
+										label: 'Top-up Rate',
+										value: (
+											<span>{`1 Credit = ${activeWallet?.topup_conversion_rate}${getCurrencySymbol(activeWallet?.currency ?? '')}`}</span>
+										),
+									},
 								]}
 							/>
 
