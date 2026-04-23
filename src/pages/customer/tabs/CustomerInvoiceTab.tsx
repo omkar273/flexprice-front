@@ -1,23 +1,24 @@
-import { AddButton, CardHeader, Loader, NoDataCard } from '@/components/atoms';
+import { AddButton, Card, CardHeader, Loader, NoDataCard, ShortPagination } from '@/components/atoms';
 import { ApiDocsContent, CustomerInvoiceTable } from '@/components/molecules';
 import InvoiceApi from '@/api/InvoiceApi';
 import CustomerApi from '@/api/CustomerApi';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
-import { Card } from '@/components/atoms';
 import { Invoice as InvoiceModel } from '@/models/Invoice';
 import { RouteNames } from '@/core/routes/Routes';
 import { useMemo } from 'react';
 import Customer from '@/models/Customer';
+import usePagination from '@/hooks/usePagination';
 
 const CustomerInvoiceTab = () => {
 	const { id: customerId } = useParams();
 	const navigate = useNavigate();
+	const { limit, offset, page } = usePagination();
 
 	const { data, isLoading } = useQuery({
-		queryKey: ['invoice', customerId],
+		queryKey: ['invoice', customerId, page],
 		queryFn: async () => {
-			return await InvoiceApi.getCustomerInvoices(customerId!);
+			return await InvoiceApi.getCustomerInvoices(customerId!, { limit, offset });
 		},
 		enabled: !!customerId,
 	});
@@ -102,6 +103,7 @@ const CustomerInvoiceTab = () => {
 					}
 				/>
 				<CustomerInvoiceTable onRowClick={handleShowDetails} customerId={customerId} data={enrichedInvoices} />
+				<ShortPagination unit='Invoices' totalItems={data?.pagination.total ?? 0} />
 			</Card>
 		</div>
 	);

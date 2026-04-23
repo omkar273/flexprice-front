@@ -110,6 +110,8 @@ const AddAddonDialog: React.FC<Props> = ({ isOpen, onOpenChange, subscriptionId,
 			toast.success('Addon added successfully');
 			refetchQueries(['subscriptionActiveAddons', subscriptionId]);
 			refetchQueries(['subscriptionDetails', subscriptionId]);
+			refetchQueries(['subscriptionDetailsEditPage', subscriptionId]);
+			refetchQueries(['subscriptionEntitlements', subscriptionId]);
 			setFormData({});
 			setErrors({});
 			onOpenChange(false);

@@ -206,6 +206,8 @@ const SubscriptionAddonsSection: FC<SubscriptionAddonsSectionProps> = ({ subscri
 			toast.success('Addon cancelled successfully');
 			queryClient.invalidateQueries({ queryKey: ['subscriptionActiveAddons', subscriptionId] });
 			queryClient.invalidateQueries({ queryKey: ['subscriptionDetails', subscriptionId] });
+			queryClient.invalidateQueries({ queryKey: ['subscriptionDetailsEditPage', subscriptionId] });
+			queryClient.invalidateQueries({ queryKey: ['subscriptionEntitlements', subscriptionId] });
 			setIsCancelDialogOpen(false);
 			setAddonToCancel(null);
 			setEffectiveEndDate(undefined);
