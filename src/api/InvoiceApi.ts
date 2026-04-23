@@ -25,7 +25,10 @@ class InvoiceApi {
 	}
 
 	/** List invoices for a single customer. Uses listInvoices with customer_id filter. */
-	public static async getCustomerInvoices(customerId: string): Promise<GetInvoicesResponse> {
+	public static async getCustomerInvoices(
+		customerId: string,
+		pagination?: { limit: number; offset: number },
+	): Promise<GetInvoicesResponse> {
 		return await this.listInvoices({
 			customer_id: customerId,
 			sort: [
@@ -34,6 +37,7 @@ class InvoiceApi {
 					direction: SortDirection.DESC,
 				},
 			],
+			...pagination,
 		});
 	}
 
