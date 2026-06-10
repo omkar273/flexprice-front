@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "external_customer_ids_to_inherit_subscription": { "type": "array", "items": { "type": "string" } } },
+	"x-readme-ref-name": "SubModifyInheritanceRequest"
+}

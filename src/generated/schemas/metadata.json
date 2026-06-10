@@ -1,0 +1,1 @@
+{ "type": "object", "additionalProperties": { "type": "string" }, "x-speakeasy-name-override": "Metadata", "x-readme-ref-name": "Metadata" }

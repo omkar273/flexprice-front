@@ -1,0 +1,22 @@
+{
+	"type": "object",
+	"properties": {
+		"normalize_fixed_to": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		}
+	},
+	"x-speakeasy-name-override": "InvoiceSyncSettings",
+	"x-readme-ref-name": "InvoiceSyncSettings"
+}

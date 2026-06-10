@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["active", "frozen", "closed"],
+	"x-enum-varnames": ["WalletStatusActive", "WalletStatusFrozen", "WalletStatusClosed"],
+	"x-speakeasy-name-override": "WalletStatus",
+	"x-readme-ref-name": "WalletStatus"
+}

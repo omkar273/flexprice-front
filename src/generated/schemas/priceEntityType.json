@@ -1,0 +1,13 @@
+{
+	"type": "string",
+	"enum": ["PLAN", "SUBSCRIPTION", "ADDON", "PRICE", "COSTSHEET"],
+	"x-enum-varnames": [
+		"PRICE_ENTITY_TYPE_PLAN",
+		"PRICE_ENTITY_TYPE_SUBSCRIPTION",
+		"PRICE_ENTITY_TYPE_ADDON",
+		"PRICE_ENTITY_TYPE_PRICE",
+		"PRICE_ENTITY_TYPE_COSTSHEET"
+	],
+	"x-speakeasy-name-override": "PriceEntityType",
+	"x-readme-ref-name": "PriceEntityType"
+}

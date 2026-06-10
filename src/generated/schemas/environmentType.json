@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["development", "production"],
+	"x-enum-varnames": ["EnvironmentDevelopment", "EnvironmentProduction"],
+	"x-speakeasy-name-override": "EnvironmentType",
+	"x-readme-ref-name": "EnvironmentType"
+}

@@ -1,0 +1,14 @@
+{
+	"type": "object",
+	"properties": {
+		"divide_by": { "type": "integer", "description": "Divide quantity by this number" },
+		"round": {
+			"type": "string",
+			"enum": ["up", "down"],
+			"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+			"x-speakeasy-name-override": "RoundType",
+			"x-readme-ref-name": "RoundType"
+		}
+	},
+	"x-readme-ref-name": "price.JSONBTransformQuantity"
+}

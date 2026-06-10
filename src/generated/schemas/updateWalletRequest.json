@@ -1,0 +1,96 @@
+{
+	"type": "object",
+	"properties": {
+		"alert_settings": {
+			"type": "object",
+			"properties": {
+				"alert_enabled": { "type": "boolean" },
+				"critical": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"info": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"warning": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				}
+			},
+			"x-speakeasy-name-override": "AlertSettings",
+			"x-readme-ref-name": "AlertSettings"
+		},
+		"auto_topup": {
+			"type": "object",
+			"properties": {
+				"amount": { "type": "number" },
+				"enabled": { "type": "boolean" },
+				"invoicing": { "type": "boolean" },
+				"threshold": { "type": "number" }
+			},
+			"x-speakeasy-name-override": "AutoTopup",
+			"x-readme-ref-name": "AutoTopup"
+		},
+		"config": {
+			"type": "object",
+			"properties": {
+				"allowed_price_types": {
+					"type": "array",
+					"description": "AllowedPriceTypes is a list of price types that are allowed for the wallet\nnil means all price types are allowed",
+					"items": {
+						"type": "string",
+						"enum": ["ALL", "USAGE", "FIXED"],
+						"x-enum-varnames": ["WalletConfigPriceTypeAll", "WalletConfigPriceTypeUsage", "WalletConfigPriceTypeFixed"],
+						"x-speakeasy-name-override": "WalletConfigPriceType",
+						"x-readme-ref-name": "WalletConfigPriceType"
+					}
+				}
+			},
+			"x-speakeasy-name-override": "WalletConfig",
+			"x-readme-ref-name": "WalletConfig"
+		},
+		"description": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" }
+	},
+	"x-readme-ref-name": "UpdateWalletRequest"
+}

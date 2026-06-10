@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["upgrade", "downgrade", "lateral"],
+	"x-enum-varnames": ["SubscriptionChangeTypeUpgrade", "SubscriptionChangeTypeDowngrade", "SubscriptionChangeTypeLateral"],
+	"x-speakeasy-name-override": "SubscriptionChangeType",
+	"x-readme-ref-name": "SubscriptionChangeType"
+}

@@ -1,0 +1,6 @@
+{
+	"type": "object",
+	"properties": { "free": { "type": "string" }, "purchased": { "type": "string" } },
+	"x-speakeasy-name-override": "CreditBreakdown",
+	"x-readme-ref-name": "CreditBreakdown"
+}

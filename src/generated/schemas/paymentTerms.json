@@ -1,0 +1,14 @@
+{
+	"type": "string",
+	"enum": ["15 NET", "30 NET", "45 NET", "60 NET", "75 NET", "90 NET"],
+	"x-enum-varnames": [
+		"PaymentTerms15Net",
+		"PaymentTerms30Net",
+		"PaymentTerms45Net",
+		"PaymentTerms60Net",
+		"PaymentTerms75Net",
+		"PaymentTerms90Net"
+	],
+	"x-speakeasy-name-override": "PaymentTerms",
+	"x-readme-ref-name": "PaymentTerms"
+}

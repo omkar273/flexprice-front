@@ -1,0 +1,11 @@
+{
+	"required": ["name"],
+	"type": "object",
+	"properties": {
+		"description": { "type": "string" },
+		"lookup_key": { "maxLength": 255, "minLength": 1, "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+		"name": { "maxLength": 255, "minLength": 1, "type": "string" }
+	},
+	"x-readme-ref-name": "CreateCostsheetRequest"
+}

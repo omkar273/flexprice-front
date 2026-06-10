@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["SUBSCRIPTION", "ONE_OFF", "CREDIT"],
+	"x-enum-varnames": ["InvoiceTypeSubscription", "InvoiceTypeOneOff", "InvoiceTypeCredit"],
+	"x-speakeasy-name-override": "InvoiceType",
+	"x-readme-ref-name": "InvoiceType"
+}

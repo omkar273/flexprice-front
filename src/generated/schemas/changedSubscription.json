@@ -1,0 +1,30 @@
+{
+	"type": "object",
+	"properties": {
+		"action": {
+			"type": "string",
+			"description": "created | updated",
+			"enum": ["created", "updated"],
+			"x-enum-varnames": ["ChangedSubscriptionActionCreated", "ChangedSubscriptionActionUpdated"],
+			"x-readme-ref-name": "ChangedSubscriptionAction"
+		},
+		"current_period_end": { "type": "string", "format": "date-time" },
+		"id": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+			"x-enum-varnames": [
+				"SubscriptionStatusActive",
+				"SubscriptionStatusPaused",
+				"SubscriptionStatusCancelled",
+				"SubscriptionStatusIncomplete",
+				"SubscriptionStatusTrialing",
+				"SubscriptionStatusDraft"
+			],
+			"x-speakeasy-name-override": "SubscriptionStatus",
+			"x-readme-ref-name": "SubscriptionStatus"
+		},
+		"trial_end": { "type": "string", "format": "date-time" }
+	},
+	"x-readme-ref-name": "ChangedSubscription"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "metadata": { "type": "object", "additionalProperties": { "type": "string" } } },
+	"x-readme-ref-name": "UpdateUserRequest"
+}

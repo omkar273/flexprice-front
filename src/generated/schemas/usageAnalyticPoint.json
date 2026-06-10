@@ -1,0 +1,16 @@
+{
+	"type": "object",
+	"properties": {
+		"computed_commitment_utilized_amount": {
+			"type": "string",
+			"description": "Commitment breakdown (only populated for windowed commitments)"
+		},
+		"computed_overage_amount": { "type": "string" },
+		"computed_true_up_amount": { "type": "string" },
+		"cost": { "type": "string" },
+		"event_count": { "type": "integer", "description": "Number of events in this time window" },
+		"timestamp": { "type": "string" },
+		"usage": { "type": "string" }
+	},
+	"x-readme-ref-name": "UsageAnalyticPoint"
+}

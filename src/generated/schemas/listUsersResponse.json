@@ -1,0 +1,70 @@
+{
+	"type": "object",
+	"properties": {
+		"items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"email": { "type": "string", "description": "Empty for service accounts" },
+					"id": { "type": "string" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"roles": { "type": "array", "items": { "type": "string" } },
+					"tenant": {
+						"type": "object",
+						"properties": {
+							"billing_details": {
+								"type": "object",
+								"properties": {
+									"address": {
+										"type": "object",
+										"properties": {
+											"address_city": { "maxLength": 100, "type": "string" },
+											"address_country": { "type": "string" },
+											"address_line1": { "maxLength": 255, "type": "string" },
+											"address_line2": { "maxLength": 255, "type": "string" },
+											"address_postal_code": { "maxLength": 20, "type": "string" },
+											"address_state": { "maxLength": 100, "type": "string" }
+										},
+										"x-readme-ref-name": "Address"
+									},
+									"email": { "type": "string" },
+									"help_email": { "type": "string" },
+									"phone": { "type": "string" }
+								},
+								"x-readme-ref-name": "TenantBillingDetails"
+							},
+							"created_at": { "type": "string", "format": "date-time" },
+							"id": { "type": "string" },
+							"metadata": {
+								"type": "object",
+								"additionalProperties": { "type": "string" },
+								"x-speakeasy-name-override": "Metadata",
+								"x-readme-ref-name": "Metadata"
+							},
+							"name": { "type": "string" },
+							"status": { "type": "string" },
+							"updated_at": { "type": "string", "format": "date-time" }
+						},
+						"x-readme-ref-name": "TenantResponse"
+					},
+					"type": {
+						"type": "string",
+						"enum": ["user", "service_account"],
+						"x-enum-varnames": ["UserTypeUser", "UserTypeServiceAccount"],
+						"x-speakeasy-name-override": "UserType",
+						"x-readme-ref-name": "UserType"
+					}
+				},
+				"x-readme-ref-name": "UserResponse"
+			}
+		},
+		"pagination": {
+			"type": "object",
+			"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+			"x-speakeasy-name-override": "PaginationResponse",
+			"x-readme-ref-name": "PaginationResponse"
+		}
+	},
+	"x-readme-ref-name": "ListUsersResponse"
+}

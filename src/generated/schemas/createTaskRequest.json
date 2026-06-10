@@ -1,0 +1,31 @@
+{
+	"required": ["entity_type", "file_type", "file_url", "task_type"],
+	"type": "object",
+	"properties": {
+		"entity_type": {
+			"type": "string",
+			"enum": ["EVENTS", "PRICES", "CUSTOMERS", "FEATURES"],
+			"x-enum-varnames": ["EntityTypeEvents", "EntityTypePrices", "EntityTypeCustomers", "EntityTypeFeatures"],
+			"x-speakeasy-name-override": "EntityType",
+			"x-readme-ref-name": "EntityType"
+		},
+		"file_name": { "type": "string" },
+		"file_type": {
+			"type": "string",
+			"enum": ["CSV", "JSON"],
+			"x-enum-varnames": ["FileTypeCSV", "FileTypeJSON"],
+			"x-speakeasy-name-override": "FileType",
+			"x-readme-ref-name": "FileType"
+		},
+		"file_url": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"task_type": {
+			"type": "string",
+			"enum": ["IMPORT", "EXPORT"],
+			"x-enum-varnames": ["TaskTypeImport", "TaskTypeExport"],
+			"x-speakeasy-name-override": "TaskType",
+			"x-readme-ref-name": "TaskType"
+		}
+	},
+	"x-readme-ref-name": "CreateTaskRequest"
+}

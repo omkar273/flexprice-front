@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["ok", "info", "warning", "in_alarm"],
+	"x-enum-varnames": ["AlertStateOk", "AlertStateInfo", "AlertStateWarning", "AlertStateInAlarm"],
+	"x-speakeasy-name-override": "AlertState",
+	"x-readme-ref-name": "AlertState"
+}

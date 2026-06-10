@@ -1,0 +1,289 @@
+{
+	"type": "object",
+	"properties": {
+		"integrations": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"base_config": {
+						"type": "object",
+						"properties": {
+							"customer": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"deal": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"invoice": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"invoice_sync_settings": {
+								"type": "object",
+								"properties": {
+									"normalize_fixed_to": {
+										"type": "string",
+										"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+										"x-enum-varnames": [
+											"BILLING_PERIOD_MONTHLY",
+											"BILLING_PERIOD_ANNUAL",
+											"BILLING_PERIOD_WEEKLY",
+											"BILLING_PERIOD_DAILY",
+											"BILLING_PERIOD_QUARTER",
+											"BILLING_PERIOD_HALF_YEAR",
+											"BILLING_PERIOD_ONETIME"
+										],
+										"x-speakeasy-name-override": "BillingPeriod",
+										"x-readme-ref-name": "BillingPeriod"
+									}
+								},
+								"x-speakeasy-name-override": "InvoiceSyncSettings",
+								"x-readme-ref-name": "InvoiceSyncSettings"
+							},
+							"payment": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"plan": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"quote": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"s3": {
+								"type": "object",
+								"properties": {
+									"bucket": { "type": "string", "description": "S3 bucket name" },
+									"compression": {
+										"type": "string",
+										"enum": ["none", "gzip"],
+										"x-enum-varnames": ["S3CompressionTypeNone", "S3CompressionTypeGzip"],
+										"x-speakeasy-name-override": "S3CompressionType",
+										"x-readme-ref-name": "S3CompressionType"
+									},
+									"encryption": {
+										"type": "string",
+										"enum": ["AES256", "aws:kms", "aws:kms:dsse"],
+										"x-enum-varnames": ["S3EncryptionTypeAES256", "S3EncryptionTypeAwsKms", "S3EncryptionTypeAwsKmsDsse"],
+										"x-speakeasy-name-override": "S3EncryptionType",
+										"x-readme-ref-name": "S3EncryptionType"
+									},
+									"is_flexprice_managed": {
+										"type": "boolean",
+										"description": "If true, use Flexprice-managed S3 credentials instead of user-provided"
+									},
+									"key_prefix": { "type": "string", "description": "Optional prefix for S3 keys (e.g., \"flexprice-exports/\")" },
+									"region": { "type": "string", "description": "AWS region (e.g., \"us-west-2\")" }
+								},
+								"x-speakeasy-name-override": "S3ExportConfig",
+								"x-readme-ref-name": "S3ExportConfig"
+							},
+							"subscription": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							}
+						},
+						"x-speakeasy-name-override": "SyncConfig",
+						"x-readme-ref-name": "SyncConfig"
+					},
+					"current_config": {
+						"type": "object",
+						"properties": {
+							"customer": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"deal": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"invoice": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"invoice_sync_settings": {
+								"type": "object",
+								"properties": {
+									"normalize_fixed_to": {
+										"type": "string",
+										"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+										"x-enum-varnames": [
+											"BILLING_PERIOD_MONTHLY",
+											"BILLING_PERIOD_ANNUAL",
+											"BILLING_PERIOD_WEEKLY",
+											"BILLING_PERIOD_DAILY",
+											"BILLING_PERIOD_QUARTER",
+											"BILLING_PERIOD_HALF_YEAR",
+											"BILLING_PERIOD_ONETIME"
+										],
+										"x-speakeasy-name-override": "BillingPeriod",
+										"x-readme-ref-name": "BillingPeriod"
+									}
+								},
+								"x-speakeasy-name-override": "InvoiceSyncSettings",
+								"x-readme-ref-name": "InvoiceSyncSettings"
+							},
+							"payment": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"plan": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"quote": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							},
+							"s3": {
+								"type": "object",
+								"properties": {
+									"bucket": { "type": "string", "description": "S3 bucket name" },
+									"compression": {
+										"type": "string",
+										"enum": ["none", "gzip"],
+										"x-enum-varnames": ["S3CompressionTypeNone", "S3CompressionTypeGzip"],
+										"x-speakeasy-name-override": "S3CompressionType",
+										"x-readme-ref-name": "S3CompressionType"
+									},
+									"encryption": {
+										"type": "string",
+										"enum": ["AES256", "aws:kms", "aws:kms:dsse"],
+										"x-enum-varnames": ["S3EncryptionTypeAES256", "S3EncryptionTypeAwsKms", "S3EncryptionTypeAwsKmsDsse"],
+										"x-speakeasy-name-override": "S3EncryptionType",
+										"x-readme-ref-name": "S3EncryptionType"
+									},
+									"is_flexprice_managed": {
+										"type": "boolean",
+										"description": "If true, use Flexprice-managed S3 credentials instead of user-provided"
+									},
+									"key_prefix": { "type": "string", "description": "Optional prefix for S3 keys (e.g., \"flexprice-exports/\")" },
+									"region": { "type": "string", "description": "AWS region (e.g., \"us-west-2\")" }
+								},
+								"x-speakeasy-name-override": "S3ExportConfig",
+								"x-readme-ref-name": "S3ExportConfig"
+							},
+							"subscription": {
+								"type": "object",
+								"properties": {
+									"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+									"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+								},
+								"x-speakeasy-name-override": "EntitySyncConfig",
+								"x-readme-ref-name": "EntitySyncConfig"
+							}
+						},
+						"x-speakeasy-name-override": "SyncConfig",
+						"x-readme-ref-name": "SyncConfig"
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"flexprice",
+							"stripe",
+							"s3",
+							"hubspot",
+							"razorpay",
+							"chargebee",
+							"quickbooks",
+							"zoho_books",
+							"nomod",
+							"moyasar",
+							"paddle",
+							"whop"
+						],
+						"x-enum-comments": { "SecretProviderS3": "supports multiple connections per environment" },
+						"x-enum-varnames": [
+							"SecretProviderFlexPrice",
+							"SecretProviderStripe",
+							"SecretProviderS3",
+							"SecretProviderHubSpot",
+							"SecretProviderRazorpay",
+							"SecretProviderChargebee",
+							"SecretProviderQuickBooks",
+							"SecretProviderZohoBooks",
+							"SecretProviderNomod",
+							"SecretProviderMoyasar",
+							"SecretProviderPaddle",
+							"SecretProviderWhop"
+						],
+						"x-speakeasy-name-override": "SecretProvider",
+						"x-readme-ref-name": "SecretProvider"
+					}
+				},
+				"x-readme-ref-name": "IntegrationConfigEntry"
+			}
+		}
+	},
+	"x-readme-ref-name": "IntegrationConfigResponse"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["FLAT_FEE", "PACKAGE", "TIERED"],
+	"x-enum-varnames": ["BILLING_MODEL_FLAT_FEE", "BILLING_MODEL_PACKAGE", "BILLING_MODEL_TIERED"],
+	"x-speakeasy-name-override": "BillingModel",
+	"x-readme-ref-name": "BillingModel"
+}

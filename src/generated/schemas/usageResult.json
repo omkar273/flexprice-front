@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "value": { "type": "number" }, "window_size": { "type": "string" } },
+	"x-readme-ref-name": "UsageResult"
+}

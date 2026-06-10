@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["none", "gzip"],
+	"x-enum-varnames": ["S3CompressionTypeNone", "S3CompressionTypeGzip"],
+	"x-speakeasy-name-override": "S3CompressionType",
+	"x-readme-ref-name": "S3CompressionType"
+}

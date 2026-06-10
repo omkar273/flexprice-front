@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["USAGE", "FIXED"],
+	"x-enum-varnames": ["PRICE_TYPE_USAGE", "PRICE_TYPE_FIXED"],
+	"x-speakeasy-name-override": "PriceType",
+	"x-readme-ref-name": "PriceType"
+}

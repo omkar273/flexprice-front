@@ -1,0 +1,11 @@
+{
+	"required": ["lookup_key", "name"],
+	"type": "object",
+	"properties": {
+		"description": { "type": "string" },
+		"lookup_key": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"name": { "type": "string" }
+	},
+	"x-readme-ref-name": "CreateAddonRequest"
+}

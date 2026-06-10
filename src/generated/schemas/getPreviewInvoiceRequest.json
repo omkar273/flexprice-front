@@ -1,0 +1,26 @@
+{
+	"required": ["subscription_id"],
+	"type": "object",
+	"properties": {
+		"hide_zero_charges_line_items": {
+			"type": "boolean",
+			"description": "hide_zero_charges_line_items indicates whether to hide line items with zero cost",
+			"default": false
+		},
+		"period_end": {
+			"type": "string",
+			"description": "period_end is the optional end date of the period to preview",
+			"format": "date-time"
+		},
+		"period_start": {
+			"type": "string",
+			"description": "period_start is the optional start date of the period to preview",
+			"format": "date-time"
+		},
+		"subscription_id": {
+			"type": "string",
+			"description": "subscription_id is the unique identifier of the subscription to preview invoice for"
+		}
+	},
+	"x-readme-ref-name": "GetPreviewInvoiceRequest"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["RECURRING"],
+	"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+	"x-speakeasy-name-override": "BillingCadence",
+	"x-readme-ref-name": "BillingCadence"
+}

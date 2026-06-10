@@ -1,0 +1,14 @@
+{
+	"required": ["id", "quantity"],
+	"type": "object",
+	"properties": {
+		"effective_date": {
+			"type": "string",
+			"description": "EffectiveDate is when the quantity change takes effect.\nIf omitted, the change is effective immediately (now).",
+			"format": "date-time"
+		},
+		"id": { "type": "string" },
+		"quantity": { "type": "string" }
+	},
+	"x-readme-ref-name": "LineItemQuantityChange"
+}

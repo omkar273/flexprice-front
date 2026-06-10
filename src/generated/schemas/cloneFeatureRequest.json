@@ -1,0 +1,15 @@
+{
+	"type": "object",
+	"properties": {
+		"description": { "type": "string", "description": "Description overrides the source feature's description when provided" },
+		"lookup_key": { "type": "string", "description": "LookupKey is required and must be unique across published features" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string", "description": "Name is required and must be different from the source feature's name" }
+	},
+	"x-readme-ref-name": "CloneFeatureRequest"
+}

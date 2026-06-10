@@ -1,0 +1,61 @@
+{
+	"type": "object",
+	"properties": {
+		"error": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "string",
+					"enum": [
+						"http_client_error",
+						"system_error",
+						"internal_error",
+						"not_found",
+						"already_exists",
+						"version_conflict",
+						"validation_error",
+						"invalid_operation",
+						"permission_denied",
+						"database_error",
+						"service_unavailable",
+						"too_many_requests"
+					],
+					"x-enum-varnames": [
+						"ErrCodeHTTPClient",
+						"ErrCodeSystemError",
+						"ErrCodeInternalError",
+						"ErrCodeNotFound",
+						"ErrCodeAlreadyExists",
+						"ErrCodeVersionConflict",
+						"ErrCodeValidation",
+						"ErrCodeInvalidOperation",
+						"ErrCodePermissionDenied",
+						"ErrCodeDatabase",
+						"ErrCodeServiceUnavailable",
+						"ErrCodeTooManyRequests"
+					],
+					"x-speakeasy-name-override": "ErrorCode",
+					"x-readme-ref-name": "ErrorCode"
+				},
+				"http_status_code": { "type": "integer" },
+				"message": { "type": "string" }
+			},
+			"x-speakeasy-name-override": "ErrorResponse",
+			"x-readme-ref-name": "ErrorResponse"
+		},
+		"failure_point_type": {
+			"type": "string",
+			"enum": ["customer_lookup", "meter_lookup", "price_lookup", "subscription_line_item_lookup"],
+			"x-enum-varnames": [
+				"FailurePointTypeCustomerLookup",
+				"FailurePointTypeMeterLookup",
+				"FailurePointTypePriceLookup",
+				"FailurePointTypeSubscriptionLineItemLookup"
+			],
+			"x-speakeasy-name-override": "FailurePointType",
+			"x-readme-ref-name": "FailurePointType"
+		}
+	},
+	"x-speakeasy-name-override": "FailurePoint",
+	"x-readme-ref-name": "FailurePoint"
+}

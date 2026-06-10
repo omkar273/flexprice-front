@@ -1,0 +1,52 @@
+{
+	"type": "object",
+	"properties": {
+		"customer_id": { "type": "string", "description": "customer_id is the unique identifier of the customer" },
+		"default_currency": { "type": "string", "description": "default_currency is the primary currency for this customer" },
+		"summaries": {
+			"type": "array",
+			"description": "summaries contains the invoice summaries for each currency",
+			"items": {
+				"type": "object",
+				"properties": {
+					"currency": { "type": "string", "description": "currency is the three-letter ISO currency code for this summary" },
+					"customer_id": { "type": "string", "description": "customer_id is the unique identifier of the customer" },
+					"overdue_invoice_count": {
+						"type": "integer",
+						"description": "overdue_invoice_count is the number of overdue invoices for this customer in this currency"
+					},
+					"total_invoice_count": {
+						"type": "integer",
+						"description": "total_invoice_count is the total number of invoices for this customer in this currency"
+					},
+					"total_overdue_amount": {
+						"type": "string",
+						"description": "total_overdue_amount is the total amount of overdue invoices in this currency"
+					},
+					"total_revenue_amount": {
+						"type": "string",
+						"description": "total_revenue_amount is the total revenue generated from this customer in this currency"
+					},
+					"total_unpaid_amount": {
+						"type": "string",
+						"description": "total_unpaid_amount is the total amount of unpaid invoices in this currency"
+					},
+					"unpaid_fixed_charges": {
+						"type": "string",
+						"description": "unpaid_fixed_charges is the total amount of unpaid fixed charges in this currency"
+					},
+					"unpaid_invoice_count": {
+						"type": "integer",
+						"description": "unpaid_invoice_count is the number of unpaid invoices for this customer in this currency"
+					},
+					"unpaid_usage_charges": {
+						"type": "string",
+						"description": "unpaid_usage_charges is the total amount of unpaid usage-based charges in this currency"
+					}
+				},
+				"x-readme-ref-name": "CustomerInvoiceSummary"
+			}
+		}
+	},
+	"x-readme-ref-name": "CustomerMultiCurrencyInvoiceSummary"
+}

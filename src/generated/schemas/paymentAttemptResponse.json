@@ -1,0 +1,21 @@
+{
+	"type": "object",
+	"properties": {
+		"attempt_number": { "type": "integer" },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"error_message": { "type": "string" },
+		"id": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"payment_id": { "type": "string" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "PaymentAttemptResponse"
+}

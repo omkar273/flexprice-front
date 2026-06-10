@@ -1,0 +1,170 @@
+{
+	"type": "object",
+	"properties": {
+		"active_at": {
+			"type": "string",
+			"description": "ActiveAt filters subscriptions that are active at the given time",
+			"format": "date-time"
+		},
+		"billing_cadence": {
+			"type": "array",
+			"description": "BillingCadence filters by billing cadence",
+			"items": {
+				"type": "string",
+				"enum": ["RECURRING"],
+				"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+				"x-speakeasy-name-override": "BillingCadence",
+				"x-readme-ref-name": "BillingCadence"
+			}
+		},
+		"billing_period": {
+			"type": "array",
+			"description": "BillingPeriod filters by billing period",
+			"items": {
+				"type": "string",
+				"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+				"x-enum-varnames": [
+					"BILLING_PERIOD_MONTHLY",
+					"BILLING_PERIOD_ANNUAL",
+					"BILLING_PERIOD_WEEKLY",
+					"BILLING_PERIOD_DAILY",
+					"BILLING_PERIOD_QUARTER",
+					"BILLING_PERIOD_HALF_YEAR",
+					"BILLING_PERIOD_ONETIME"
+				],
+				"x-speakeasy-name-override": "BillingPeriod",
+				"x-readme-ref-name": "BillingPeriod"
+			}
+		},
+		"customer_id": { "type": "string", "description": "CustomerID filters by customer ID" },
+		"customer_ids": { "type": "array", "description": "CustomerIDs filters by customer IDs", "items": { "type": "string" } },
+		"effective_date_for_update": {
+			"type": "string",
+			"description": "EffectiveDateForUpdate selects subscriptions that need a billing-period pass on or before this time:\ncurrent_period_end <= date OR (cancel_at IS NOT NULL AND cancel_at <= date).\nWhen nil, period/cancel cutoff logic is not applied by this field (see TimeRangeFilter for legacy period-end filtering)."
+		},
+		"end_time": { "type": "string", "format": "date-time" },
+		"expand": { "type": "string" },
+		"external_customer_id": { "type": "string", "description": "ExternalCustomerID filters by external customer ID" },
+		"filters": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"data_type": {
+						"type": "string",
+						"enum": ["string", "number", "date", "array"],
+						"x-enum-varnames": ["DataTypeString", "DataTypeNumber", "DataTypeDate", "DataTypeArray"],
+						"x-speakeasy-name-override": "DataType",
+						"x-readme-ref-name": "DataType"
+					},
+					"field": { "type": "string" },
+					"operator": {
+						"type": "string",
+						"enum": ["eq", "contains", "not_contains", "gt", "lt", "in", "not_in", "before", "after"],
+						"x-enum-varnames": ["EQUAL", "CONTAINS", "NOT_CONTAINS", "GREATER_THAN", "LESS_THAN", "IN", "NOT_IN", "BEFORE", "AFTER"],
+						"x-speakeasy-name-override": "FilterOperatorType",
+						"x-readme-ref-name": "FilterOperatorType"
+					},
+					"value": {
+						"type": "object",
+						"properties": {
+							"array": { "type": "array", "items": { "type": "string" } },
+							"boolean": { "type": "boolean" },
+							"date": { "type": "string" },
+							"number": { "type": "number" },
+							"string": { "type": "string" }
+						},
+						"x-speakeasy-name-override": "Value",
+						"x-readme-ref-name": "Value"
+					}
+				},
+				"x-speakeasy-name-override": "FilterCondition",
+				"x-readme-ref-name": "FilterCondition"
+			}
+		},
+		"invoicing_customer_ids": {
+			"type": "array",
+			"description": "InvoicingCustomerIDs filters by invoicing customer ID",
+			"items": { "type": "string" }
+		},
+		"limit": { "maximum": 1000, "minimum": 1, "type": "integer" },
+		"offset": { "minimum": 0, "type": "integer" },
+		"order": { "type": "string", "enum": ["asc", "desc"] },
+		"parent_subscription_ids": {
+			"type": "array",
+			"description": "ParentSubscriptionIDs filters by parent subscription IDs",
+			"items": { "type": "string" }
+		},
+		"plan_id": { "type": "string", "description": "PlanID filters by plan ID" },
+		"sort": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"direction": {
+						"type": "string",
+						"enum": ["asc", "desc"],
+						"x-enum-varnames": ["SortDirectionAsc", "SortDirectionDesc"],
+						"x-speakeasy-name-override": "SortDirection",
+						"x-readme-ref-name": "SortDirection"
+					},
+					"field": { "type": "string" }
+				},
+				"x-speakeasy-name-override": "SortCondition",
+				"x-readme-ref-name": "SortCondition"
+			}
+		},
+		"start_time": { "type": "string", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_ids": { "type": "array", "items": { "type": "string" } },
+		"subscription_status": {
+			"type": "array",
+			"description": "SubscriptionStatus filters by subscription status",
+			"items": {
+				"type": "string",
+				"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+				"x-enum-varnames": [
+					"SubscriptionStatusActive",
+					"SubscriptionStatusPaused",
+					"SubscriptionStatusCancelled",
+					"SubscriptionStatusIncomplete",
+					"SubscriptionStatusTrialing",
+					"SubscriptionStatusDraft"
+				],
+				"x-speakeasy-name-override": "SubscriptionStatus",
+				"x-readme-ref-name": "SubscriptionStatus"
+			}
+		},
+		"subscription_type": {
+			"type": "array",
+			"description": "SubscriptionType filters by subscription type",
+			"items": {
+				"type": "string",
+				"enum": ["standalone", "delegated_invoicing", "parent", "inherited", "grouped_invoicing"],
+				"x-enum-varnames": [
+					"SubscriptionTypeStandalone",
+					"SubscriptionTypeDelegatedInvoicing",
+					"SubscriptionTypeParent",
+					"SubscriptionTypeInherited",
+					"SubscriptionTypeGroupedInvoicing"
+				],
+				"x-speakeasy-name-override": "SubscriptionType",
+				"x-readme-ref-name": "SubscriptionType"
+			}
+		},
+		"trial_end_due_lte": {
+			"type": "string",
+			"description": "TrialEndDueLTE, when set, restricts to subscriptions with trial_end not nil and trial_end <= trial_end_due_lte.\nUse with subscription_status trialing for trial-end cron processing.",
+			"format": "date-time"
+		},
+		"with_line_items": { "type": "boolean", "description": "WithLineItems includes line items in the response" }
+	},
+	"x-speakeasy-name-override": "SubscriptionFilter",
+	"x-readme-ref-name": "SubscriptionFilter"
+}

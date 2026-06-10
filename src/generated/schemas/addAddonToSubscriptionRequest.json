@@ -1,0 +1,74 @@
+{
+	"required": ["addon_id"],
+	"type": "object",
+	"properties": {
+		"addon_id": { "type": "string" },
+		"cadence": {
+			"type": "string",
+			"enum": ["onetime", "recurring"],
+			"x-enum-varnames": ["AddonCadenceOnetime", "AddonCadenceRecurring"],
+			"x-speakeasy-name-override": "AddonCadence",
+			"x-readme-ref-name": "AddonCadence"
+		},
+		"line_item_commitments": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object",
+				"properties": {
+					"commitment_amount": { "type": "number", "description": "CommitmentAmount is the minimum amount committed for this line item" },
+					"commitment_duration": {
+						"type": "string",
+						"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+						"x-enum-varnames": [
+							"BILLING_PERIOD_MONTHLY",
+							"BILLING_PERIOD_ANNUAL",
+							"BILLING_PERIOD_WEEKLY",
+							"BILLING_PERIOD_DAILY",
+							"BILLING_PERIOD_QUARTER",
+							"BILLING_PERIOD_HALF_YEAR",
+							"BILLING_PERIOD_ONETIME"
+						],
+						"x-speakeasy-name-override": "BillingPeriod",
+						"x-readme-ref-name": "BillingPeriod"
+					},
+					"commitment_quantity": {
+						"type": "number",
+						"description": "CommitmentQuantity is the minimum quantity committed for this line item"
+					},
+					"commitment_type": {
+						"type": "string",
+						"enum": ["amount", "quantity"],
+						"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+						"x-speakeasy-name-override": "CommitmentType",
+						"x-readme-ref-name": "CommitmentType"
+					},
+					"enable_true_up": {
+						"type": "boolean",
+						"description": "EnableTrueUp determines if true-up fee should be applied when usage is below commitment"
+					},
+					"is_window_commitment": {
+						"type": "boolean",
+						"description": "IsWindowCommitment determines if commitment is applied per window (e.g., per day) rather than per billing period"
+					},
+					"overage_factor": { "type": "number", "description": "OverageFactor is a multiplier applied to usage beyond the commitment" }
+				},
+				"x-readme-ref-name": "LineItemCommitmentConfig"
+			},
+			"description": "LineItemCommitments allows setting commitment configuration per addon line item (keyed by price_id)"
+		},
+		"metadata": { "type": "object", "additionalProperties": true },
+		"proration_behavior": {
+			"type": "string",
+			"enum": ["create_prorations", "none"],
+			"x-enum-comments": {
+				"ProrationBehaviorCreateProrations": "Default: Create credits/charges on invoice",
+				"ProrationBehaviorNone": "Calculate but don't apply (e.g., for previews)"
+			},
+			"x-enum-varnames": ["ProrationBehaviorCreateProrations", "ProrationBehaviorNone"],
+			"x-speakeasy-name-override": "ProrationBehavior",
+			"x-readme-ref-name": "ProrationBehavior"
+		},
+		"start_date": { "type": "string", "format": "date-time" }
+	},
+	"x-readme-ref-name": "AddAddonToSubscriptionRequest"
+}

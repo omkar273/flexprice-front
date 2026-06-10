@@ -1,0 +1,13 @@
+{
+	"type": "string",
+	"enum": ["pending", "executing", "executed", "cancelled", "failed"],
+	"x-enum-varnames": [
+		"ScheduleStatusPending",
+		"ScheduleStatusExecuting",
+		"ScheduleStatusExecuted",
+		"ScheduleStatusCancelled",
+		"ScheduleStatusFailed"
+	],
+	"x-speakeasy-name-override": "ScheduleStatus",
+	"x-readme-ref-name": "ScheduleStatus"
+}

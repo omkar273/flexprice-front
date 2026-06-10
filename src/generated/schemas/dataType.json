@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["string", "number", "date", "array"],
+	"x-enum-varnames": ["DataTypeString", "DataTypeNumber", "DataTypeDate", "DataTypeArray"],
+	"x-speakeasy-name-override": "DataType",
+	"x-readme-ref-name": "DataType"
+}

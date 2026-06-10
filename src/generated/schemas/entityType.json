@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["EVENTS", "PRICES", "CUSTOMERS", "FEATURES"],
+	"x-enum-varnames": ["EntityTypeEvents", "EntityTypePrices", "EntityTypeCustomers", "EntityTypeFeatures"],
+	"x-speakeasy-name-override": "EntityType",
+	"x-readme-ref-name": "EntityType"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["immediate", "scheduled", "period_end"],
+	"x-enum-varnames": ["PauseModeImmediate", "PauseModeScheduled", "PauseModePeriodEnd"],
+	"x-speakeasy-name-override": "PauseMode",
+	"x-readme-ref-name": "PauseMode"
+}

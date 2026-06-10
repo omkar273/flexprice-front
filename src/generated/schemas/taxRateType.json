@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["percentage", "fixed"],
+	"x-enum-varnames": ["TaxRateTypePercentage", "TaxRateTypeFixed"],
+	"x-speakeasy-name-override": "TaxRateType",
+	"x-readme-ref-name": "TaxRateType"
+}

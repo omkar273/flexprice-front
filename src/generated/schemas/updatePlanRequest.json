@@ -1,0 +1,16 @@
+{
+	"type": "object",
+	"properties": {
+		"description": { "type": "string" },
+		"display_order": { "type": "integer" },
+		"lookup_key": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" }
+	},
+	"x-readme-ref-name": "UpdatePlanRequest"
+}

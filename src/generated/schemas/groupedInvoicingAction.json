@@ -1,0 +1,6 @@
+{
+	"type": "string",
+	"enum": ["add", "remove"],
+	"x-enum-varnames": ["GroupedInvoicingActionAdd", "GroupedInvoicingActionRemove"],
+	"x-readme-ref-name": "GroupedInvoicingAction"
+}

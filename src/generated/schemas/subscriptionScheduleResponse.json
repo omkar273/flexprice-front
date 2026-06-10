@@ -1,0 +1,43 @@
+{
+	"type": "object",
+	"properties": {
+		"can_be_cancelled": { "type": "boolean", "description": "can_be_cancelled indicates if the schedule can be cancelled" },
+		"cancelled_at": { "type": "string", "description": "cancelled_at is when the schedule was cancelled", "format": "date-time" },
+		"configuration": {
+			"type": "object",
+			"description": "configuration contains type-specific configuration (e.g., target_plan_id for plan changes)"
+		},
+		"created_at": { "type": "string", "description": "created_at timestamp", "format": "date-time" },
+		"days_until_execution": { "type": "integer", "description": "days_until_execution is the number of days until execution" },
+		"error_message": { "type": "string", "description": "error_message contains the error if execution failed" },
+		"executed_at": { "type": "string", "description": "executed_at is when the schedule was executed", "format": "date-time" },
+		"execution_result": { "type": "object", "description": "execution_result contains type-specific execution result" },
+		"id": { "type": "string", "description": "id of the schedule" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "metadata from the schedule" },
+		"schedule_type": {
+			"type": "string",
+			"enum": ["plan_change", "cancellation"],
+			"x-enum-varnames": ["SubscriptionScheduleChangeTypePlanChange", "SubscriptionScheduleChangeTypeCancellation"],
+			"x-speakeasy-name-override": "SubscriptionScheduleChangeType",
+			"x-readme-ref-name": "SubscriptionScheduleChangeType"
+		},
+		"scheduled_at": { "type": "string", "description": "scheduled_at is when the schedule will execute", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["pending", "executing", "executed", "cancelled", "failed"],
+			"x-enum-varnames": [
+				"ScheduleStatusPending",
+				"ScheduleStatusExecuting",
+				"ScheduleStatusExecuted",
+				"ScheduleStatusCancelled",
+				"ScheduleStatusFailed"
+			],
+			"x-speakeasy-name-override": "ScheduleStatus",
+			"x-readme-ref-name": "ScheduleStatus"
+		},
+		"subscription_id": { "type": "string", "description": "subscription_id is the ID of the subscription" },
+		"updated_at": { "type": "string", "description": "updated_at timestamp", "format": "date-time" }
+	},
+	"description": "Full details of a subscription schedule",
+	"x-readme-ref-name": "SubscriptionScheduleResponse"
+}

@@ -1,0 +1,26 @@
+{
+	"required": ["tax_rate_code"],
+	"type": "object",
+	"properties": {
+		"auto_apply": { "type": "boolean" },
+		"currency": { "type": "string" },
+		"entity_id": { "type": "string" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["customer", "subscription", "invoice", "tenant"],
+			"x-enum-varnames": [
+				"TaxRateEntityTypeCustomer",
+				"TaxRateEntityTypeSubscription",
+				"TaxRateEntityTypeInvoice",
+				"TaxRateEntityTypeTenant"
+			],
+			"x-speakeasy-name-override": "TaxRateEntityType",
+			"x-readme-ref-name": "TaxRateEntityType"
+		},
+		"external_customer_id": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+		"priority": { "type": "integer" },
+		"tax_rate_code": { "type": "string" }
+	},
+	"x-readme-ref-name": "CreateTaxAssociationRequest"
+}

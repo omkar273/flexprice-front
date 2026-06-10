@@ -1,0 +1,69 @@
+{
+	"required": ["invoice_id", "reason"],
+	"type": "object",
+	"properties": {
+		"credit_note_number": {
+			"type": "string",
+			"description": "credit_note_number is an optional human-readable identifier for the credit note"
+		},
+		"idempotency_key": {
+			"type": "string",
+			"description": "idempotency_key is an optional key used to prevent duplicate credit note creation"
+		},
+		"invoice_id": { "type": "string", "description": "invoice_id is the unique identifier of the invoice this credit note is applied to" },
+		"line_items": {
+			"type": "array",
+			"description": "line_items contains the individual line items that make up this credit note (minimum 1 required)",
+			"items": {
+				"required": ["amount", "invoice_line_item_id"],
+				"type": "object",
+				"properties": {
+					"amount": { "type": "string", "description": "amount is the monetary amount to be credited for this line item" },
+					"display_name": {
+						"type": "string",
+						"description": "display_name is an optional human-readable name for this credit note line item"
+					},
+					"invoice_line_item_id": {
+						"type": "string",
+						"description": "invoice_line_item_id is the unique identifier of the invoice line item being credited"
+					},
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					}
+				},
+				"x-readme-ref-name": "CreateCreditNoteLineItemRequest"
+			}
+		},
+		"memo": { "type": "string", "description": "memo is an optional free-text field for additional notes about the credit note" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"process_credit_note": {
+			"type": "boolean",
+			"description": "process_credit_note is a flag to process the credit note after creation",
+			"default": true
+		},
+		"reason": {
+			"type": "string",
+			"enum": ["DUPLICATE", "FRAUDULENT", "ORDER_CHANGE", "UNSATISFACTORY", "SERVICE_ISSUE", "BILLING_ERROR", "SUBSCRIPTION_CANCELLATION"],
+			"x-enum-varnames": [
+				"CreditNoteReasonDuplicate",
+				"CreditNoteReasonFraudulent",
+				"CreditNoteReasonOrderChange",
+				"CreditNoteReasonUnsatisfactory",
+				"CreditNoteReasonService",
+				"CreditNoteReasonBillingError",
+				"CreditNoteReasonSubscriptionCancellation"
+			],
+			"x-speakeasy-name-override": "CreditNoteReason",
+			"x-readme-ref-name": "CreditNoteReason"
+		}
+	},
+	"x-readme-ref-name": "CreateCreditNoteRequest"
+}

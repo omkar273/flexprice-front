@@ -1,0 +1,18 @@
+{
+	"required": ["action"],
+	"type": "object",
+	"properties": {
+		"action": {
+			"type": "string",
+			"enum": ["immediate", "scheduled_date"],
+			"x-enum-varnames": ["TrialEndActionImmediate", "TrialEndActionScheduledDate"],
+			"x-readme-ref-name": "TrialEndAction"
+		},
+		"new_trial_end": {
+			"type": "string",
+			"description": "NewTrialEnd is the new trial end date. Required when action is \"scheduled_date\".",
+			"format": "date-time"
+		}
+	},
+	"x-readme-ref-name": "SubModifyTrialEndRequest"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["BILLING_PERIOD", "NEVER"],
+	"x-enum-varnames": ["ResetUsageBillingPeriod", "ResetUsageNever"],
+	"x-speakeasy-name-override": "ResetUsage",
+	"x-readme-ref-name": "ResetUsage"
+}

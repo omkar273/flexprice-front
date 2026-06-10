@@ -1,0 +1,41 @@
+{
+	"type": "object",
+	"properties": {
+		"end_time": {
+			"type": "string",
+			"description": "End time of the events to be fetched in ISO 8601 format\nDefaults to now if not provided",
+			"example": "2024-12-09T00:00:00Z",
+			"format": "date-time"
+		},
+		"event_id": { "type": "string", "description": "Event ID is the idempotency key for the event" },
+		"event_name": { "type": "string", "description": "Event name / Unique identifier for the event in your system" },
+		"external_customer_id": { "type": "string", "description": "Customer ID in your system that was sent with the event" },
+		"iter_first_key": { "type": "string", "description": "First key to iterate over the events" },
+		"iter_last_key": { "type": "string", "description": "Last key to iterate over the events" },
+		"offset": { "type": "integer", "description": "Offset to fetch the events and is set to 0 by default" },
+		"order": {
+			"type": "string",
+			"description": "Order by condition. Allowed values (case sensitive): asc, desc (default: desc)",
+			"example": "desc"
+		},
+		"page_size": { "type": "integer", "description": "Page size to fetch the events and is set to 50 by default" },
+		"property_filters": {
+			"type": "object",
+			"additionalProperties": { "type": "array", "items": { "type": "string" } },
+			"description": "Property filters to filter the events by the keys in `properties` field of the event"
+		},
+		"sort": {
+			"type": "string",
+			"description": "Sort by the field. Allowed values (case sensitive): timestamp, event_name (default: timestamp)",
+			"example": "timestamp"
+		},
+		"source": { "type": "string", "description": "Source to filter the events by the source" },
+		"start_time": {
+			"type": "string",
+			"description": "Start time of the events to be fetched in ISO 8601 format\nDefaults to last 7 days from now if not provided",
+			"example": "2024-11-09T00:00:00Z",
+			"format": "date-time"
+		}
+	},
+	"x-readme-ref-name": "GetEventsRequest"
+}

@@ -1,0 +1,16 @@
+{
+	"required": ["type"],
+	"type": "object",
+	"properties": {
+		"email": { "type": "string", "description": "Required when type is \"user\"" },
+		"roles": { "type": "array", "description": "Required when type is \"service_account\"", "items": { "type": "string" } },
+		"type": {
+			"type": "string",
+			"enum": ["user", "service_account"],
+			"x-enum-varnames": ["UserTypeUser", "UserTypeServiceAccount"],
+			"x-speakeasy-name-override": "UserType",
+			"x-readme-ref-name": "UserType"
+		}
+	},
+	"x-readme-ref-name": "CreateUserRequest"
+}

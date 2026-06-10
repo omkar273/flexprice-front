@@ -1,0 +1,15 @@
+{
+	"type": "object",
+	"properties": {
+		"condition": {
+			"type": "string",
+			"enum": ["above", "below"],
+			"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+			"x-speakeasy-name-override": "AlertCondition",
+			"x-readme-ref-name": "AlertCondition"
+		},
+		"threshold": { "type": "number" }
+	},
+	"x-speakeasy-name-override": "AlertThreshold",
+	"x-readme-ref-name": "AlertThreshold"
+}

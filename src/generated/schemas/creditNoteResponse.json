@@ -1,0 +1,167 @@
+{
+	"type": "object",
+	"properties": {
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"credit_note_number": { "type": "string", "description": "credit_note_number is the unique identifier for credit notes" },
+		"credit_note_status": {
+			"type": "string",
+			"enum": ["DRAFT", "FINALIZED", "VOIDED"],
+			"x-enum-varnames": ["CreditNoteStatusDraft", "CreditNoteStatusFinalized", "CreditNoteStatusVoided"],
+			"x-speakeasy-name-override": "CreditNoteStatus",
+			"x-readme-ref-name": "CreditNoteStatus"
+		},
+		"credit_note_type": {
+			"type": "string",
+			"enum": ["ADJUSTMENT", "REFUND"],
+			"x-enum-varnames": ["CreditNoteTypeAdjustment", "CreditNoteTypeRefund"],
+			"x-speakeasy-name-override": "CreditNoteType",
+			"x-readme-ref-name": "CreditNoteType"
+		},
+		"currency": { "type": "string", "description": "currency is the three-letter ISO currency code (e.g., USD, EUR) for the credit note" },
+		"customer": {
+			"type": "object",
+			"properties": {
+				"address_city": { "type": "string", "description": "AddressCity is the city of the customer's address" },
+				"address_country": {
+					"type": "string",
+					"description": "AddressCountry is the country of the customer's address (ISO 3166-1 alpha-2)"
+				},
+				"address_line1": { "type": "string", "description": "AddressLine1 is the first line of the customer's address" },
+				"address_line2": { "type": "string", "description": "AddressLine2 is the second line of the customer's address" },
+				"address_postal_code": { "type": "string", "description": "AddressPostalCode is the postal code of the customer's address" },
+				"address_state": { "type": "string", "description": "AddressState is the state of the customer's address" },
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"email": { "type": "string", "description": "Email is the email of the customer" },
+				"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the customer" },
+				"external_id": { "type": "string", "description": "ExternalID is the external identifier for the customer" },
+				"id": { "type": "string", "description": "ID is the unique identifier for the customer" },
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata" },
+				"name": { "type": "string", "description": "Name is the name of the customer" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"x-readme-ref-name": "Customer"
+		},
+		"customer_id": { "type": "string", "description": "customer_id is the unique identifier of the customer who owns this credit note" },
+		"environment_id": {
+			"type": "string",
+			"description": "environment_id is the unique identifier of the environment this credit note belongs to"
+		},
+		"finalized_at": {
+			"type": "string",
+			"description": "finalized_at is the timestamp when the credit note was finalized",
+			"format": "date-time"
+		},
+		"id": { "type": "string", "description": "id is the unique identifier for the credit note" },
+		"idempotency_key": {
+			"type": "string",
+			"description": "idempotency_key is an optional key used to prevent duplicate credit note creation"
+		},
+		"invoice": { "$ref": "#/components/schemas/InvoiceResponse" },
+		"invoice_id": { "type": "string", "description": "invoice_id is the id of the invoice resource that this credit note is applied to" },
+		"line_items": {
+			"type": "array",
+			"description": "line_items contains all of the line items associated with this credit note",
+			"items": {
+				"type": "object",
+				"properties": {
+					"amount": { "type": "string" },
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"credit_note_id": { "type": "string" },
+					"currency": { "type": "string" },
+					"display_name": { "type": "string" },
+					"environment_id": { "type": "string" },
+					"id": { "type": "string" },
+					"invoice_line_item_id": { "type": "string" },
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"tenant_id": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "creditnote.CreditNoteLineItem"
+			}
+		},
+		"memo": { "type": "string", "description": "memo is an optional memo supplied on the credit note" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"reason": {
+			"type": "string",
+			"enum": ["DUPLICATE", "FRAUDULENT", "ORDER_CHANGE", "UNSATISFACTORY", "SERVICE_ISSUE", "BILLING_ERROR", "SUBSCRIPTION_CANCELLATION"],
+			"x-enum-varnames": [
+				"CreditNoteReasonDuplicate",
+				"CreditNoteReasonFraudulent",
+				"CreditNoteReasonOrderChange",
+				"CreditNoteReasonUnsatisfactory",
+				"CreditNoteReasonService",
+				"CreditNoteReasonBillingError",
+				"CreditNoteReasonSubscriptionCancellation"
+			],
+			"x-speakeasy-name-override": "CreditNoteReason",
+			"x-readme-ref-name": "CreditNoteReason"
+		},
+		"refund_status": {
+			"type": "string",
+			"enum": ["INITIATED", "PENDING", "PROCESSING", "SUCCEEDED", "OVERPAID", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED"],
+			"x-enum-varnames": [
+				"PaymentStatusInitiated",
+				"PaymentStatusPending",
+				"PaymentStatusProcessing",
+				"PaymentStatusSucceeded",
+				"PaymentStatusOverpaid",
+				"PaymentStatusFailed",
+				"PaymentStatusRefunded",
+				"PaymentStatusPartiallyRefunded"
+			],
+			"x-speakeasy-name-override": "PaymentStatus",
+			"x-readme-ref-name": "PaymentStatus"
+		},
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription": { "$ref": "#/components/schemas/SubscriptionResponse" },
+		"subscription_id": {
+			"type": "string",
+			"description": "subscription_id is the optional unique identifier of the subscription related to this credit note"
+		},
+		"tenant_id": { "type": "string" },
+		"total_amount": {
+			"type": "string",
+			"description": "total_amount is the total including creditable invoice-level discounts or minimums, and tax"
+		},
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" },
+		"voided_at": { "type": "string", "description": "voided_at is the timestamp when the credit note was voided", "format": "date-time" }
+	},
+	"x-readme-ref-name": "CreditNoteResponse"
+}

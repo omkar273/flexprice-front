@@ -1,0 +1,6 @@
+{
+	"type": "object",
+	"properties": { "end_time": { "type": "string", "format": "date-time" }, "start_time": { "type": "string", "format": "date-time" } },
+	"x-speakeasy-name-override": "TimeRangeFilter",
+	"x-readme-ref-name": "TimeRangeFilter"
+}

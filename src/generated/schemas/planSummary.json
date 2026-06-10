@@ -1,0 +1,10 @@
+{
+	"type": "object",
+	"properties": {
+		"description": { "type": "string", "description": "description of the plan" },
+		"id": { "type": "string", "description": "id of the plan" },
+		"lookup_key": { "type": "string", "description": "lookup_key of the plan" },
+		"name": { "type": "string", "description": "name of the plan" }
+	},
+	"x-readme-ref-name": "PlanSummary"
+}

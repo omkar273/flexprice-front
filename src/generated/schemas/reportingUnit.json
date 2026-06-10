@@ -1,0 +1,10 @@
+{
+	"type": "object",
+	"properties": {
+		"conversion_rate": { "type": "number", "description": "Multiplier: reporting_unit_value = unit_value * conversion_rate; must be > 0" },
+		"unit_plural": { "type": "string", "description": "Display unit label, plural (e.g. \"seconds\")" },
+		"unit_singular": { "type": "string", "description": "Display unit label, singular (e.g. \"second\")" }
+	},
+	"x-speakeasy-name-override": "ReportingUnit",
+	"x-readme-ref-name": "ReportingUnit"
+}

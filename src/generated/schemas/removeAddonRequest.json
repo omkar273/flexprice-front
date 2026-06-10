@@ -1,0 +1,25 @@
+{
+	"required": ["addon_association_id"],
+	"type": "object",
+	"properties": {
+		"addon_association_id": { "type": "string" },
+		"effective_date": {
+			"type": "string",
+			"description": "EffectiveDate is the date the cancellation takes effect.\nWhen nil the addon is cancelled at the end of the current period.\nWhen provided it must fall within [CurrentPeriodStart, CurrentPeriodEnd]; mid-period\nvalues combined with create_prorations will issue a wallet credit for unused time.",
+			"format": "date-time"
+		},
+		"proration_behavior": {
+			"type": "string",
+			"enum": ["create_prorations", "none"],
+			"x-enum-comments": {
+				"ProrationBehaviorCreateProrations": "Default: Create credits/charges on invoice",
+				"ProrationBehaviorNone": "Calculate but don't apply (e.g., for previews)"
+			},
+			"x-enum-varnames": ["ProrationBehaviorCreateProrations", "ProrationBehaviorNone"],
+			"x-speakeasy-name-override": "ProrationBehavior",
+			"x-readme-ref-name": "ProrationBehavior"
+		},
+		"reason": { "type": "string" }
+	},
+	"x-readme-ref-name": "RemoveAddonRequest"
+}

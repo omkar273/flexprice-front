@@ -1,0 +1,11 @@
+{
+	"type": "string",
+	"enum": ["plan", "addon", "subscription"],
+	"x-enum-varnames": [
+		"SubscriptionLineItemEntityTypePlan",
+		"SubscriptionLineItemEntityTypeAddon",
+		"SubscriptionLineItemEntityTypeSubscription"
+	],
+	"x-speakeasy-name-override": "SubscriptionLineItemEntityType",
+	"x-readme-ref-name": "SubscriptionLineItemEntityType"
+}

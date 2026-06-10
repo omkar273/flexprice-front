@@ -1,0 +1,16 @@
+{
+	"type": "object",
+	"properties": {
+		"description": { "type": "string", "description": "Description overrides the source plan's description when provided" },
+		"display_order": { "type": "integer", "description": "DisplayOrder overrides the source plan's display order when provided" },
+		"lookup_key": { "type": "string", "description": "LookupKey is required and must be unique across published plans" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string", "description": "Name is required and must be different from the source plan's name" }
+	},
+	"x-readme-ref-name": "ClonePlanRequest"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["none", "active", "scheduled", "completed", "cancelled"],
+	"x-enum-varnames": ["PauseStatusNone", "PauseStatusActive", "PauseStatusScheduled", "PauseStatusCompleted", "PauseStatusCancelled"],
+	"x-speakeasy-name-override": "PauseStatus",
+	"x-readme-ref-name": "PauseStatus"
+}

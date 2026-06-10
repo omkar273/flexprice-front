@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["low_ongoing_balance", "low_credit_balance", "feature_wallet_balance"],
+	"x-enum-varnames": ["AlertTypeLowOngoingBalance", "AlertTypeLowCreditBalance", "AlertTypeFeatureWalletBalance"],
+	"x-speakeasy-name-override": "AlertType",
+	"x-readme-ref-name": "AlertType"
+}

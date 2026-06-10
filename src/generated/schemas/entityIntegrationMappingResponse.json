@@ -1,0 +1,42 @@
+{
+	"type": "object",
+	"properties": {
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"entity_id": { "type": "string" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+			"x-enum-varnames": [
+				"IntegrationEntityTypeCustomer",
+				"IntegrationEntityTypePlan",
+				"IntegrationEntityTypeInvoice",
+				"IntegrationEntityTypeSubscription",
+				"IntegrationEntityTypePayment",
+				"IntegrationEntityTypeCreditNote",
+				"IntegrationEntityTypeAddon",
+				"IntegrationEntityTypeItem",
+				"IntegrationEntityTypeItemPrice",
+				"IntegrationEntityTypePrice"
+			],
+			"x-speakeasy-name-override": "IntegrationEntityType",
+			"x-readme-ref-name": "IntegrationEntityType"
+		},
+		"environment_id": { "type": "string" },
+		"id": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"provider_entity_id": { "type": "string" },
+		"provider_type": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "EntityIntegrationMappingResponse"
+}

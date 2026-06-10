@@ -1,0 +1,17 @@
+{
+	"required": ["name", "type"],
+	"type": "object",
+	"properties": {
+		"expires_at": { "type": "string", "format": "date-time" },
+		"name": { "type": "string" },
+		"service_account_id": { "type": "string" },
+		"type": {
+			"type": "string",
+			"enum": ["private_key", "publishable_key", "integration"],
+			"x-enum-varnames": ["SecretTypePrivateKey", "SecretTypePublishableKey", "SecretTypeIntegration"],
+			"x-speakeasy-name-override": "SecretType",
+			"x-readme-ref-name": "SecretType"
+		}
+	},
+	"x-readme-ref-name": "CreateAPIKeyRequest"
+}

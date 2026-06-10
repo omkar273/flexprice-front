@@ -1,0 +1,15 @@
+{
+	"type": "string",
+	"enum": ["DUPLICATE", "FRAUDULENT", "ORDER_CHANGE", "UNSATISFACTORY", "SERVICE_ISSUE", "BILLING_ERROR", "SUBSCRIPTION_CANCELLATION"],
+	"x-enum-varnames": [
+		"CreditNoteReasonDuplicate",
+		"CreditNoteReasonFraudulent",
+		"CreditNoteReasonOrderChange",
+		"CreditNoteReasonUnsatisfactory",
+		"CreditNoteReasonService",
+		"CreditNoteReasonBillingError",
+		"CreditNoteReasonSubscriptionCancellation"
+	],
+	"x-speakeasy-name-override": "CreditNoteReason",
+	"x-readme-ref-name": "CreditNoteReason"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["immediate", "end_of_period", "scheduled_date"],
+	"x-enum-varnames": ["CancellationTypeImmediate", "CancellationTypeEndOfPeriod", "CancellationTypeScheduledDate"],
+	"x-speakeasy-name-override": "CancellationType",
+	"x-readme-ref-name": "CancellationType"
+}

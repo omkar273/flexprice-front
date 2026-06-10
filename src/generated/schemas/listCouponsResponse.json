@@ -1,0 +1,60 @@
+{
+	"type": "object",
+	"properties": {
+		"items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"amount_off": { "type": "string" },
+					"cadence": {
+						"type": "string",
+						"enum": ["once", "repeated", "forever"],
+						"x-enum-varnames": ["CouponCadenceOnce", "CouponCadenceRepeated", "CouponCadenceForever"],
+						"x-speakeasy-name-override": "CouponCadence",
+						"x-readme-ref-name": "CouponCadence"
+					},
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"currency": { "type": "string" },
+					"duration_in_periods": { "type": "integer" },
+					"environment_id": { "type": "string" },
+					"id": { "type": "string" },
+					"max_redemptions": { "type": "integer" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"name": { "type": "string" },
+					"percentage_off": { "type": "string" },
+					"redeem_after": { "type": "string" },
+					"redeem_before": { "type": "string" },
+					"rules": { "type": "object", "additionalProperties": true },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"tenant_id": { "type": "string" },
+					"total_redemptions": { "type": "integer" },
+					"type": {
+						"type": "string",
+						"enum": ["fixed", "percentage"],
+						"x-enum-varnames": ["CouponTypeFixed", "CouponTypePercentage"],
+						"x-speakeasy-name-override": "CouponType",
+						"x-readme-ref-name": "CouponType"
+					},
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "CouponResponse"
+			}
+		},
+		"pagination": {
+			"type": "object",
+			"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+			"x-speakeasy-name-override": "PaginationResponse",
+			"x-readme-ref-name": "PaginationResponse"
+		}
+	},
+	"x-readme-ref-name": "ListCouponsResponse"
+}

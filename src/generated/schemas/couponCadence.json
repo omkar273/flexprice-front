@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["once", "repeated", "forever"],
+	"x-enum-varnames": ["CouponCadenceOnce", "CouponCadenceRepeated", "CouponCadenceForever"],
+	"x-speakeasy-name-override": "CouponCadence",
+	"x-readme-ref-name": "CouponCadence"
+}

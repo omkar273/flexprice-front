@@ -1,0 +1,65 @@
+{
+	"required": ["billing_cadence", "billing_cycle", "billing_period", "proration_behavior", "target_plan_id"],
+	"type": "object",
+	"properties": {
+		"billing_cadence": {
+			"type": "string",
+			"enum": ["RECURRING"],
+			"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+			"x-speakeasy-name-override": "BillingCadence",
+			"x-readme-ref-name": "BillingCadence"
+		},
+		"billing_cycle": {
+			"type": "string",
+			"enum": ["anniversary", "calendar"],
+			"x-enum-varnames": ["BillingCycleAnniversary", "BillingCycleCalendar"],
+			"x-speakeasy-name-override": "BillingCycle",
+			"x-readme-ref-name": "BillingCycle"
+		},
+		"billing_period": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		},
+		"billing_period_count": {
+			"type": "integer",
+			"description": "billing_period_count is the billing period count for the new subscription"
+		},
+		"change_at": {
+			"type": "string",
+			"enum": ["immediate", "end_of_period"],
+			"x-enum-varnames": ["ScheduleTypeImmediate", "ScheduleTypePeriodEnd"],
+			"x-speakeasy-name-override": "ScheduleType",
+			"x-readme-ref-name": "ScheduleType"
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "metadata contains additional key-value pairs for storing extra information"
+		},
+		"proration_behavior": {
+			"type": "string",
+			"enum": ["create_prorations", "none"],
+			"x-enum-comments": {
+				"ProrationBehaviorCreateProrations": "Default: Create credits/charges on invoice",
+				"ProrationBehaviorNone": "Calculate but don't apply (e.g., for previews)"
+			},
+			"x-enum-varnames": ["ProrationBehaviorCreateProrations", "ProrationBehaviorNone"],
+			"x-speakeasy-name-override": "ProrationBehavior",
+			"x-readme-ref-name": "ProrationBehavior"
+		},
+		"target_plan_id": { "type": "string", "description": "target_plan_id is the ID of the new plan to change to (required)" }
+	},
+	"description": "Request object for changing a subscription plan (upgrade/downgrade)",
+	"x-readme-ref-name": "SubscriptionChangeRequest"
+}

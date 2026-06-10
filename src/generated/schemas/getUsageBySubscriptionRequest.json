@@ -1,0 +1,11 @@
+{
+	"required": ["subscription_id"],
+	"type": "object",
+	"properties": {
+		"end_time": { "type": "string", "example": "2024-03-20T00:00:00Z", "format": "date-time" },
+		"lifetime_usage": { "type": "boolean", "example": false },
+		"start_time": { "type": "string", "example": "2024-03-13T00:00:00Z", "format": "date-time" },
+		"subscription_id": { "type": "string", "example": "123" }
+	},
+	"x-readme-ref-name": "GetUsageBySubscriptionRequest"
+}

@@ -1,0 +1,13 @@
+{
+	"type": "object",
+	"properties": {
+		"items": { "type": "array", "items": { "$ref": "#/components/schemas/EntitlementResponse" } },
+		"pagination": {
+			"type": "object",
+			"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+			"x-speakeasy-name-override": "PaginationResponse",
+			"x-readme-ref-name": "PaginationResponse"
+		}
+	},
+	"x-readme-ref-name": "ListEntitlementsResponse"
+}

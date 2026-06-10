@@ -1,0 +1,30 @@
+{
+	"type": "object",
+	"properties": {
+		"items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"created_at": { "type": "string", "format": "date-time" },
+					"entity_ids": { "type": "array", "items": { "type": "string" } },
+					"entity_type": { "type": "string" },
+					"id": { "type": "string" },
+					"lookup_key": { "type": "string" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"name": { "type": "string" },
+					"status": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" }
+				},
+				"x-readme-ref-name": "GroupResponse"
+			}
+		},
+		"pagination": {
+			"type": "object",
+			"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+			"x-speakeasy-name-override": "PaginationResponse",
+			"x-readme-ref-name": "PaginationResponse"
+		}
+	},
+	"x-readme-ref-name": "ListGroupsResponse"
+}

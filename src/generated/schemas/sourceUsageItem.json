@@ -1,0 +1,11 @@
+{
+	"type": "object",
+	"properties": {
+		"cost": { "type": "string", "description": "cost is the cost attributed to this source for the line item" },
+		"event_count": { "type": "integer", "description": "event_count is the number of events from this source (optional)" },
+		"percentage": { "type": "string", "description": "percentage is the percentage of total line item cost from this source (optional)" },
+		"source": { "type": "string", "description": "source is the name of the event source" },
+		"usage": { "type": "string", "description": "usage is the total usage amount from this source (optional, for additional context)" }
+	},
+	"x-readme-ref-name": "SourceUsageItem"
+}

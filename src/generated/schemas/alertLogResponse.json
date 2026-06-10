@@ -1,0 +1,546 @@
+{
+	"type": "object",
+	"properties": {
+		"alert_info": {
+			"type": "object",
+			"properties": {
+				"alert_settings": {
+					"type": "object",
+					"properties": {
+						"alert_enabled": { "type": "boolean" },
+						"critical": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"warning": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						}
+					},
+					"x-speakeasy-name-override": "AlertSettings",
+					"x-readme-ref-name": "AlertSettings"
+				},
+				"timestamp": { "type": "string" },
+				"value_at_time": { "type": "number" }
+			},
+			"x-speakeasy-name-override": "AlertInfo",
+			"x-readme-ref-name": "AlertInfo"
+		},
+		"alert_status": {
+			"type": "string",
+			"enum": ["ok", "info", "warning", "in_alarm"],
+			"x-enum-varnames": ["AlertStateOk", "AlertStateInfo", "AlertStateWarning", "AlertStateInAlarm"],
+			"x-speakeasy-name-override": "AlertState",
+			"x-readme-ref-name": "AlertState"
+		},
+		"alert_type": {
+			"type": "string",
+			"enum": ["low_ongoing_balance", "low_credit_balance", "feature_wallet_balance"],
+			"x-enum-varnames": ["AlertTypeLowOngoingBalance", "AlertTypeLowCreditBalance", "AlertTypeFeatureWalletBalance"],
+			"x-speakeasy-name-override": "AlertType",
+			"x-readme-ref-name": "AlertType"
+		},
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"customer": {
+			"type": "object",
+			"properties": {
+				"address_city": { "type": "string", "description": "AddressCity is the city of the customer's address" },
+				"address_country": {
+					"type": "string",
+					"description": "AddressCountry is the country of the customer's address (ISO 3166-1 alpha-2)"
+				},
+				"address_line1": { "type": "string", "description": "AddressLine1 is the first line of the customer's address" },
+				"address_line2": { "type": "string", "description": "AddressLine2 is the second line of the customer's address" },
+				"address_postal_code": { "type": "string", "description": "AddressPostalCode is the postal code of the customer's address" },
+				"address_state": { "type": "string", "description": "AddressState is the state of the customer's address" },
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"email": { "type": "string", "description": "Email is the email of the customer" },
+				"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the customer" },
+				"external_id": { "type": "string", "description": "ExternalID is the external identifier for the customer" },
+				"id": { "type": "string", "description": "ID is the unique identifier for the customer" },
+				"integrations": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"created_at": { "type": "string", "format": "date-time" },
+							"created_by": { "type": "string" },
+							"entity_id": { "type": "string" },
+							"entity_type": {
+								"type": "string",
+								"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+								"x-enum-varnames": [
+									"IntegrationEntityTypeCustomer",
+									"IntegrationEntityTypePlan",
+									"IntegrationEntityTypeInvoice",
+									"IntegrationEntityTypeSubscription",
+									"IntegrationEntityTypePayment",
+									"IntegrationEntityTypeCreditNote",
+									"IntegrationEntityTypeAddon",
+									"IntegrationEntityTypeItem",
+									"IntegrationEntityTypeItemPrice",
+									"IntegrationEntityTypePrice"
+								],
+								"x-speakeasy-name-override": "IntegrationEntityType",
+								"x-readme-ref-name": "IntegrationEntityType"
+							},
+							"environment_id": { "type": "string" },
+							"id": { "type": "string" },
+							"metadata": { "type": "object", "additionalProperties": true },
+							"provider_entity_id": { "type": "string" },
+							"provider_type": { "type": "string" },
+							"status": {
+								"type": "string",
+								"enum": ["published", "deleted", "archived"],
+								"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+								"x-speakeasy-name-override": "Status",
+								"x-readme-ref-name": "Status"
+							},
+							"tenant_id": { "type": "string" },
+							"updated_at": { "type": "string", "format": "date-time" },
+							"updated_by": { "type": "string" }
+						},
+						"x-readme-ref-name": "EntityIntegrationMappingResponse"
+					}
+				},
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata" },
+				"name": { "type": "string", "description": "Name is the name of the customer" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"description": "Customer response object containing all customer information",
+			"x-readme-ref-name": "CustomerResponse"
+		},
+		"customer_id": { "type": "string" },
+		"entity_id": { "type": "string" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["wallet", "feature"],
+			"x-enum-varnames": ["AlertEntityTypeWallet", "AlertEntityTypeFeature"],
+			"x-speakeasy-name-override": "AlertEntityType",
+			"x-readme-ref-name": "AlertEntityType"
+		},
+		"environment_id": { "type": "string" },
+		"feature": {
+			"type": "object",
+			"properties": {
+				"alert_settings": {
+					"type": "object",
+					"properties": {
+						"alert_enabled": { "type": "boolean" },
+						"critical": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"warning": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						}
+					},
+					"x-speakeasy-name-override": "AlertSettings",
+					"x-readme-ref-name": "AlertSettings"
+				},
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"description": { "type": "string" },
+				"environment_id": { "type": "string" },
+				"group": {
+					"type": "object",
+					"properties": {
+						"created_at": { "type": "string", "format": "date-time" },
+						"entity_ids": { "type": "array", "items": { "type": "string" } },
+						"entity_type": { "type": "string" },
+						"id": { "type": "string" },
+						"lookup_key": { "type": "string" },
+						"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+						"name": { "type": "string" },
+						"status": { "type": "string" },
+						"updated_at": { "type": "string", "format": "date-time" }
+					},
+					"x-readme-ref-name": "GroupResponse"
+				},
+				"group_id": { "type": "string" },
+				"id": { "type": "string" },
+				"lookup_key": { "type": "string" },
+				"metadata": {
+					"type": "object",
+					"additionalProperties": { "type": "string" },
+					"x-speakeasy-name-override": "Metadata",
+					"x-readme-ref-name": "Metadata"
+				},
+				"meter": {
+					"type": "object",
+					"properties": {
+						"aggregation": {
+							"type": "object",
+							"properties": {
+								"bucket_size": {
+									"type": "string",
+									"enum": ["MINUTE", "15MIN", "30MIN", "HOUR", "3HOUR", "6HOUR", "12HOUR", "DAY", "WEEK", "MONTH", "MONTH"],
+									"x-enum-varnames": [
+										"WindowSizeMinute",
+										"WindowSize15Min",
+										"WindowSize30Min",
+										"WindowSizeHour",
+										"WindowSize3Hour",
+										"WindowSize6Hour",
+										"WindowSize12Hour",
+										"WindowSizeDay",
+										"WindowSizeWeek",
+										"WindowSizeMonth",
+										"DefaultWindowSize"
+									],
+									"x-speakeasy-name-override": "WindowSize",
+									"x-readme-ref-name": "WindowSize"
+								},
+								"expression": {
+									"type": "string",
+									"description": "Expression is an optional CEL expression to compute per-event quantity from event.properties.\nWhen set, it replaces Field-based extraction. Property names are used directly (e.g., token * duration * pixel)."
+								},
+								"field": {
+									"type": "string",
+									"description": "Field is the key in $event.properties on which the aggregation is to be applied\nFor ex if the aggregation type is sum for API usage, the field could be \"duration_ms\"\nIgnored when Expression is set."
+								},
+								"group_by": {
+									"type": "string",
+									"description": "GroupBy is the property name in event.properties to group by before aggregating.\nCurrently only supported for MAX aggregation with bucket_size.\nWhen set, aggregation is applied per unique value of this property within each bucket,\nthen the per-group results are summed to produce the bucket total."
+								},
+								"multiplier": {
+									"type": "string",
+									"description": "Multiplier is the multiplier for the aggregation\nFor ex if the aggregation type is sum_with_multiplier for API usage, the multiplier could be 1000\nto scale up by a factor of 1000. If not provided, it will be null."
+								},
+								"type": {
+									"type": "string",
+									"enum": ["COUNT", "SUM", "AVG", "COUNT_UNIQUE", "LATEST", "SUM_WITH_MULTIPLIER", "MAX", "WEIGHTED_SUM"],
+									"x-enum-comments": { "AggregationSumWithMultiplier": "Sum with a multiplier - [sum(value) * multiplier]" },
+									"x-enum-varnames": [
+										"AggregationCount",
+										"AggregationSum",
+										"AggregationAvg",
+										"AggregationCountUnique",
+										"AggregationLatest",
+										"AggregationSumWithMultiplier",
+										"AggregationMax",
+										"AggregationWeightedSum"
+									],
+									"x-speakeasy-name-override": "AggregationType",
+									"x-readme-ref-name": "AggregationType"
+								}
+							},
+							"x-readme-ref-name": "meter.Aggregation"
+						},
+						"created_at": { "type": "string", "example": "2024-03-20T15:04:05Z", "format": "date-time" },
+						"event_name": { "type": "string", "example": "api_request" },
+						"filters": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"key": {
+										"type": "string",
+										"description": "Key is the key for the filter from $event.properties\nCurrently we support only first level keys in the properties and not nested keys"
+									},
+									"values": {
+										"type": "array",
+										"description": "Values are the possible values for the filter to be considered for the meter\nFor ex \"model_name\" could have values \"o1-mini\", \"gpt-4o\" etc",
+										"items": { "type": "string" }
+									}
+								},
+								"x-readme-ref-name": "meter.Filter"
+							}
+						},
+						"id": { "type": "string", "example": "550e8400-e29b-41d4-a716-446655440000" },
+						"name": { "type": "string", "example": "API Usage Meter" },
+						"reset_usage": {
+							"type": "string",
+							"enum": ["BILLING_PERIOD", "NEVER"],
+							"x-enum-varnames": ["ResetUsageBillingPeriod", "ResetUsageNever"],
+							"x-speakeasy-name-override": "ResetUsage",
+							"x-readme-ref-name": "ResetUsage"
+						},
+						"status": { "type": "string", "example": "published" },
+						"tenant_id": { "type": "string", "example": "tenant123" },
+						"updated_at": { "type": "string", "example": "2024-03-20T15:04:05Z", "format": "date-time" }
+					},
+					"x-readme-ref-name": "MeterResponse"
+				},
+				"meter_id": { "type": "string" },
+				"name": { "type": "string" },
+				"reporting_unit": {
+					"type": "object",
+					"properties": {
+						"conversion_rate": {
+							"type": "number",
+							"description": "Multiplier: reporting_unit_value = unit_value * conversion_rate; must be > 0"
+						},
+						"unit_plural": { "type": "string", "description": "Display unit label, plural (e.g. \"seconds\")" },
+						"unit_singular": { "type": "string", "description": "Display unit label, singular (e.g. \"second\")" }
+					},
+					"x-speakeasy-name-override": "ReportingUnit",
+					"x-readme-ref-name": "ReportingUnit"
+				},
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"type": {
+					"type": "string",
+					"enum": ["metered", "boolean", "static"],
+					"x-enum-varnames": ["FeatureTypeMetered", "FeatureTypeBoolean", "FeatureTypeStatic"],
+					"x-speakeasy-name-override": "FeatureType",
+					"x-readme-ref-name": "FeatureType"
+				},
+				"unit_plural": { "type": "string" },
+				"unit_singular": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"x-readme-ref-name": "FeatureResponse"
+		},
+		"id": { "type": "string" },
+		"parent_entity_id": { "type": "string" },
+		"parent_entity_type": { "type": "string" },
+		"status": { "type": "string" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" },
+		"wallet": {
+			"type": "object",
+			"properties": {
+				"alert_settings": {
+					"type": "object",
+					"properties": {
+						"alert_enabled": { "type": "boolean" },
+						"critical": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"warning": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						}
+					},
+					"x-speakeasy-name-override": "AlertSettings",
+					"x-readme-ref-name": "AlertSettings"
+				},
+				"alert_state": {
+					"type": "string",
+					"enum": ["ok", "info", "warning", "in_alarm"],
+					"x-enum-varnames": ["AlertStateOk", "AlertStateInfo", "AlertStateWarning", "AlertStateInAlarm"],
+					"x-speakeasy-name-override": "AlertState",
+					"x-readme-ref-name": "AlertState"
+				},
+				"auto_topup": {
+					"type": "object",
+					"properties": {
+						"amount": { "type": "number" },
+						"enabled": { "type": "boolean" },
+						"invoicing": { "type": "boolean" },
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AutoTopup",
+					"x-readme-ref-name": "AutoTopup"
+				},
+				"balance": { "type": "string" },
+				"config": {
+					"type": "object",
+					"properties": {
+						"allowed_price_types": {
+							"type": "array",
+							"description": "AllowedPriceTypes is a list of price types that are allowed for the wallet\nnil means all price types are allowed",
+							"items": {
+								"type": "string",
+								"enum": ["ALL", "USAGE", "FIXED"],
+								"x-enum-varnames": ["WalletConfigPriceTypeAll", "WalletConfigPriceTypeUsage", "WalletConfigPriceTypeFixed"],
+								"x-speakeasy-name-override": "WalletConfigPriceType",
+								"x-readme-ref-name": "WalletConfigPriceType"
+							}
+						}
+					},
+					"x-speakeasy-name-override": "WalletConfig",
+					"x-readme-ref-name": "WalletConfig"
+				},
+				"conversion_rate": {
+					"type": "string",
+					"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits"
+				},
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"credit_balance": { "type": "string" },
+				"credits_available_breakdown": {
+					"type": "object",
+					"properties": { "free": { "type": "string" }, "purchased": { "type": "string" } },
+					"x-speakeasy-name-override": "CreditBreakdown",
+					"x-readme-ref-name": "CreditBreakdown"
+				},
+				"currency": { "type": "string" },
+				"customer_id": { "type": "string" },
+				"description": { "type": "string" },
+				"environment_id": { "type": "string" },
+				"id": { "type": "string" },
+				"metadata": {
+					"type": "object",
+					"additionalProperties": { "type": "string" },
+					"x-speakeasy-name-override": "Metadata",
+					"x-readme-ref-name": "Metadata"
+				},
+				"name": { "type": "string" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"topup_conversion_rate": {
+					"type": "string",
+					"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+				},
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" },
+				"wallet_status": {
+					"type": "string",
+					"enum": ["active", "frozen", "closed"],
+					"x-enum-varnames": ["WalletStatusActive", "WalletStatusFrozen", "WalletStatusClosed"],
+					"x-speakeasy-name-override": "WalletStatus",
+					"x-readme-ref-name": "WalletStatus"
+				},
+				"wallet_type": {
+					"type": "string",
+					"enum": ["PRE_PAID", "POST_PAID"],
+					"x-enum-varnames": ["WalletTypePrePaid", "WalletTypePostPaid"],
+					"x-speakeasy-name-override": "WalletType",
+					"x-readme-ref-name": "WalletType"
+				}
+			},
+			"x-readme-ref-name": "WalletResponse"
+		}
+	},
+	"x-readme-ref-name": "AlertLogResponse"
+}

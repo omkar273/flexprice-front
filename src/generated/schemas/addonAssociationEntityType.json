@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["subscription", "plan", "addon"],
+	"x-enum-varnames": ["AddonAssociationEntityTypeSubscription", "AddonAssociationEntityTypePlan", "AddonAssociationEntityTypeAddon"],
+	"x-speakeasy-name-override": "AddonAssociationEntityType",
+	"x-readme-ref-name": "AddonAssociationEntityType"
+}

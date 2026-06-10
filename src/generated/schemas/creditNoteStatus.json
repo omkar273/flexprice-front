@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["DRAFT", "FINALIZED", "VOIDED"],
+	"x-enum-varnames": ["CreditNoteStatusDraft", "CreditNoteStatusFinalized", "CreditNoteStatusVoided"],
+	"x-speakeasy-name-override": "CreditNoteStatus",
+	"x-readme-ref-name": "CreditNoteStatus"
+}

@@ -1,0 +1,6 @@
+{
+	"required": ["coupon_id"],
+	"type": "object",
+	"properties": { "coupon_association_id": { "type": "string" }, "coupon_id": { "type": "string" } },
+	"x-readme-ref-name": "InvoiceCoupon"
+}

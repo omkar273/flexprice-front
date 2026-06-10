@@ -1,0 +1,94 @@
+{
+	"required": ["external_id"],
+	"type": "object",
+	"properties": {
+		"address_city": { "maxLength": 100, "type": "string", "description": "address_city is the city name with maximum 100 characters" },
+		"address_country": { "type": "string", "description": "address_country is the two-letter ISO 3166-1 alpha-2 country code" },
+		"address_line1": {
+			"maxLength": 255,
+			"type": "string",
+			"description": "address_line1 is the primary address line with maximum 255 characters"
+		},
+		"address_line2": {
+			"maxLength": 255,
+			"type": "string",
+			"description": "address_line2 is the secondary address line with maximum 255 characters"
+		},
+		"address_postal_code": {
+			"maxLength": 20,
+			"type": "string",
+			"description": "address_postal_code is the ZIP code or postal code with maximum 20 characters"
+		},
+		"address_state": {
+			"maxLength": 100,
+			"type": "string",
+			"description": "address_state is the state, province, or region name with maximum 100 characters"
+		},
+		"email": { "type": "string", "description": "email is the customer's email address and must be a valid email format if provided" },
+		"external_id": {
+			"type": "string",
+			"description": "external_id is the unique identifier from your system to reference this customer (required)"
+		},
+		"integration_entity_mapping": {
+			"type": "array",
+			"description": "integration_entity_mapping contains provider integration mappings for this customer",
+			"items": {
+				"required": ["entity_id", "entity_type", "provider_entity_id", "provider_type"],
+				"type": "object",
+				"properties": {
+					"entity_id": { "maxLength": 255, "type": "string" },
+					"entity_type": {
+						"type": "string",
+						"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+						"x-enum-varnames": [
+							"IntegrationEntityTypeCustomer",
+							"IntegrationEntityTypePlan",
+							"IntegrationEntityTypeInvoice",
+							"IntegrationEntityTypeSubscription",
+							"IntegrationEntityTypePayment",
+							"IntegrationEntityTypeCreditNote",
+							"IntegrationEntityTypeAddon",
+							"IntegrationEntityTypeItem",
+							"IntegrationEntityTypeItemPrice",
+							"IntegrationEntityTypePrice"
+						],
+						"x-speakeasy-name-override": "IntegrationEntityType",
+						"x-readme-ref-name": "IntegrationEntityType"
+					},
+					"metadata": { "type": "object", "additionalProperties": true },
+					"provider_entity_id": { "maxLength": 255, "type": "string" },
+					"provider_type": { "maxLength": 50, "type": "string" }
+				},
+				"x-readme-ref-name": "CreateEntityIntegrationMappingRequest"
+			}
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "metadata contains additional key-value pairs for storing extra information"
+		},
+		"name": { "type": "string", "description": "name is the full name or company name of the customer" },
+		"skip_onboarding_workflow": {
+			"type": "boolean",
+			"description": "skip_onboarding_workflow when true, prevents the customer onboarding workflow from being triggered\nThis is used internally when a customer is created via a workflow to prevent infinite loops\nDefault: false"
+		},
+		"tax_rate_overrides": {
+			"type": "array",
+			"description": "tax_rate_overrides contains tax rate configurations to be linked to this customer",
+			"items": {
+				"required": ["currency", "tax_rate_code"],
+				"type": "object",
+				"properties": {
+					"auto_apply": { "type": "boolean", "default": true },
+					"currency": { "type": "string" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"priority": { "type": "integer" },
+					"tax_rate_code": { "type": "string" }
+				},
+				"x-readme-ref-name": "TaxRateOverride"
+			}
+		}
+	},
+	"description": "Request object for creating a new customer in the system",
+	"x-readme-ref-name": "CreateCustomerRequest"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/PriceResponse" } } },
+	"x-readme-ref-name": "CreateBulkPriceResponse"
+}

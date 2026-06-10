@@ -1,0 +1,321 @@
+{
+	"required": ["amount_due", "currency", "customer_id", "subtotal", "total"],
+	"type": "object",
+	"properties": {
+		"amount_due": { "type": "string", "description": "amount_due is the total amount that needs to be paid for this invoice" },
+		"amount_paid": { "type": "string", "description": "amount_paid is the amount that has been paid towards this invoice" },
+		"billing_period": {
+			"type": "string",
+			"description": "billing_period is the period this invoice covers (e.g., \"monthly\", \"yearly\")"
+		},
+		"billing_reason": {
+			"type": "string",
+			"enum": [
+				"SUBSCRIPTION_CREATE",
+				"SUBSCRIPTION_CYCLE",
+				"SUBSCRIPTION_UPDATE",
+				"SUBSCRIPTION_TRIAL_END",
+				"SUBSCRIPTION_TRIAL_START",
+				"PRORATION",
+				"MANUAL",
+				"AUTO_INVOICE_THRESHOLD",
+				"WALLET_AUTO_TOPUP"
+			],
+			"x-enum-varnames": [
+				"InvoiceBillingReasonSubscriptionCreate",
+				"InvoiceBillingReasonSubscriptionCycle",
+				"InvoiceBillingReasonSubscriptionUpdate",
+				"InvoiceBillingReasonSubscriptionTrialEnd",
+				"InvoiceBillingReasonSubscriptionTrialStart",
+				"InvoiceBillingReasonProration",
+				"InvoiceBillingReasonManual",
+				"InvoiceBillingReasonAutoInvoiceThreshold",
+				"InvoiceBillingReasonWalletAutoTopup"
+			],
+			"x-speakeasy-name-override": "InvoiceBillingReason",
+			"x-readme-ref-name": "InvoiceBillingReason"
+		},
+		"coupons": { "type": "array", "description": "coupons", "items": { "type": "string" } },
+		"currency": { "type": "string", "description": "currency is the three-letter ISO currency code (e.g., USD, EUR) for the invoice" },
+		"customer_id": { "type": "string", "description": "customer_id is the unique identifier of the customer this invoice belongs to" },
+		"description": { "type": "string", "description": "description is an optional text description of the invoice" },
+		"due_date": { "type": "string", "description": "due_date is the date by which payment is expected", "format": "date-time" },
+		"idempotency_key": { "type": "string", "description": "idempotency_key is an optional key used to prevent duplicate invoice creation" },
+		"invoice_coupons": {
+			"type": "array",
+			"description": "Invoice Coupons",
+			"items": {
+				"required": ["coupon_id"],
+				"type": "object",
+				"properties": { "coupon_association_id": { "type": "string" }, "coupon_id": { "type": "string" } },
+				"x-readme-ref-name": "InvoiceCoupon"
+			}
+		},
+		"invoice_number": { "type": "string", "description": "invoice_number is an optional human-readable identifier for the invoice" },
+		"invoice_pdf_url": {
+			"type": "string",
+			"description": "invoice_pdf_url is the URL where customers can download the PDF version of this invoice"
+		},
+		"invoice_status": {
+			"type": "string",
+			"enum": ["DRAFT", "FINALIZED", "VOIDED", "SKIPPED"],
+			"x-enum-varnames": ["InvoiceStatusDraft", "InvoiceStatusFinalized", "InvoiceStatusVoided", "InvoiceStatusSkipped"],
+			"x-speakeasy-name-override": "InvoiceStatus",
+			"x-readme-ref-name": "InvoiceStatus"
+		},
+		"invoice_type": {
+			"type": "string",
+			"enum": ["SUBSCRIPTION", "ONE_OFF", "CREDIT"],
+			"x-enum-varnames": ["InvoiceTypeSubscription", "InvoiceTypeOneOff", "InvoiceTypeCredit"],
+			"x-speakeasy-name-override": "InvoiceType",
+			"x-readme-ref-name": "InvoiceType"
+		},
+		"issue_date": {
+			"type": "string",
+			"description": "issue_date overrides the user-facing date of the invoice.\nDefaults to created_at if not provided.",
+			"format": "date-time"
+		},
+		"line_item_coupons": {
+			"type": "array",
+			"description": "Invoice Line Item Coupons",
+			"items": {
+				"required": ["coupon_id", "line_item_id"],
+				"type": "object",
+				"properties": {
+					"coupon_association_id": { "type": "string" },
+					"coupon_id": { "type": "string" },
+					"line_item_id": { "type": "string", "description": "price_id used to match the line item" }
+				},
+				"x-readme-ref-name": "InvoiceLineItemCoupon"
+			}
+		},
+		"line_items": {
+			"type": "array",
+			"description": "line_items contains the individual items that make up this invoice",
+			"items": {
+				"required": ["amount", "quantity"],
+				"type": "object",
+				"properties": {
+					"adjusted_entitlement_quantity": {
+						"type": "string",
+						"description": "adjusted_entitlement_quantity is the entitlement-covered units deducted from raw usage."
+					},
+					"amount": { "type": "string", "description": "amount is the monetary amount for this line item" },
+					"commitment_info": {
+						"type": "object",
+						"properties": {
+							"amount": { "type": "string" },
+							"computed_commitment_utilized_amount": { "type": "string" },
+							"computed_overage_amount": { "type": "string" },
+							"computed_true_up_amount": {
+								"type": "string",
+								"description": "total_cost = computed_commitment_utilized_amount + computed_overage_amount + computed_true_up_amount"
+							},
+							"duration": {
+								"type": "string",
+								"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+								"x-enum-varnames": [
+									"BILLING_PERIOD_MONTHLY",
+									"BILLING_PERIOD_ANNUAL",
+									"BILLING_PERIOD_WEEKLY",
+									"BILLING_PERIOD_DAILY",
+									"BILLING_PERIOD_QUARTER",
+									"BILLING_PERIOD_HALF_YEAR",
+									"BILLING_PERIOD_ONETIME"
+								],
+								"x-speakeasy-name-override": "BillingPeriod",
+								"x-readme-ref-name": "BillingPeriod"
+							},
+							"is_windowed": { "type": "boolean" },
+							"overage_factor": { "type": "string" },
+							"quantity": { "type": "string", "description": "Only used for quantity-based commitments" },
+							"true_up_enabled": { "type": "boolean" },
+							"type": {
+								"type": "string",
+								"enum": ["amount", "quantity"],
+								"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+								"x-speakeasy-name-override": "CommitmentType",
+								"x-readme-ref-name": "CommitmentType"
+							}
+						},
+						"x-speakeasy-name-override": "CommitmentInfo",
+						"x-readme-ref-name": "CommitmentInfo"
+					},
+					"display_name": { "type": "string", "description": "display_name is the optional human-readable name for this line item" },
+					"entity_id": {
+						"type": "string",
+						"description": "entity_id is the optional unique identifier of the entity associated with this line item"
+					},
+					"entity_type": {
+						"type": "string",
+						"description": "entity_type is the optional type of the entity associated with this line item"
+					},
+					"invoice_level_discount": {
+						"type": "string",
+						"description": "invoice_level_discount is the discount amount in invoice currency applied to all line items on the invoice."
+					},
+					"line_item_discount": {
+						"type": "string",
+						"description": "line_item_discount is the discount amount in invoice currency applied directly to this line item."
+					},
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"meter_display_name": { "type": "string", "description": "meter_display_name is the optional human-readable name of the meter" },
+					"meter_id": {
+						"type": "string",
+						"description": "meter_id is the optional unique identifier of the meter used for usage tracking"
+					},
+					"period_end": {
+						"type": "string",
+						"description": "period_end is the optional end date of the period this line item covers",
+						"format": "date-time"
+					},
+					"period_start": {
+						"type": "string",
+						"description": "period_start is the optional start date of the period this line item covers",
+						"format": "date-time"
+					},
+					"plan_display_name": { "type": "string", "description": "plan_display_name is the optional human-readable name of the plan" },
+					"plan_id": {
+						"type": "string",
+						"description": "TODO: !REMOVE after migration\nplan_id is the optional unique identifier of the plan associated with this line item"
+					},
+					"prepaid_credits_applied": {
+						"type": "string",
+						"description": "prepaid_credits_applied is the amount in invoice currency reduced from this line item due to prepaid credits application."
+					},
+					"price_id": {
+						"type": "string",
+						"description": "price_id is the optional unique identifier of the price associated with this line item"
+					},
+					"price_type": { "type": "string", "description": "price_type indicates the type of pricing (fixed, usage, tiered, etc.)" },
+					"price_unit": {
+						"type": "string",
+						"description": "price_unit is the optional 3-digit ISO code of the price unit associated with this line item"
+					},
+					"price_unit_amount": {
+						"type": "string",
+						"description": "price_unit_amount is the optional amount converted to the price unit currency"
+					},
+					"quantity": { "type": "string", "description": "quantity is the quantity of units for this line item" },
+					"subscription_id": {
+						"type": "string",
+						"description": "subscription_id overrides the invoice's subscription_id for this specific line item.\nUsed for grouped invoicing where child line items belong to child subscriptions."
+					},
+					"subscription_line_item_id": {
+						"type": "string",
+						"description": "sub_line_item_id links this line item to the subscription_line_item that generated it."
+					}
+				},
+				"x-readme-ref-name": "CreateInvoiceLineItemRequest"
+			}
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"payment_status": {
+			"type": "string",
+			"enum": ["INITIATED", "PENDING", "PROCESSING", "SUCCEEDED", "OVERPAID", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED"],
+			"x-enum-varnames": [
+				"PaymentStatusInitiated",
+				"PaymentStatusPending",
+				"PaymentStatusProcessing",
+				"PaymentStatusSucceeded",
+				"PaymentStatusOverpaid",
+				"PaymentStatusFailed",
+				"PaymentStatusRefunded",
+				"PaymentStatusPartiallyRefunded"
+			],
+			"x-speakeasy-name-override": "PaymentStatus",
+			"x-readme-ref-name": "PaymentStatus"
+		},
+		"period_end": { "type": "string", "description": "period_end is the end date of the billing period", "format": "date-time" },
+		"period_start": { "type": "string", "description": "period_start is the start date of the billing period", "format": "date-time" },
+		"prepared_tax_rates": {
+			"type": "array",
+			"description": "prepared_tax_rates contains the tax rates pre-resolved by the caller (e.g., billing service)",
+			"items": {
+				"type": "object",
+				"properties": {
+					"code": { "type": "string" },
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"description": { "type": "string" },
+					"environment_id": { "type": "string" },
+					"fixed_value": { "type": "string" },
+					"id": { "type": "string" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"name": { "type": "string" },
+					"percentage_value": { "type": "string" },
+					"scope": {
+						"type": "string",
+						"enum": ["INTERNAL", "EXTERNAL", "ONETIME"],
+						"x-enum-varnames": ["TaxRateScopeInternal", "TaxRateScopeExternal", "TaxRateScopeOneTime"],
+						"x-speakeasy-name-override": "TaxRateScope",
+						"x-readme-ref-name": "TaxRateScope"
+					},
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"tax_rate_status": {
+						"type": "string",
+						"enum": ["ACTIVE", "INACTIVE"],
+						"x-enum-varnames": ["TaxRateStatusActive", "TaxRateStatusInactive"],
+						"x-speakeasy-name-override": "TaxRateStatus",
+						"x-readme-ref-name": "TaxRateStatus"
+					},
+					"tax_rate_type": {
+						"type": "string",
+						"enum": ["percentage", "fixed"],
+						"x-enum-varnames": ["TaxRateTypePercentage", "TaxRateTypeFixed"],
+						"x-speakeasy-name-override": "TaxRateType",
+						"x-readme-ref-name": "TaxRateType"
+					},
+					"tenant_id": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "TaxRateResponse"
+			}
+		},
+		"subscription_id": {
+			"type": "string",
+			"description": "subscription_id is the optional unique identifier of the subscription associated with this invoice"
+		},
+		"subtotal": { "type": "string", "description": "subtotal is the amount before taxes and discounts are applied" },
+		"tax_rate_overrides": {
+			"type": "array",
+			"description": "tax_rate_overrides is the tax rate overrides to be applied to the invoice",
+			"items": {
+				"required": ["currency", "tax_rate_code"],
+				"type": "object",
+				"properties": {
+					"auto_apply": { "type": "boolean", "default": true },
+					"currency": { "type": "string" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"priority": { "type": "integer" },
+					"tax_rate_code": { "type": "string" }
+				},
+				"x-readme-ref-name": "TaxRateOverride"
+			}
+		},
+		"tax_rates": { "type": "array", "description": "tax_rates", "items": { "type": "string" } },
+		"total": { "type": "string", "description": "total is the total amount of the invoice including taxes and discounts" },
+		"total_prepaid_applied": {
+			"type": "string",
+			"description": "total_prepaid_applied is the total amount of prepaid applied to this invoice."
+		}
+	},
+	"x-readme-ref-name": "CreateInvoiceRequest"
+}

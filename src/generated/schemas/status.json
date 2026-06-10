@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["published", "deleted", "archived"],
+	"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+	"x-speakeasy-name-override": "Status",
+	"x-readme-ref-name": "Status"
+}

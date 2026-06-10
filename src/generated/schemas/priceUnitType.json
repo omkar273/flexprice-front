@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["FIAT", "CUSTOM"],
+	"x-enum-varnames": ["PRICE_UNIT_TYPE_FIAT", "PRICE_UNIT_TYPE_CUSTOM"],
+	"x-speakeasy-name-override": "PriceUnitType",
+	"x-readme-ref-name": "PriceUnitType"
+}

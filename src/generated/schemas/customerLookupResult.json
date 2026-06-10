@@ -1,0 +1,93 @@
+{
+	"type": "object",
+	"properties": {
+		"customer": {
+			"type": "object",
+			"properties": {
+				"address_city": { "type": "string", "description": "AddressCity is the city of the customer's address" },
+				"address_country": {
+					"type": "string",
+					"description": "AddressCountry is the country of the customer's address (ISO 3166-1 alpha-2)"
+				},
+				"address_line1": { "type": "string", "description": "AddressLine1 is the first line of the customer's address" },
+				"address_line2": { "type": "string", "description": "AddressLine2 is the second line of the customer's address" },
+				"address_postal_code": { "type": "string", "description": "AddressPostalCode is the postal code of the customer's address" },
+				"address_state": { "type": "string", "description": "AddressState is the state of the customer's address" },
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"email": { "type": "string", "description": "Email is the email of the customer" },
+				"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the customer" },
+				"external_id": { "type": "string", "description": "ExternalID is the external identifier for the customer" },
+				"id": { "type": "string", "description": "ID is the unique identifier for the customer" },
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata" },
+				"name": { "type": "string", "description": "Name is the name of the customer" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"x-readme-ref-name": "Customer"
+		},
+		"error": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "string",
+					"enum": [
+						"http_client_error",
+						"system_error",
+						"internal_error",
+						"not_found",
+						"already_exists",
+						"version_conflict",
+						"validation_error",
+						"invalid_operation",
+						"permission_denied",
+						"database_error",
+						"service_unavailable",
+						"too_many_requests"
+					],
+					"x-enum-varnames": [
+						"ErrCodeHTTPClient",
+						"ErrCodeSystemError",
+						"ErrCodeInternalError",
+						"ErrCodeNotFound",
+						"ErrCodeAlreadyExists",
+						"ErrCodeVersionConflict",
+						"ErrCodeValidation",
+						"ErrCodeInvalidOperation",
+						"ErrCodePermissionDenied",
+						"ErrCodeDatabase",
+						"ErrCodeServiceUnavailable",
+						"ErrCodeTooManyRequests"
+					],
+					"x-speakeasy-name-override": "ErrorCode",
+					"x-readme-ref-name": "ErrorCode"
+				},
+				"http_status_code": { "type": "integer" },
+				"message": { "type": "string" }
+			},
+			"x-speakeasy-name-override": "ErrorResponse",
+			"x-readme-ref-name": "ErrorResponse"
+		},
+		"status": {
+			"type": "string",
+			"enum": ["unprocessed", "not_found", "found", "error"],
+			"x-enum-varnames": [
+				"DebugTrackerStatusUnprocessed",
+				"DebugTrackerStatusNotFound",
+				"DebugTrackerStatusFound",
+				"DebugTrackerStatusError"
+			],
+			"x-speakeasy-name-override": "DebugTrackerStatus",
+			"x-readme-ref-name": "DebugTrackerStatus"
+		}
+	},
+	"x-readme-ref-name": "CustomerLookupResult"
+}

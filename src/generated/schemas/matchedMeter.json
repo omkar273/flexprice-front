@@ -1,0 +1,117 @@
+{
+	"type": "object",
+	"properties": {
+		"event_name": { "type": "string" },
+		"meter": {
+			"type": "object",
+			"properties": {
+				"aggregation": {
+					"type": "object",
+					"properties": {
+						"bucket_size": {
+							"type": "string",
+							"enum": ["MINUTE", "15MIN", "30MIN", "HOUR", "3HOUR", "6HOUR", "12HOUR", "DAY", "WEEK", "MONTH", "MONTH"],
+							"x-enum-varnames": [
+								"WindowSizeMinute",
+								"WindowSize15Min",
+								"WindowSize30Min",
+								"WindowSizeHour",
+								"WindowSize3Hour",
+								"WindowSize6Hour",
+								"WindowSize12Hour",
+								"WindowSizeDay",
+								"WindowSizeWeek",
+								"WindowSizeMonth",
+								"DefaultWindowSize"
+							],
+							"x-speakeasy-name-override": "WindowSize",
+							"x-readme-ref-name": "WindowSize"
+						},
+						"expression": {
+							"type": "string",
+							"description": "Expression is an optional CEL expression to compute per-event quantity from event.properties.\nWhen set, it replaces Field-based extraction. Property names are used directly (e.g., token * duration * pixel)."
+						},
+						"field": {
+							"type": "string",
+							"description": "Field is the key in $event.properties on which the aggregation is to be applied\nFor ex if the aggregation type is sum for API usage, the field could be \"duration_ms\"\nIgnored when Expression is set."
+						},
+						"group_by": {
+							"type": "string",
+							"description": "GroupBy is the property name in event.properties to group by before aggregating.\nCurrently only supported for MAX aggregation with bucket_size.\nWhen set, aggregation is applied per unique value of this property within each bucket,\nthen the per-group results are summed to produce the bucket total."
+						},
+						"multiplier": {
+							"type": "string",
+							"description": "Multiplier is the multiplier for the aggregation\nFor ex if the aggregation type is sum_with_multiplier for API usage, the multiplier could be 1000\nto scale up by a factor of 1000. If not provided, it will be null."
+						},
+						"type": {
+							"type": "string",
+							"enum": ["COUNT", "SUM", "AVG", "COUNT_UNIQUE", "LATEST", "SUM_WITH_MULTIPLIER", "MAX", "WEIGHTED_SUM"],
+							"x-enum-comments": { "AggregationSumWithMultiplier": "Sum with a multiplier - [sum(value) * multiplier]" },
+							"x-enum-varnames": [
+								"AggregationCount",
+								"AggregationSum",
+								"AggregationAvg",
+								"AggregationCountUnique",
+								"AggregationLatest",
+								"AggregationSumWithMultiplier",
+								"AggregationMax",
+								"AggregationWeightedSum"
+							],
+							"x-speakeasy-name-override": "AggregationType",
+							"x-readme-ref-name": "AggregationType"
+						}
+					},
+					"x-readme-ref-name": "meter.Aggregation"
+				},
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the meter" },
+				"event_name": {
+					"type": "string",
+					"description": "EventName is the unique identifier for the event that this meter is tracking\nIt is a mandatory field in the events table and hence being used as the primary matching field\nWe can have multiple meters tracking the same event but with different filters and aggregation"
+				},
+				"filters": {
+					"type": "array",
+					"description": "Filters define the criteria for the meter to be applied on the events before aggregation\nIt also defines the possible values on which later the charges will be applied",
+					"items": {
+						"type": "object",
+						"properties": {
+							"key": {
+								"type": "string",
+								"description": "Key is the key for the filter from $event.properties\nCurrently we support only first level keys in the properties and not nested keys"
+							},
+							"values": {
+								"type": "array",
+								"description": "Values are the possible values for the filter to be considered for the meter\nFor ex \"model_name\" could have values \"o1-mini\", \"gpt-4o\" etc",
+								"items": { "type": "string" }
+							}
+						},
+						"x-readme-ref-name": "meter.Filter"
+					}
+				},
+				"id": { "type": "string", "description": "ID is the unique identifier for the meter" },
+				"name": { "type": "string", "description": "Name is the display name of the meter" },
+				"reset_usage": {
+					"type": "string",
+					"enum": ["BILLING_PERIOD", "NEVER"],
+					"x-enum-varnames": ["ResetUsageBillingPeriod", "ResetUsageNever"],
+					"x-speakeasy-name-override": "ResetUsage",
+					"x-readme-ref-name": "ResetUsage"
+				},
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"x-readme-ref-name": "meter.Meter"
+		},
+		"meter_id": { "type": "string" }
+	},
+	"x-readme-ref-name": "MatchedMeter"
+}

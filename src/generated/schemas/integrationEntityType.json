@@ -1,0 +1,18 @@
+{
+	"type": "string",
+	"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+	"x-enum-varnames": [
+		"IntegrationEntityTypeCustomer",
+		"IntegrationEntityTypePlan",
+		"IntegrationEntityTypeInvoice",
+		"IntegrationEntityTypeSubscription",
+		"IntegrationEntityTypePayment",
+		"IntegrationEntityTypeCreditNote",
+		"IntegrationEntityTypeAddon",
+		"IntegrationEntityTypeItem",
+		"IntegrationEntityTypeItemPrice",
+		"IntegrationEntityTypePrice"
+	],
+	"x-speakeasy-name-override": "IntegrationEntityType",
+	"x-readme-ref-name": "IntegrationEntityType"
+}

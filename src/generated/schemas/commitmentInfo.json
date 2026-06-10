@@ -1,0 +1,40 @@
+{
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string" },
+		"computed_commitment_utilized_amount": { "type": "string" },
+		"computed_overage_amount": { "type": "string" },
+		"computed_true_up_amount": {
+			"type": "string",
+			"description": "total_cost = computed_commitment_utilized_amount + computed_overage_amount + computed_true_up_amount"
+		},
+		"duration": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		},
+		"is_windowed": { "type": "boolean" },
+		"overage_factor": { "type": "string" },
+		"quantity": { "type": "string", "description": "Only used for quantity-based commitments" },
+		"true_up_enabled": { "type": "boolean" },
+		"type": {
+			"type": "string",
+			"enum": ["amount", "quantity"],
+			"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+			"x-speakeasy-name-override": "CommitmentType",
+			"x-readme-ref-name": "CommitmentType"
+		}
+	},
+	"x-speakeasy-name-override": "CommitmentInfo",
+	"x-readme-ref-name": "CommitmentInfo"
+}

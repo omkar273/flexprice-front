@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "costsheet": { "$ref": "#/components/schemas/CostsheetResponse" } },
+	"x-readme-ref-name": "UpdateCostsheetResponse"
+}

@@ -1,0 +1,12 @@
+{
+	"type": "string",
+	"enum": ["PAYMENT", "EXTERNAL", "REQUEST", "INVOICE"],
+	"x-enum-varnames": [
+		"WalletTxReferenceTypePayment",
+		"WalletTxReferenceTypeExternal",
+		"WalletTxReferenceTypeRequest",
+		"WalletTxReferenceTypeInvoice"
+	],
+	"x-speakeasy-name-override": "WalletTxReferenceType",
+	"x-readme-ref-name": "WalletTxReferenceType"
+}

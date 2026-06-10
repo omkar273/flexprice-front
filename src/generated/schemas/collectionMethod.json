@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["charge_automatically", "send_invoice"],
+	"x-enum-varnames": ["CollectionMethodChargeAutomatically", "CollectionMethodSendInvoice"],
+	"x-speakeasy-name-override": "CollectionMethod",
+	"x-readme-ref-name": "CollectionMethod"
+}

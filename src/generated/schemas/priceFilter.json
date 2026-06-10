@@ -1,0 +1,80 @@
+{
+	"type": "object",
+	"properties": {
+		"allow_expired_prices": { "type": "boolean", "default": false },
+		"end_time": { "type": "string", "format": "date-time" },
+		"entity_ids": { "type": "array", "items": { "type": "string" } },
+		"entity_type": {
+			"type": "string",
+			"enum": ["PLAN", "SUBSCRIPTION", "ADDON", "PRICE", "COSTSHEET"],
+			"x-enum-varnames": [
+				"PRICE_ENTITY_TYPE_PLAN",
+				"PRICE_ENTITY_TYPE_SUBSCRIPTION",
+				"PRICE_ENTITY_TYPE_ADDON",
+				"PRICE_ENTITY_TYPE_PRICE",
+				"PRICE_ENTITY_TYPE_COSTSHEET"
+			],
+			"x-speakeasy-name-override": "PriceEntityType",
+			"x-readme-ref-name": "PriceEntityType"
+		},
+		"expand": { "type": "string" },
+		"filters": {
+			"type": "array",
+			"description": "DSL filters",
+			"items": {
+				"type": "object",
+				"properties": {
+					"data_type": {
+						"type": "string",
+						"enum": ["string", "number", "date", "array"],
+						"x-enum-varnames": ["DataTypeString", "DataTypeNumber", "DataTypeDate", "DataTypeArray"],
+						"x-speakeasy-name-override": "DataType",
+						"x-readme-ref-name": "DataType"
+					},
+					"field": { "type": "string" },
+					"operator": {
+						"type": "string",
+						"enum": ["eq", "contains", "not_contains", "gt", "lt", "in", "not_in", "before", "after"],
+						"x-enum-varnames": ["EQUAL", "CONTAINS", "NOT_CONTAINS", "GREATER_THAN", "LESS_THAN", "IN", "NOT_IN", "BEFORE", "AFTER"],
+						"x-speakeasy-name-override": "FilterOperatorType",
+						"x-readme-ref-name": "FilterOperatorType"
+					},
+					"value": {
+						"type": "object",
+						"properties": {
+							"array": { "type": "array", "items": { "type": "string" } },
+							"boolean": { "type": "boolean" },
+							"date": { "type": "string" },
+							"number": { "type": "number" },
+							"string": { "type": "string" }
+						},
+						"x-speakeasy-name-override": "Value",
+						"x-readme-ref-name": "Value"
+					}
+				},
+				"x-speakeasy-name-override": "FilterCondition",
+				"x-readme-ref-name": "FilterCondition"
+			}
+		},
+		"limit": { "maximum": 1000, "minimum": 1, "type": "integer" },
+		"meter_ids": { "type": "array", "items": { "type": "string" } },
+		"offset": { "minimum": 0, "type": "integer" },
+		"order": { "type": "string", "enum": ["asc", "desc"] },
+		"parent_price_id": { "type": "string" },
+		"plan_ids": { "type": "array", "description": "Price override filtering fields", "items": { "type": "string" } },
+		"price_ids": { "type": "array", "items": { "type": "string" } },
+		"sort": { "type": "string" },
+		"start_date_lt": { "type": "string" },
+		"start_time": { "type": "string", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_id": { "type": "string" }
+	},
+	"x-speakeasy-name-override": "PriceFilter",
+	"x-readme-ref-name": "PriceFilter"
+}

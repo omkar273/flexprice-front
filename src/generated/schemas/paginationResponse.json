@@ -1,0 +1,6 @@
+{
+	"type": "object",
+	"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+	"x-speakeasy-name-override": "PaginationResponse",
+	"x-readme-ref-name": "PaginationResponse"
+}

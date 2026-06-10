@@ -1,0 +1,10 @@
+{
+	"required": ["coupon_id", "line_item_id"],
+	"type": "object",
+	"properties": {
+		"coupon_association_id": { "type": "string" },
+		"coupon_id": { "type": "string" },
+		"line_item_id": { "type": "string", "description": "price_id used to match the line item" }
+	},
+	"x-readme-ref-name": "InvoiceLineItemCoupon"
+}

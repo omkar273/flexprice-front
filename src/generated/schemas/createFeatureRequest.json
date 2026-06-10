@@ -1,0 +1,185 @@
+{
+	"required": ["name", "type"],
+	"type": "object",
+	"properties": {
+		"alert_settings": {
+			"type": "object",
+			"properties": {
+				"alert_enabled": { "type": "boolean" },
+				"critical": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"info": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"warning": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				}
+			},
+			"x-speakeasy-name-override": "AlertSettings",
+			"x-readme-ref-name": "AlertSettings"
+		},
+		"description": { "type": "string" },
+		"group_id": { "type": "string", "description": "GroupID is the id of the group to add the feature to" },
+		"lookup_key": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"meter": {
+			"required": ["aggregation", "event_name", "name", "reset_usage"],
+			"type": "object",
+			"properties": {
+				"aggregation": {
+					"type": "object",
+					"properties": {
+						"bucket_size": {
+							"type": "string",
+							"enum": ["MINUTE", "15MIN", "30MIN", "HOUR", "3HOUR", "6HOUR", "12HOUR", "DAY", "WEEK", "MONTH", "MONTH"],
+							"x-enum-varnames": [
+								"WindowSizeMinute",
+								"WindowSize15Min",
+								"WindowSize30Min",
+								"WindowSizeHour",
+								"WindowSize3Hour",
+								"WindowSize6Hour",
+								"WindowSize12Hour",
+								"WindowSizeDay",
+								"WindowSizeWeek",
+								"WindowSizeMonth",
+								"DefaultWindowSize"
+							],
+							"x-speakeasy-name-override": "WindowSize",
+							"x-readme-ref-name": "WindowSize"
+						},
+						"expression": {
+							"type": "string",
+							"description": "Expression is an optional CEL expression to compute per-event quantity from event.properties.\nWhen set, it replaces Field-based extraction. Property names are used directly (e.g., token * duration * pixel)."
+						},
+						"field": {
+							"type": "string",
+							"description": "Field is the key in $event.properties on which the aggregation is to be applied\nFor ex if the aggregation type is sum for API usage, the field could be \"duration_ms\"\nIgnored when Expression is set."
+						},
+						"group_by": {
+							"type": "string",
+							"description": "GroupBy is the property name in event.properties to group by before aggregating.\nCurrently only supported for MAX aggregation with bucket_size.\nWhen set, aggregation is applied per unique value of this property within each bucket,\nthen the per-group results are summed to produce the bucket total."
+						},
+						"multiplier": {
+							"type": "string",
+							"description": "Multiplier is the multiplier for the aggregation\nFor ex if the aggregation type is sum_with_multiplier for API usage, the multiplier could be 1000\nto scale up by a factor of 1000. If not provided, it will be null."
+						},
+						"type": {
+							"type": "string",
+							"enum": ["COUNT", "SUM", "AVG", "COUNT_UNIQUE", "LATEST", "SUM_WITH_MULTIPLIER", "MAX", "WEIGHTED_SUM"],
+							"x-enum-comments": { "AggregationSumWithMultiplier": "Sum with a multiplier - [sum(value) * multiplier]" },
+							"x-enum-varnames": [
+								"AggregationCount",
+								"AggregationSum",
+								"AggregationAvg",
+								"AggregationCountUnique",
+								"AggregationLatest",
+								"AggregationSumWithMultiplier",
+								"AggregationMax",
+								"AggregationWeightedSum"
+							],
+							"x-speakeasy-name-override": "AggregationType",
+							"x-readme-ref-name": "AggregationType"
+						}
+					},
+					"x-readme-ref-name": "meter.Aggregation"
+				},
+				"event_name": { "type": "string", "example": "api_request" },
+				"filters": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"key": {
+								"type": "string",
+								"description": "Key is the key for the filter from $event.properties\nCurrently we support only first level keys in the properties and not nested keys"
+							},
+							"values": {
+								"type": "array",
+								"description": "Values are the possible values for the filter to be considered for the meter\nFor ex \"model_name\" could have values \"o1-mini\", \"gpt-4o\" etc",
+								"items": { "type": "string" }
+							}
+						},
+						"x-readme-ref-name": "meter.Filter"
+					}
+				},
+				"name": { "type": "string", "example": "API Usage Meter" },
+				"reset_usage": {
+					"type": "string",
+					"enum": ["BILLING_PERIOD", "NEVER"],
+					"x-enum-varnames": ["ResetUsageBillingPeriod", "ResetUsageNever"],
+					"x-speakeasy-name-override": "ResetUsage",
+					"x-readme-ref-name": "ResetUsage"
+				}
+			},
+			"x-readme-ref-name": "CreateMeterRequest"
+		},
+		"meter_id": { "type": "string" },
+		"name": { "type": "string" },
+		"reporting_unit": {
+			"type": "object",
+			"properties": {
+				"conversion_rate": {
+					"type": "number",
+					"description": "Multiplier: reporting_unit_value = unit_value * conversion_rate; must be > 0"
+				},
+				"unit_plural": { "type": "string", "description": "Display unit label, plural (e.g. \"seconds\")" },
+				"unit_singular": { "type": "string", "description": "Display unit label, singular (e.g. \"second\")" }
+			},
+			"x-speakeasy-name-override": "ReportingUnit",
+			"x-readme-ref-name": "ReportingUnit"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["metered", "boolean", "static"],
+			"x-enum-varnames": ["FeatureTypeMetered", "FeatureTypeBoolean", "FeatureTypeStatic"],
+			"x-speakeasy-name-override": "FeatureType",
+			"x-readme-ref-name": "FeatureType"
+		},
+		"unit_plural": { "type": "string" },
+		"unit_singular": { "type": "string" }
+	},
+	"x-readme-ref-name": "CreateFeatureRequest"
+}

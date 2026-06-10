@@ -1,0 +1,22 @@
+{
+	"type": "object",
+	"properties": {
+		"schedule_id": {
+			"type": "string",
+			"description": "schedule_id is the ID of the schedule to cancel (optional if subscription_id and schedule_type are provided)"
+		},
+		"schedule_type": {
+			"type": "string",
+			"enum": ["plan_change", "cancellation"],
+			"x-enum-varnames": ["SubscriptionScheduleChangeTypePlanChange", "SubscriptionScheduleChangeTypeCancellation"],
+			"x-speakeasy-name-override": "SubscriptionScheduleChangeType",
+			"x-readme-ref-name": "SubscriptionScheduleChangeType"
+		},
+		"subscription_id": {
+			"type": "string",
+			"description": "subscription_id is the ID of the subscription (required if schedule_id is not provided)"
+		}
+	},
+	"description": "Request to cancel a subscription schedule (supports two modes)",
+	"x-readme-ref-name": "CancelScheduleRequest"
+}

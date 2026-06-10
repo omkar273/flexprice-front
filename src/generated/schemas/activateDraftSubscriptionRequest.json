@@ -1,0 +1,12 @@
+{
+	"required": ["start_date"],
+	"type": "object",
+	"properties": {
+		"start_date": {
+			"type": "string",
+			"description": "start_date is the new start date for the subscription when activating",
+			"format": "date-time"
+		}
+	},
+	"x-readme-ref-name": "ActivateDraftSubscriptionRequest"
+}

@@ -1,0 +1,9 @@
+{
+	"type": "object",
+	"properties": {
+		"description": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"name": { "type": "string" }
+	},
+	"x-readme-ref-name": "UpdateAddonRequest"
+}

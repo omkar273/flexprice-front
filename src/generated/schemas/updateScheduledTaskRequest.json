@@ -1,0 +1,6 @@
+{
+	"required": ["enabled"],
+	"type": "object",
+	"properties": { "enabled": { "type": "boolean" } },
+	"x-readme-ref-name": "UpdateScheduledTaskRequest"
+}

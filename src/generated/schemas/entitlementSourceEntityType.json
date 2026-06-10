@@ -1,0 +1,6 @@
+{
+	"type": "string",
+	"enum": ["plan", "addon", "subscription"],
+	"x-enum-varnames": ["EntitlementSourceEntityTypePlan", "EntitlementSourceEntityTypeAddon", "EntitlementSourceEntityTypeSubscription"],
+	"x-readme-ref-name": "EntitlementSourceEntityType"
+}

@@ -1,0 +1,21 @@
+{
+	"type": "object",
+	"properties": {
+		"code": { "type": "string", "description": "code is the updated unique alphanumeric identifier for the tax rate" },
+		"description": { "type": "string", "description": "description is the updated text description for the tax rate" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "metadata contains updated key-value pairs that will replace existing metadata"
+		},
+		"name": { "type": "string", "description": "name is the updated human-readable name for the tax rate" },
+		"tax_rate_status": {
+			"type": "string",
+			"enum": ["ACTIVE", "INACTIVE"],
+			"x-enum-varnames": ["TaxRateStatusActive", "TaxRateStatusInactive"],
+			"x-speakeasy-name-override": "TaxRateStatus",
+			"x-readme-ref-name": "TaxRateStatus"
+		}
+	},
+	"x-readme-ref-name": "UpdateTaxRateRequest"
+}

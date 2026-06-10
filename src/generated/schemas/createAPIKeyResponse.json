@@ -1,0 +1,76 @@
+{
+	"type": "object",
+	"properties": {
+		"api_key": { "type": "string" },
+		"secret": {
+			"type": "object",
+			"properties": {
+				"created_at": { "type": "string", "format": "date-time" },
+				"display_id": { "type": "string" },
+				"expires_at": { "type": "string", "format": "date-time" },
+				"id": { "type": "string" },
+				"last_used_at": { "type": "string", "format": "date-time" },
+				"name": { "type": "string" },
+				"provider": {
+					"type": "string",
+					"enum": [
+						"flexprice",
+						"stripe",
+						"s3",
+						"hubspot",
+						"razorpay",
+						"chargebee",
+						"quickbooks",
+						"zoho_books",
+						"nomod",
+						"moyasar",
+						"paddle",
+						"whop"
+					],
+					"x-enum-comments": { "SecretProviderS3": "supports multiple connections per environment" },
+					"x-enum-varnames": [
+						"SecretProviderFlexPrice",
+						"SecretProviderStripe",
+						"SecretProviderS3",
+						"SecretProviderHubSpot",
+						"SecretProviderRazorpay",
+						"SecretProviderChargebee",
+						"SecretProviderQuickBooks",
+						"SecretProviderZohoBooks",
+						"SecretProviderNomod",
+						"SecretProviderMoyasar",
+						"SecretProviderPaddle",
+						"SecretProviderWhop"
+					],
+					"x-speakeasy-name-override": "SecretProvider",
+					"x-readme-ref-name": "SecretProvider"
+				},
+				"roles": { "type": "array", "description": "RBAC roles", "items": { "type": "string" } },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"type": {
+					"type": "string",
+					"enum": ["private_key", "publishable_key", "integration"],
+					"x-enum-varnames": ["SecretTypePrivateKey", "SecretTypePublishableKey", "SecretTypeIntegration"],
+					"x-speakeasy-name-override": "SecretType",
+					"x-readme-ref-name": "SecretType"
+				},
+				"updated_at": { "type": "string", "format": "date-time" },
+				"user_type": {
+					"type": "string",
+					"enum": ["user", "service_account"],
+					"x-enum-varnames": ["UserTypeUser", "UserTypeServiceAccount"],
+					"x-speakeasy-name-override": "UserType",
+					"x-readme-ref-name": "UserType"
+				}
+			},
+			"x-readme-ref-name": "SecretResponse"
+		}
+	},
+	"x-readme-ref-name": "CreateAPIKeyResponse"
+}

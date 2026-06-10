@@ -1,0 +1,83 @@
+{
+	"required": ["connection_id", "entity_type", "interval", "job_config"],
+	"type": "object",
+	"properties": {
+		"connection_id": { "type": "string" },
+		"enabled": { "type": "boolean" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["events", "invoice", "credit_topups", "credit_usage", "usage_analytics"],
+			"x-enum-varnames": [
+				"ScheduledTaskEntityTypeEvents",
+				"ScheduledTaskEntityTypeInvoice",
+				"ScheduledTaskEntityTypeCreditTopups",
+				"ScheduledTaskEntityTypeCreditUsage",
+				"ScheduledTaskEntityTypeUsageAnalytics"
+			],
+			"x-speakeasy-name-override": "ScheduledTaskEntityType",
+			"x-readme-ref-name": "ScheduledTaskEntityType"
+		},
+		"interval": {
+			"type": "string",
+			"enum": ["15MIN", "30MIN", "custom", "hourly", "daily"],
+			"x-enum-comments": { "ScheduledTaskIntervalCustom": "10 minutes for testing" },
+			"x-enum-varnames": [
+				"ScheduledTaskIntervalEvery15Minutes",
+				"ScheduledTaskIntervalEvery30Minutes",
+				"ScheduledTaskIntervalCustom",
+				"ScheduledTaskIntervalHourly",
+				"ScheduledTaskIntervalDaily"
+			],
+			"x-speakeasy-name-override": "ScheduledTaskInterval",
+			"x-readme-ref-name": "ScheduledTaskInterval"
+		},
+		"job_config": {
+			"type": "object",
+			"properties": {
+				"bucket": { "type": "string", "description": "S3 bucket name" },
+				"compression": {
+					"type": "string",
+					"enum": ["none", "gzip"],
+					"x-enum-varnames": ["S3CompressionTypeNone", "S3CompressionTypeGzip"],
+					"x-speakeasy-name-override": "S3CompressionType",
+					"x-readme-ref-name": "S3CompressionType"
+				},
+				"encryption": {
+					"type": "string",
+					"enum": ["AES256", "aws:kms", "aws:kms:dsse"],
+					"x-enum-varnames": ["S3EncryptionTypeAES256", "S3EncryptionTypeAwsKms", "S3EncryptionTypeAwsKmsDsse"],
+					"x-speakeasy-name-override": "S3EncryptionType",
+					"x-readme-ref-name": "S3EncryptionType"
+				},
+				"endpoint_url": { "type": "string", "description": "Custom S3 endpoint URL (e.g., \"http://minio:9000\" for MinIO)" },
+				"export_metadata_fields": {
+					"type": "array",
+					"description": "Optional user-selected metadata columns",
+					"items": {
+						"required": ["entity_type", "field_key"],
+						"type": "object",
+						"properties": {
+							"column_name": { "type": "string", "description": "CSV column header to be shown in the exported file" },
+							"entity_type": {
+								"type": "string",
+								"enum": ["customer", "wallet"],
+								"x-enum-varnames": ["ExportMetadataEntityTypeCustomer", "ExportMetadataEntityTypeWallet"],
+								"x-speakeasy-name-override": "ExportMetadataEntityType",
+								"x-readme-ref-name": "ExportMetadataEntityType"
+							},
+							"field_key": { "type": "string", "description": "metadata key to look up" }
+						},
+						"x-speakeasy-name-override": "ExportMetadataField",
+						"x-readme-ref-name": "ExportMetadataField"
+					}
+				},
+				"key_prefix": { "type": "string", "description": "Optional prefix for S3 keys (e.g., \"flexprice-exports/\")" },
+				"region": { "type": "string", "description": "AWS region (e.g., \"us-west-2\")" },
+				"use_path_style": { "type": "boolean", "description": "Use path-style addressing (required for MinIO)" }
+			},
+			"x-speakeasy-name-override": "S3JobConfig",
+			"x-readme-ref-name": "S3JobConfig"
+		}
+	},
+	"x-readme-ref-name": "CreateScheduledTaskRequest"
+}

@@ -1,0 +1,14 @@
+{
+	"type": "string",
+	"enum": ["DAILY", "WEEKLY", "MONTHLY", "ANNUAL", "QUARTERLY", "HALF_YEARLY"],
+	"x-enum-varnames": [
+		"CREDIT_GRANT_PERIOD_DAILY",
+		"CREDIT_GRANT_PERIOD_WEEKLY",
+		"CREDIT_GRANT_PERIOD_MONTHLY",
+		"CREDIT_GRANT_PERIOD_ANNUAL",
+		"CREDIT_GRANT_PERIOD_QUARTER",
+		"CREDIT_GRANT_PERIOD_HALF_YEARLY"
+	],
+	"x-speakeasy-name-override": "CreditGrantPeriod",
+	"x-readme-ref-name": "CreditGrantPeriod"
+}

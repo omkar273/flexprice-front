@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["user", "service_account"],
+	"x-enum-varnames": ["UserTypeUser", "UserTypeServiceAccount"],
+	"x-speakeasy-name-override": "UserType",
+	"x-readme-ref-name": "UserType"
+}

@@ -1,0 +1,82 @@
+{
+	"required": ["price_id"],
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string", "description": "Amount is the new price amount that overrides the original price (optional)" },
+		"billing_model": {
+			"type": "string",
+			"enum": ["FLAT_FEE", "PACKAGE", "TIERED"],
+			"x-enum-varnames": ["BILLING_MODEL_FLAT_FEE", "BILLING_MODEL_PACKAGE", "BILLING_MODEL_TIERED"],
+			"x-speakeasy-name-override": "BillingModel",
+			"x-readme-ref-name": "BillingModel"
+		},
+		"price_id": { "type": "string", "description": "PriceID references the plan price to override" },
+		"price_unit_amount": {
+			"type": "string",
+			"description": "PriceUnitAmount is the amount of the price unit (for CUSTOM type, FLAT_FEE/PACKAGE billing models)"
+		},
+		"price_unit_tiers": {
+			"type": "array",
+			"description": "PriceUnitTiers are the tiers for the price unit (for CUSTOM type, TIERED billing model)",
+			"items": {
+				"required": ["unit_amount"],
+				"type": "object",
+				"properties": {
+					"flat_amount": {
+						"type": "string",
+						"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+					},
+					"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+					"up_to": {
+						"type": "integer",
+						"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+					}
+				},
+				"x-readme-ref-name": "CreatePriceTier"
+			}
+		},
+		"quantity": { "type": "string", "description": "Quantity for this line item (optional)" },
+		"tier_mode": {
+			"type": "string",
+			"enum": ["VOLUME", "SLAB"],
+			"x-enum-varnames": ["BILLING_TIER_VOLUME", "BILLING_TIER_SLAB"],
+			"x-speakeasy-name-override": "BillingTier",
+			"x-readme-ref-name": "BillingTier"
+		},
+		"tiers": {
+			"type": "array",
+			"description": "Tiers determines the pricing tiers for this line item",
+			"items": {
+				"required": ["unit_amount"],
+				"type": "object",
+				"properties": {
+					"flat_amount": {
+						"type": "string",
+						"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+					},
+					"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+					"up_to": {
+						"type": "integer",
+						"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+					}
+				},
+				"x-readme-ref-name": "CreatePriceTier"
+			}
+		},
+		"transform_quantity": {
+			"type": "object",
+			"properties": {
+				"divide_by": { "type": "integer", "description": "Divide quantity by this number" },
+				"round": {
+					"type": "string",
+					"enum": ["up", "down"],
+					"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+					"x-speakeasy-name-override": "RoundType",
+					"x-readme-ref-name": "RoundType"
+				}
+			},
+			"x-readme-ref-name": "price.TransformQuantity"
+		}
+	},
+	"x-readme-ref-name": "OverrideLineItemRequest"
+}

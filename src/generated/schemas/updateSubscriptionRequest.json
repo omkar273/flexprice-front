@@ -1,0 +1,26 @@
+{
+	"type": "object",
+	"properties": {
+		"cancel_at": { "type": "string", "format": "date-time" },
+		"cancel_at_period_end": { "type": "boolean" },
+		"parent_subscription_id": {
+			"type": "string",
+			"description": "ParentSubscriptionID sets or clears the parent subscription. Omit to leave unchanged; send \"\" to clear."
+		},
+		"status": {
+			"type": "string",
+			"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+			"x-enum-varnames": [
+				"SubscriptionStatusActive",
+				"SubscriptionStatusPaused",
+				"SubscriptionStatusCancelled",
+				"SubscriptionStatusIncomplete",
+				"SubscriptionStatusTrialing",
+				"SubscriptionStatusDraft"
+			],
+			"x-speakeasy-name-override": "SubscriptionStatus",
+			"x-readme-ref-name": "SubscriptionStatus"
+		}
+	},
+	"x-readme-ref-name": "UpdateSubscriptionRequest"
+}

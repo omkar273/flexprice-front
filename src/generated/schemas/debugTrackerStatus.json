@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["unprocessed", "not_found", "found", "error"],
+	"x-enum-varnames": ["DebugTrackerStatusUnprocessed", "DebugTrackerStatusNotFound", "DebugTrackerStatusFound", "DebugTrackerStatusError"],
+	"x-speakeasy-name-override": "DebugTrackerStatus",
+	"x-readme-ref-name": "DebugTrackerStatus"
+}

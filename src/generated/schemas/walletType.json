@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["PRE_PAID", "POST_PAID"],
+	"x-enum-varnames": ["WalletTypePrePaid", "WalletTypePostPaid"],
+	"x-speakeasy-name-override": "WalletType",
+	"x-readme-ref-name": "WalletType"
+}

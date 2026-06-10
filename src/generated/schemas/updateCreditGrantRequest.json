@@ -1,0 +1,13 @@
+{
+	"type": "object",
+	"properties": {
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" }
+	},
+	"x-readme-ref-name": "UpdateCreditGrantRequest"
+}

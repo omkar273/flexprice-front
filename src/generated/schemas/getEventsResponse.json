@@ -1,0 +1,28 @@
+{
+	"type": "object",
+	"properties": {
+		"events": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"customer_id": { "type": "string" },
+					"environment_id": { "type": "string" },
+					"event_name": { "type": "string" },
+					"external_customer_id": { "type": "string" },
+					"id": { "type": "string" },
+					"properties": { "type": "object", "additionalProperties": true },
+					"source": { "type": "string" },
+					"timestamp": { "type": "string" }
+				},
+				"x-readme-ref-name": "Event"
+			}
+		},
+		"has_more": { "type": "boolean" },
+		"iter_first_key": { "type": "string" },
+		"iter_last_key": { "type": "string" },
+		"offset": { "type": "integer" },
+		"total_count": { "type": "integer" }
+	},
+	"x-readme-ref-name": "GetEventsResponse"
+}

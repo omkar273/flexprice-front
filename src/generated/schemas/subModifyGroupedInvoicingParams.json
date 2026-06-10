@@ -1,0 +1,15 @@
+{
+	"required": ["action"],
+	"type": "object",
+	"properties": {
+		"action": {
+			"type": "string",
+			"enum": ["add", "remove"],
+			"x-enum-varnames": ["GroupedInvoicingActionAdd", "GroupedInvoicingActionRemove"],
+			"x-readme-ref-name": "GroupedInvoicingAction"
+		},
+		"child_subscription_ids": { "type": "array", "items": { "type": "string" } },
+		"parent_subscription_id": { "type": "string", "description": "ParentSubscriptionID is required for action 'add'." }
+	},
+	"x-readme-ref-name": "SubModifyGroupedInvoicingParams"
+}

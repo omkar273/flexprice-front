@@ -1,0 +1,19 @@
+{
+	"required": ["amount", "invoice_line_item_id"],
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string", "description": "amount is the monetary amount to be credited for this line item" },
+		"display_name": { "type": "string", "description": "display_name is an optional human-readable name for this credit note line item" },
+		"invoice_line_item_id": {
+			"type": "string",
+			"description": "invoice_line_item_id is the unique identifier of the invoice line item being credited"
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		}
+	},
+	"x-readme-ref-name": "CreateCreditNoteLineItemRequest"
+}

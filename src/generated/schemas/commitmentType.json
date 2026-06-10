@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["amount", "quantity"],
+	"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+	"x-speakeasy-name-override": "CommitmentType",
+	"x-readme-ref-name": "CommitmentType"
+}

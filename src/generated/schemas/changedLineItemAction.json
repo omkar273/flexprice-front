@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"description": "created | updated | ended",
+	"enum": ["created", "updated", "ended"],
+	"x-enum-varnames": ["ChangedLineItemActionCreated", "ChangedLineItemActionUpdated", "ChangedLineItemActionEnded"],
+	"x-readme-ref-name": "ChangedLineItemAction"
+}

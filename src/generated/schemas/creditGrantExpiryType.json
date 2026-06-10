@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["NEVER", "DURATION", "BILLING_CYCLE"],
+	"x-enum-varnames": ["CreditGrantExpiryTypeNever", "CreditGrantExpiryTypeDuration", "CreditGrantExpiryTypeBillingCycle"],
+	"x-speakeasy-name-override": "CreditGrantExpiryType",
+	"x-readme-ref-name": "CreditGrantExpiryType"
+}

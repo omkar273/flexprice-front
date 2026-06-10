@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["INVOICE"],
+	"x-enum-varnames": ["PaymentDestinationTypeInvoice"],
+	"x-speakeasy-name-override": "PaymentDestinationType",
+	"x-readme-ref-name": "PaymentDestinationType"
+}

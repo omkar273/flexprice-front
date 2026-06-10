@@ -1,0 +1,25 @@
+{
+	"type": "object",
+	"properties": {
+		"bucket": { "type": "string", "description": "S3 bucket name" },
+		"compression": {
+			"type": "string",
+			"enum": ["none", "gzip"],
+			"x-enum-varnames": ["S3CompressionTypeNone", "S3CompressionTypeGzip"],
+			"x-speakeasy-name-override": "S3CompressionType",
+			"x-readme-ref-name": "S3CompressionType"
+		},
+		"encryption": {
+			"type": "string",
+			"enum": ["AES256", "aws:kms", "aws:kms:dsse"],
+			"x-enum-varnames": ["S3EncryptionTypeAES256", "S3EncryptionTypeAwsKms", "S3EncryptionTypeAwsKmsDsse"],
+			"x-speakeasy-name-override": "S3EncryptionType",
+			"x-readme-ref-name": "S3EncryptionType"
+		},
+		"is_flexprice_managed": { "type": "boolean", "description": "If true, use Flexprice-managed S3 credentials instead of user-provided" },
+		"key_prefix": { "type": "string", "description": "Optional prefix for S3 keys (e.g., \"flexprice-exports/\")" },
+		"region": { "type": "string", "description": "AWS region (e.g., \"us-west-2\")" }
+	},
+	"x-speakeasy-name-override": "S3ExportConfig",
+	"x-readme-ref-name": "S3ExportConfig"
+}

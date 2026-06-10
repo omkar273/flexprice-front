@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["generate_invoice", "skip"],
+	"x-enum-varnames": ["CancelImmediatelyInvoicePolicyGenerateInvoice", "CancelImmediatelyInvoicePolicySkip"],
+	"x-speakeasy-name-override": "CancelImmediatelyInvoicePolicy",
+	"x-readme-ref-name": "CancelImmediatelyInvoicePolicy"
+}

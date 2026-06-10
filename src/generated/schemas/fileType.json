@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["CSV", "JSON"],
+	"x-enum-varnames": ["FileTypeCSV", "FileTypeJSON"],
+	"x-speakeasy-name-override": "FileType",
+	"x-readme-ref-name": "FileType"
+}

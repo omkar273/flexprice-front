@@ -1,0 +1,11 @@
+{
+	"type": "string",
+	"enum": ["first_time_recurring_credit_grant", "recurring_credit_grant", "onetime_credit_grant"],
+	"x-enum-varnames": [
+		"ApplicationReasonFirstTimeRecurringCreditGrant",
+		"ApplicationReasonRecurringCreditGrant",
+		"ApplicationReasonOnetimeCreditGrant"
+	],
+	"x-speakeasy-name-override": "CreditGrantApplicationReason",
+	"x-readme-ref-name": "CreditGrantApplicationReason"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["above", "below"],
+	"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+	"x-speakeasy-name-override": "AlertCondition",
+	"x-readme-ref-name": "AlertCondition"
+}

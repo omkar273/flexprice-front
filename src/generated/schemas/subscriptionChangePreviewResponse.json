@@ -1,0 +1,127 @@
+{
+	"type": "object",
+	"properties": {
+		"change_type": {
+			"type": "string",
+			"enum": ["upgrade", "downgrade", "lateral"],
+			"x-enum-varnames": ["SubscriptionChangeTypeUpgrade", "SubscriptionChangeTypeDowngrade", "SubscriptionChangeTypeLateral"],
+			"x-speakeasy-name-override": "SubscriptionChangeType",
+			"x-readme-ref-name": "SubscriptionChangeType"
+		},
+		"current_plan": {
+			"type": "object",
+			"properties": {
+				"description": { "type": "string", "description": "description of the plan" },
+				"id": { "type": "string", "description": "id of the plan" },
+				"lookup_key": { "type": "string", "description": "lookup_key of the plan" },
+				"name": { "type": "string", "description": "name of the plan" }
+			},
+			"x-readme-ref-name": "PlanSummary"
+		},
+		"effective_date": { "type": "string", "description": "effective_date is when the change would take effect", "format": "date-time" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "metadata from the request" },
+		"new_billing_cycle": {
+			"type": "object",
+			"properties": {
+				"billing_anchor": { "type": "string", "description": "billing_anchor is the new billing anchor", "format": "date-time" },
+				"billing_cadence": {
+					"type": "string",
+					"enum": ["RECURRING"],
+					"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+					"x-speakeasy-name-override": "BillingCadence",
+					"x-readme-ref-name": "BillingCadence"
+				},
+				"billing_period": {
+					"type": "string",
+					"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+					"x-enum-varnames": [
+						"BILLING_PERIOD_MONTHLY",
+						"BILLING_PERIOD_ANNUAL",
+						"BILLING_PERIOD_WEEKLY",
+						"BILLING_PERIOD_DAILY",
+						"BILLING_PERIOD_QUARTER",
+						"BILLING_PERIOD_HALF_YEAR",
+						"BILLING_PERIOD_ONETIME"
+					],
+					"x-speakeasy-name-override": "BillingPeriod",
+					"x-readme-ref-name": "BillingPeriod"
+				},
+				"billing_period_count": { "type": "integer", "description": "billing_period_count is the billing period count" },
+				"period_end": { "type": "string", "description": "period_end is the end of the new billing period", "format": "date-time" },
+				"period_start": { "type": "string", "description": "period_start is the start of the new billing period", "format": "date-time" }
+			},
+			"x-readme-ref-name": "BillingCycleInfo"
+		},
+		"next_invoice_preview": {
+			"type": "object",
+			"properties": {
+				"currency": { "type": "string", "description": "currency is the currency for all amounts" },
+				"due_date": { "type": "string", "description": "due_date is when the invoice would be due", "format": "date-time" },
+				"line_items": {
+					"type": "array",
+					"description": "line_items contains preview of line items",
+					"items": {
+						"type": "object",
+						"properties": {
+							"amount": { "type": "string", "description": "amount for this line item" },
+							"description": { "type": "string", "description": "description of the line item" },
+							"is_proration": { "type": "boolean", "description": "is_proration indicates if this line item is a proration" },
+							"period_end": { "type": "string", "description": "period_end for this line item (if applicable)", "format": "date-time" },
+							"period_start": { "type": "string", "description": "period_start for this line item (if applicable)", "format": "date-time" },
+							"quantity": { "type": "string", "description": "quantity for this line item" },
+							"unit_price": { "type": "string", "description": "unit_price for this line item" }
+						},
+						"x-readme-ref-name": "InvoiceLineItemPreview"
+					}
+				},
+				"subtotal": { "type": "string", "description": "subtotal is the subtotal amount before taxes" },
+				"tax_amount": { "type": "string", "description": "tax_amount is the total tax amount" },
+				"total": { "type": "string", "description": "total is the total amount including taxes" }
+			},
+			"x-readme-ref-name": "InvoicePreview"
+		},
+		"proration_details": {
+			"type": "object",
+			"properties": {
+				"charge_amount": { "type": "string", "description": "charge_amount is the charge amount for the new subscription" },
+				"charge_description": { "type": "string", "description": "charge_description describes what the charge is for" },
+				"credit_amount": { "type": "string", "description": "credit_amount is the credit amount from the old subscription" },
+				"credit_description": { "type": "string", "description": "credit_description describes what the credit is for" },
+				"currency": { "type": "string", "description": "currency is the currency for all amounts" },
+				"current_period_end": {
+					"type": "string",
+					"description": "current_period_end is the end of the current billing period",
+					"format": "date-time"
+				},
+				"current_period_start": {
+					"type": "string",
+					"description": "current_period_start is the start of the current billing period",
+					"format": "date-time"
+				},
+				"days_remaining": { "type": "integer", "description": "days_remaining is the number of days remaining in the current period" },
+				"days_used": { "type": "integer", "description": "days_used is the number of days used in the current period" },
+				"net_amount": { "type": "string", "description": "net_amount is the net amount (charge - credit)" },
+				"proration_date": {
+					"type": "string",
+					"description": "proration_date is the date used for proration calculations",
+					"format": "date-time"
+				}
+			},
+			"x-readme-ref-name": "ProrationDetails"
+		},
+		"subscription_id": { "type": "string", "description": "subscription_id is the ID of the subscription being changed" },
+		"target_plan": {
+			"type": "object",
+			"properties": {
+				"description": { "type": "string", "description": "description of the plan" },
+				"id": { "type": "string", "description": "id of the plan" },
+				"lookup_key": { "type": "string", "description": "lookup_key of the plan" },
+				"name": { "type": "string", "description": "name of the plan" }
+			},
+			"x-readme-ref-name": "PlanSummary"
+		},
+		"warnings": { "type": "array", "description": "warnings contains any warnings about the change", "items": { "type": "string" } }
+	},
+	"description": "Response showing the financial impact of a subscription plan change",
+	"x-readme-ref-name": "SubscriptionChangePreviewResponse"
+}

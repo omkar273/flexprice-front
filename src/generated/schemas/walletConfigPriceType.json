@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["ALL", "USAGE", "FIXED"],
+	"x-enum-varnames": ["WalletConfigPriceTypeAll", "WalletConfigPriceTypeUsage", "WalletConfigPriceTypeFixed"],
+	"x-speakeasy-name-override": "WalletConfigPriceType",
+	"x-readme-ref-name": "WalletConfigPriceType"
+}

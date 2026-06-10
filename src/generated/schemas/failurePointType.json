@@ -1,0 +1,12 @@
+{
+	"type": "string",
+	"enum": ["customer_lookup", "meter_lookup", "price_lookup", "subscription_line_item_lookup"],
+	"x-enum-varnames": [
+		"FailurePointTypeCustomerLookup",
+		"FailurePointTypeMeterLookup",
+		"FailurePointTypePriceLookup",
+		"FailurePointTypeSubscriptionLineItemLookup"
+	],
+	"x-speakeasy-name-override": "FailurePointType",
+	"x-readme-ref-name": "FailurePointType"
+}

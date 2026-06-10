@@ -1,0 +1,13 @@
+{
+	"type": "string",
+	"enum": ["standalone", "delegated_invoicing", "parent", "inherited", "grouped_invoicing"],
+	"x-enum-varnames": [
+		"SubscriptionTypeStandalone",
+		"SubscriptionTypeDelegatedInvoicing",
+		"SubscriptionTypeParent",
+		"SubscriptionTypeInherited",
+		"SubscriptionTypeGroupedInvoicing"
+	],
+	"x-speakeasy-name-override": "SubscriptionType",
+	"x-readme-ref-name": "SubscriptionType"
+}

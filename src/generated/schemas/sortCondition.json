@@ -1,0 +1,15 @@
+{
+	"type": "object",
+	"properties": {
+		"direction": {
+			"type": "string",
+			"enum": ["asc", "desc"],
+			"x-enum-varnames": ["SortDirectionAsc", "SortDirectionDesc"],
+			"x-speakeasy-name-override": "SortDirection",
+			"x-readme-ref-name": "SortDirection"
+		},
+		"field": { "type": "string" }
+	},
+	"x-speakeasy-name-override": "SortCondition",
+	"x-readme-ref-name": "SortCondition"
+}

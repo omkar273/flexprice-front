@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "costNanoUsd": { "type": "string" }, "requestId": { "type": "string" } },
+	"x-readme-ref-name": "EventCostInfo"
+}

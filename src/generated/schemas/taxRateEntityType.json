@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["customer", "subscription", "invoice", "tenant"],
+	"x-enum-varnames": ["TaxRateEntityTypeCustomer", "TaxRateEntityTypeSubscription", "TaxRateEntityTypeInvoice", "TaxRateEntityTypeTenant"],
+	"x-speakeasy-name-override": "TaxRateEntityType",
+	"x-readme-ref-name": "TaxRateEntityType"
+}

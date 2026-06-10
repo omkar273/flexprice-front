@@ -1,0 +1,34 @@
+{
+	"required": ["cancellation_type"],
+	"type": "object",
+	"properties": {
+		"cancel_at": { "type": "string", "format": "date-time" },
+		"cancel_immediately_inovice_policy": {
+			"type": "string",
+			"enum": ["generate_invoice", "skip"],
+			"x-enum-varnames": ["CancelImmediatelyInvoicePolicyGenerateInvoice", "CancelImmediatelyInvoicePolicySkip"],
+			"x-speakeasy-name-override": "CancelImmediatelyInvoicePolicy",
+			"x-readme-ref-name": "CancelImmediatelyInvoicePolicy"
+		},
+		"cancellation_type": {
+			"type": "string",
+			"enum": ["immediate", "end_of_period", "scheduled_date"],
+			"x-enum-varnames": ["CancellationTypeImmediate", "CancellationTypeEndOfPeriod", "CancellationTypeScheduledDate"],
+			"x-speakeasy-name-override": "CancellationType",
+			"x-readme-ref-name": "CancellationType"
+		},
+		"proration_behavior": {
+			"type": "string",
+			"enum": ["create_prorations", "none"],
+			"x-enum-comments": {
+				"ProrationBehaviorCreateProrations": "Default: Create credits/charges on invoice",
+				"ProrationBehaviorNone": "Calculate but don't apply (e.g., for previews)"
+			},
+			"x-enum-varnames": ["ProrationBehaviorCreateProrations", "ProrationBehaviorNone"],
+			"x-speakeasy-name-override": "ProrationBehavior",
+			"x-readme-ref-name": "ProrationBehavior"
+		},
+		"reason": { "type": "string", "description": "Reason for cancellation (for audit and business intelligence)" }
+	},
+	"x-readme-ref-name": "CancelSubscriptionRequest"
+}

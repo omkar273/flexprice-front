@@ -1,0 +1,12 @@
+{
+	"type": "string",
+	"enum": ["allow_incomplete", "default_incomplete", "error_if_incomplete", "default_active"],
+	"x-enum-varnames": [
+		"PaymentBehaviorAllowIncomplete",
+		"PaymentBehaviorDefaultIncomplete",
+		"PaymentBehaviorErrorIfIncomplete",
+		"PaymentBehaviorDefaultActive"
+	],
+	"x-speakeasy-name-override": "PaymentBehavior",
+	"x-readme-ref-name": "PaymentBehavior"
+}

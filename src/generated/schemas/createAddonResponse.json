@@ -1,0 +1,26 @@
+{
+	"type": "object",
+	"properties": {
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"description": { "type": "string" },
+		"entitlements": { "type": "array", "items": { "$ref": "#/components/schemas/EntitlementResponse" } },
+		"environment_id": { "type": "string" },
+		"id": { "type": "string" },
+		"lookup_key": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"name": { "type": "string" },
+		"prices": { "type": "array", "description": "Optional expanded fields", "items": { "$ref": "#/components/schemas/PriceResponse" } },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "CreateAddonResponse"
+}

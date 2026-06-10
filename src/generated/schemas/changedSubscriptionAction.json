@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"description": "created | updated",
+	"enum": ["created", "updated"],
+	"x-enum-varnames": ["ChangedSubscriptionActionCreated", "ChangedSubscriptionActionUpdated"],
+	"x-readme-ref-name": "ChangedSubscriptionAction"
+}

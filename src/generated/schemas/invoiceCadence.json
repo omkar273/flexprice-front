@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["ARREAR", "ADVANCE"],
+	"x-enum-varnames": ["InvoiceCadenceArrear", "InvoiceCadenceAdvance"],
+	"x-speakeasy-name-override": "InvoiceCadence",
+	"x-readme-ref-name": "InvoiceCadence"
+}

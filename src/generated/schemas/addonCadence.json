@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["onetime", "recurring"],
+	"x-enum-varnames": ["AddonCadenceOnetime", "AddonCadenceRecurring"],
+	"x-speakeasy-name-override": "AddonCadence",
+	"x-readme-ref-name": "AddonCadence"
+}

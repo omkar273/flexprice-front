@@ -1,0 +1,84 @@
+{
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string", "description": "Amount is the new price amount that overrides the original price" },
+		"billing_model": {
+			"type": "string",
+			"enum": ["FLAT_FEE", "PACKAGE", "TIERED"],
+			"x-enum-varnames": ["BILLING_MODEL_FLAT_FEE", "BILLING_MODEL_PACKAGE", "BILLING_MODEL_TIERED"],
+			"x-speakeasy-name-override": "BillingModel",
+			"x-readme-ref-name": "BillingModel"
+		},
+		"commitment_amount": { "type": "number", "description": "Commitment fields" },
+		"commitment_duration": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		},
+		"commitment_overage_factor": { "type": "number" },
+		"commitment_quantity": { "type": "number" },
+		"commitment_true_up_enabled": { "type": "boolean" },
+		"commitment_type": {
+			"type": "string",
+			"enum": ["amount", "quantity"],
+			"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+			"x-speakeasy-name-override": "CommitmentType",
+			"x-readme-ref-name": "CommitmentType"
+		},
+		"commitment_windowed": { "type": "boolean" },
+		"effective_from": { "type": "string", "description": "EffectiveFrom for the existing line item (if not provided, defaults to now)" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata for the new line item" },
+		"tier_mode": {
+			"type": "string",
+			"enum": ["VOLUME", "SLAB"],
+			"x-enum-varnames": ["BILLING_TIER_VOLUME", "BILLING_TIER_SLAB"],
+			"x-speakeasy-name-override": "BillingTier",
+			"x-readme-ref-name": "BillingTier"
+		},
+		"tiers": {
+			"type": "array",
+			"description": "Tiers determines the pricing tiers for this line item",
+			"items": {
+				"required": ["unit_amount"],
+				"type": "object",
+				"properties": {
+					"flat_amount": {
+						"type": "string",
+						"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+					},
+					"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+					"up_to": {
+						"type": "integer",
+						"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+					}
+				},
+				"x-readme-ref-name": "CreatePriceTier"
+			}
+		},
+		"transform_quantity": {
+			"type": "object",
+			"properties": {
+				"divide_by": { "type": "integer", "description": "Divide quantity by this number" },
+				"round": {
+					"type": "string",
+					"enum": ["up", "down"],
+					"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+					"x-speakeasy-name-override": "RoundType",
+					"x-readme-ref-name": "RoundType"
+				}
+			},
+			"x-readme-ref-name": "price.TransformQuantity"
+		}
+	},
+	"x-readme-ref-name": "UpdateSubscriptionLineItemRequest"
+}

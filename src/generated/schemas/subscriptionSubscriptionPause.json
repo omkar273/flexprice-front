@@ -1,0 +1,66 @@
+{
+	"type": "object",
+	"properties": {
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the pause" },
+		"id": { "type": "string", "description": "ID is the unique identifier for the subscription pause" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"original_period_end": {
+			"type": "string",
+			"description": "OriginalPeriodEnd is the end of the billing period when the pause was created",
+			"format": "date-time"
+		},
+		"original_period_start": {
+			"type": "string",
+			"description": "OriginalPeriodStart is the start of the billing period when the pause was created",
+			"format": "date-time"
+		},
+		"pause_end": { "type": "string", "description": "PauseEnd is when the pause will end (null for indefinite)", "format": "date-time" },
+		"pause_mode": {
+			"type": "string",
+			"enum": ["immediate", "scheduled", "period_end"],
+			"x-enum-varnames": ["PauseModeImmediate", "PauseModeScheduled", "PauseModePeriodEnd"],
+			"x-speakeasy-name-override": "PauseMode",
+			"x-readme-ref-name": "PauseMode"
+		},
+		"pause_start": { "type": "string", "description": "PauseStart is when the pause actually started", "format": "date-time" },
+		"pause_status": {
+			"type": "string",
+			"enum": ["none", "active", "scheduled", "completed", "cancelled"],
+			"x-enum-varnames": ["PauseStatusNone", "PauseStatusActive", "PauseStatusScheduled", "PauseStatusCompleted", "PauseStatusCancelled"],
+			"x-speakeasy-name-override": "PauseStatus",
+			"x-readme-ref-name": "PauseStatus"
+		},
+		"reason": { "type": "string", "description": "Reason is the reason for pausing" },
+		"resume_mode": {
+			"type": "string",
+			"enum": ["immediate", "scheduled", "auto"],
+			"x-enum-varnames": ["ResumeModeImmediate", "ResumeModeScheduled", "ResumeModeAuto"],
+			"x-speakeasy-name-override": "ResumeMode",
+			"x-readme-ref-name": "ResumeMode"
+		},
+		"resumed_at": {
+			"type": "string",
+			"description": "ResumedAt is when the pause was actually ended (if manually resumed)",
+			"format": "date-time"
+		},
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_id": { "type": "string", "description": "SubscriptionID is the identifier for the subscription" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "subscription.SubscriptionPause"
+}

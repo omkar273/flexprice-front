@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["anniversary", "calendar"],
+	"x-enum-varnames": ["BillingCycleAnniversary", "BillingCycleCalendar"],
+	"x-speakeasy-name-override": "BillingCycle",
+	"x-readme-ref-name": "BillingCycle"
+}

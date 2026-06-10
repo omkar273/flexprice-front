@@ -1,0 +1,43 @@
+{
+	"type": "object",
+	"properties": {
+		"addon": { "$ref": "#/components/schemas/AddonResponse" },
+		"addon_id": { "type": "string" },
+		"addon_status": {
+			"type": "string",
+			"enum": ["active", "cancelled", "pending"],
+			"x-enum-varnames": ["AddonStatusActive", "AddonStatusCancelled", "AddonStatusPending"],
+			"x-speakeasy-name-override": "AddonStatus",
+			"x-readme-ref-name": "AddonStatus"
+		},
+		"cancellation_reason": { "type": "string" },
+		"cancelled_at": { "type": "string", "format": "date-time" },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"end_date": { "type": "string", "format": "date-time" },
+		"entity_id": { "type": "string" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["subscription", "plan", "addon"],
+			"x-enum-varnames": ["AddonAssociationEntityTypeSubscription", "AddonAssociationEntityTypePlan", "AddonAssociationEntityTypeAddon"],
+			"x-speakeasy-name-override": "AddonAssociationEntityType",
+			"x-readme-ref-name": "AddonAssociationEntityType"
+		},
+		"environment_id": { "type": "string" },
+		"id": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"start_date": { "type": "string", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription": { "$ref": "#/components/schemas/SubscriptionResponse" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "AddonAssociationResponse"
+}

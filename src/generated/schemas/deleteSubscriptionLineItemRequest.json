@@ -1,0 +1,18 @@
+{
+	"type": "object",
+	"properties": {
+		"effective_from": { "type": "string" },
+		"proration_behavior": {
+			"type": "string",
+			"enum": ["create_prorations", "none"],
+			"x-enum-comments": {
+				"ProrationBehaviorCreateProrations": "Default: Create credits/charges on invoice",
+				"ProrationBehaviorNone": "Calculate but don't apply (e.g., for previews)"
+			},
+			"x-enum-varnames": ["ProrationBehaviorCreateProrations", "ProrationBehaviorNone"],
+			"x-speakeasy-name-override": "ProrationBehavior",
+			"x-readme-ref-name": "ProrationBehavior"
+		}
+	},
+	"x-readme-ref-name": "DeleteSubscriptionLineItemRequest"
+}

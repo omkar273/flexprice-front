@@ -1,0 +1,6 @@
+{
+	"required": ["entity_type", "lookup_key", "name"],
+	"type": "object",
+	"properties": { "entity_type": { "type": "string" }, "lookup_key": { "type": "string" }, "name": { "type": "string" } },
+	"x-readme-ref-name": "CreateGroupRequest"
+}

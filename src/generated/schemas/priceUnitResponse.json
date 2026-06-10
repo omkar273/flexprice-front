@@ -1,0 +1,31 @@
+{
+	"type": "object",
+	"properties": {
+		"base_currency": { "type": "string" },
+		"code": { "type": "string" },
+		"conversion_rate": { "type": "string" },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"environment_id": { "type": "string" },
+		"id": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"symbol": { "type": "string" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "PriceUnitResponse"
+}

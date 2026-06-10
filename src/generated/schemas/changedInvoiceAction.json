@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"description": "created (proration invoice) | wallet_credit (downgrade credit)",
+	"enum": ["created", "wallet_credit"],
+	"x-enum-varnames": ["ChangedInvoiceActionCreated", "ChangedInvoiceActionWalletCredit"],
+	"x-readme-ref-name": "ChangedInvoiceAction"
+}

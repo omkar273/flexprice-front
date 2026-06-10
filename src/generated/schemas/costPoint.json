@@ -1,0 +1,10 @@
+{
+	"type": "object",
+	"properties": {
+		"cost": { "type": "string" },
+		"event_count": { "type": "integer" },
+		"quantity": { "type": "string" },
+		"timestamp": { "type": "string" }
+	},
+	"x-readme-ref-name": "CostPoint"
+}

@@ -1,0 +1,33 @@
+{
+	"type": "string",
+	"enum": [
+		"http_client_error",
+		"system_error",
+		"internal_error",
+		"not_found",
+		"already_exists",
+		"version_conflict",
+		"validation_error",
+		"invalid_operation",
+		"permission_denied",
+		"database_error",
+		"service_unavailable",
+		"too_many_requests"
+	],
+	"x-enum-varnames": [
+		"ErrCodeHTTPClient",
+		"ErrCodeSystemError",
+		"ErrCodeInternalError",
+		"ErrCodeNotFound",
+		"ErrCodeAlreadyExists",
+		"ErrCodeVersionConflict",
+		"ErrCodeValidation",
+		"ErrCodeInvalidOperation",
+		"ErrCodePermissionDenied",
+		"ErrCodeDatabase",
+		"ErrCodeServiceUnavailable",
+		"ErrCodeTooManyRequests"
+	],
+	"x-speakeasy-name-override": "ErrorCode",
+	"x-readme-ref-name": "ErrorCode"
+}

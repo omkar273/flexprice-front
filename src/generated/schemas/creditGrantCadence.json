@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["ONETIME", "RECURRING"],
+	"x-enum-varnames": ["CreditGrantCadenceOneTime", "CreditGrantCadenceRecurring"],
+	"x-speakeasy-name-override": "CreditGrantCadence",
+	"x-readme-ref-name": "CreditGrantCadence"
+}

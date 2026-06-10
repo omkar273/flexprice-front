@@ -1,0 +1,53 @@
+{
+	"type": "object",
+	"properties": {
+		"alert_enabled": { "type": "boolean" },
+		"critical": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"type": "string",
+					"enum": ["above", "below"],
+					"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+					"x-speakeasy-name-override": "AlertCondition",
+					"x-readme-ref-name": "AlertCondition"
+				},
+				"threshold": { "type": "number" }
+			},
+			"x-speakeasy-name-override": "AlertThreshold",
+			"x-readme-ref-name": "AlertThreshold"
+		},
+		"info": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"type": "string",
+					"enum": ["above", "below"],
+					"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+					"x-speakeasy-name-override": "AlertCondition",
+					"x-readme-ref-name": "AlertCondition"
+				},
+				"threshold": { "type": "number" }
+			},
+			"x-speakeasy-name-override": "AlertThreshold",
+			"x-readme-ref-name": "AlertThreshold"
+		},
+		"warning": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"type": "string",
+					"enum": ["above", "below"],
+					"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+					"x-speakeasy-name-override": "AlertCondition",
+					"x-readme-ref-name": "AlertCondition"
+				},
+				"threshold": { "type": "number" }
+			},
+			"x-speakeasy-name-override": "AlertThreshold",
+			"x-readme-ref-name": "AlertThreshold"
+		}
+	},
+	"x-speakeasy-name-override": "AlertSettings",
+	"x-readme-ref-name": "AlertSettings"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["INTERNAL", "EXTERNAL", "ONETIME"],
+	"x-enum-varnames": ["TaxRateScopeInternal", "TaxRateScopeExternal", "TaxRateScopeOneTime"],
+	"x-speakeasy-name-override": "TaxRateScope",
+	"x-readme-ref-name": "TaxRateScope"
+}

@@ -1,0 +1,21 @@
+{
+	"type": "object",
+	"properties": {
+		"alert_enabled": { "type": "boolean" },
+		"expand": { "type": "string" },
+		"limit": { "maximum": 1000, "minimum": 1, "type": "integer" },
+		"offset": { "minimum": 0, "type": "integer" },
+		"order": { "type": "string", "enum": ["asc", "desc"] },
+		"sort": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["active", "frozen", "closed"],
+			"x-enum-varnames": ["WalletStatusActive", "WalletStatusFrozen", "WalletStatusClosed"],
+			"x-speakeasy-name-override": "WalletStatus",
+			"x-readme-ref-name": "WalletStatus"
+		},
+		"wallet_ids": { "type": "array", "items": { "type": "string" } }
+	},
+	"x-speakeasy-name-override": "WalletFilter",
+	"x-readme-ref-name": "WalletFilter"
+}

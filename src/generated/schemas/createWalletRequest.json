@@ -1,0 +1,114 @@
+{
+	"required": ["currency"],
+	"type": "object",
+	"properties": {
+		"alert_settings": {
+			"type": "object",
+			"properties": {
+				"alert_enabled": { "type": "boolean" },
+				"critical": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"info": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"warning": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				}
+			},
+			"x-speakeasy-name-override": "AlertSettings",
+			"x-readme-ref-name": "AlertSettings"
+		},
+		"auto_topup": {
+			"type": "object",
+			"properties": {
+				"amount": { "type": "number" },
+				"enabled": { "type": "boolean" },
+				"invoicing": { "type": "boolean" },
+				"threshold": { "type": "number" }
+			},
+			"x-speakeasy-name-override": "AutoTopup",
+			"x-readme-ref-name": "AutoTopup"
+		},
+		"conversion_rate": {
+			"type": "string",
+			"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits",
+			"default": "1"
+		},
+		"currency": { "type": "string" },
+		"customer_id": { "type": "string" },
+		"description": { "type": "string" },
+		"external_customer_id": { "type": "string", "description": "external_customer_id is the customer id in the external system" },
+		"initial_credits_expiry_date_utc": {
+			"type": "string",
+			"description": "initial_credits_expiry_date_utc is the expiry date in UTC timezone (optional to set nil means no expiry)\nex 2025-01-01 00:00:00 UTC"
+		},
+		"initial_credits_to_load": {
+			"type": "string",
+			"description": "initial_credits_to_load is the number of credits to load to the wallet\nif not provided, the wallet will be created with 0 balance\nNOTE: this is not the amount in the currency, but the number of credits",
+			"default": "0"
+		},
+		"initial_credits_to_load_expiry_date": {
+			"type": "integer",
+			"description": "initial_credits_to_load_expiry_date YYYYMMDD format in UTC timezone (optional to set nil means no expiry)\nfor ex 20250101 means the credits will expire on 2025-01-01 00:00:00 UTC\nhence they will be available for use until 2024-12-31 23:59:59 UTC"
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"price_unit": {
+			"type": "string",
+			"description": "price_unit is the code of the price unit to use for wallet creation\nIf provided, the price unit will be used to set the currency and conversion rate of the wallet:\n- currency: set to price unit's base_currency\n- conversion_rate: set to price unit's conversion_rate"
+		},
+		"topup_conversion_rate": {
+			"type": "string",
+			"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+		},
+		"wallet_type": {
+			"type": "string",
+			"enum": ["PRE_PAID", "POST_PAID"],
+			"x-enum-varnames": ["WalletTypePrePaid", "WalletTypePostPaid"],
+			"x-speakeasy-name-override": "WalletType",
+			"x-readme-ref-name": "WalletType"
+		}
+	},
+	"x-readme-ref-name": "CreateWalletRequest"
+}

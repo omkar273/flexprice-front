@@ -1,0 +1,11 @@
+{
+	"type": "object",
+	"properties": {
+		"amount": { "type": "number" },
+		"enabled": { "type": "boolean" },
+		"invoicing": { "type": "boolean" },
+		"threshold": { "type": "number" }
+	},
+	"x-speakeasy-name-override": "AutoTopup",
+	"x-readme-ref-name": "AutoTopup"
+}

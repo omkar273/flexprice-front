@@ -1,0 +1,33 @@
+{
+	"type": "object",
+	"properties": {
+		"items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"close_time": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"duration_ms": { "type": "integer" },
+					"entity": { "type": "string", "description": "e.g. plan, invoice, subscription" },
+					"entity_id": { "type": "string", "description": "e.g. plan ID, invoice ID" },
+					"run_id": { "type": "string" },
+					"start_time": { "type": "string", "format": "date-time" },
+					"status": { "type": "string" },
+					"task_queue": { "type": "string" },
+					"total_duration": { "type": "string" },
+					"workflow_id": { "type": "string" },
+					"workflow_type": { "type": "string" }
+				},
+				"x-readme-ref-name": "WorkflowExecutionDTO"
+			}
+		},
+		"pagination": {
+			"type": "object",
+			"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+			"x-speakeasy-name-override": "PaginationResponse",
+			"x-readme-ref-name": "PaginationResponse"
+		}
+	},
+	"x-readme-ref-name": "ListWorkflowsResponse"
+}

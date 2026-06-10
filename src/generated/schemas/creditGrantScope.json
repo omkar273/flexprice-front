@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["PLAN", "SUBSCRIPTION"],
+	"x-enum-varnames": ["CreditGrantScopePlan", "CreditGrantScopeSubscription"],
+	"x-speakeasy-name-override": "CreditGrantScope",
+	"x-readme-ref-name": "CreditGrantScope"
+}

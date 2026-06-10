@@ -1,0 +1,51 @@
+{
+	"type": "object",
+	"properties": {
+		"cancellation_type": {
+			"type": "string",
+			"enum": ["immediate", "end_of_period", "scheduled_date"],
+			"x-enum-varnames": ["CancellationTypeImmediate", "CancellationTypeEndOfPeriod", "CancellationTypeScheduledDate"],
+			"x-speakeasy-name-override": "CancellationType",
+			"x-readme-ref-name": "CancellationType"
+		},
+		"effective_date": { "type": "string", "format": "date-time" },
+		"message": { "type": "string", "description": "Response metadata" },
+		"processed_at": { "type": "string", "format": "date-time" },
+		"proration_details": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"charge_amount": { "type": "string" },
+					"credit_amount": { "type": "string" },
+					"description": { "type": "string" },
+					"line_item_id": { "type": "string" },
+					"original_amount": { "type": "string" },
+					"plan_name": { "type": "string" },
+					"price_id": { "type": "string" },
+					"proration_days": { "type": "integer" }
+				},
+				"x-readme-ref-name": "ProrationDetail"
+			}
+		},
+		"proration_invoice": { "$ref": "#/components/schemas/InvoiceResponse" },
+		"reason": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+			"x-enum-varnames": [
+				"SubscriptionStatusActive",
+				"SubscriptionStatusPaused",
+				"SubscriptionStatusCancelled",
+				"SubscriptionStatusIncomplete",
+				"SubscriptionStatusTrialing",
+				"SubscriptionStatusDraft"
+			],
+			"x-speakeasy-name-override": "SubscriptionStatus",
+			"x-readme-ref-name": "SubscriptionStatus"
+		},
+		"subscription_id": { "type": "string", "description": "Basic cancellation info" },
+		"total_credit_amount": { "type": "string" }
+	},
+	"x-readme-ref-name": "CancelSubscriptionResponse"
+}

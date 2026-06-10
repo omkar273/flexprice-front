@@ -1,0 +1,856 @@
+{
+	"type": "object",
+	"properties": {
+		"active_pause_id": {
+			"type": "string",
+			"description": "ActivePauseID references the current active pause configuration\nThis will be null if no pause is active or scheduled"
+		},
+		"auto_invoice_threshold": {
+			"type": "string",
+			"description": "AutoInvoiceThreshold is the usage amount (in subscription currency) that triggers\nan intermediate invoice. Overrides the plan-level threshold when set.\nNil means: inherit from the plan's threshold (which may also be nil = disabled)."
+		},
+		"billing_anchor": {
+			"type": "string",
+			"description": "BillingAnchor is the reference point that aligns future billing cycle dates.\nIt sets the day of week for week intervals, the day of month for month and year intervals,\nand the month of year for year intervals. The timestamp is in UTC format.",
+			"format": "date-time"
+		},
+		"billing_cadence": {
+			"type": "string",
+			"enum": ["RECURRING"],
+			"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+			"x-speakeasy-name-override": "BillingCadence",
+			"x-readme-ref-name": "BillingCadence"
+		},
+		"billing_cycle": {
+			"type": "string",
+			"enum": ["anniversary", "calendar"],
+			"x-enum-varnames": ["BillingCycleAnniversary", "BillingCycleCalendar"],
+			"x-speakeasy-name-override": "BillingCycle",
+			"x-readme-ref-name": "BillingCycle"
+		},
+		"billing_period": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		},
+		"billing_period_count": { "type": "integer", "description": "BillingPeriodCount is the total number units of the billing period." },
+		"cancel_at": { "type": "string", "description": "CancelAt is the date the subscription will be canceled", "format": "date-time" },
+		"cancel_at_period_end": {
+			"type": "boolean",
+			"description": "CancelAtPeriodEnd is whether the subscription was canceled at the end of the current period"
+		},
+		"cancelled_at": { "type": "string", "description": "CanceledAt is the date the subscription was canceled", "format": "date-time" },
+		"collection_method": { "type": "string", "description": "CollectionMethod determines how invoices are collected" },
+		"commitment_amount": {
+			"type": "string",
+			"description": "CommitmentAmount is the minimum amount a customer commits to paying for a billing period"
+		},
+		"commitment_duration": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		},
+		"coupon_associations": {
+			"type": "array",
+			"description": "CouponAssociations are the coupon associations for this subscription",
+			"items": {
+				"type": "object",
+				"properties": {
+					"coupon": {
+						"type": "object",
+						"properties": {
+							"amount_off": { "type": "string" },
+							"cadence": {
+								"type": "string",
+								"enum": ["once", "repeated", "forever"],
+								"x-enum-varnames": ["CouponCadenceOnce", "CouponCadenceRepeated", "CouponCadenceForever"],
+								"x-speakeasy-name-override": "CouponCadence",
+								"x-readme-ref-name": "CouponCadence"
+							},
+							"created_at": { "type": "string", "format": "date-time" },
+							"created_by": { "type": "string" },
+							"currency": { "type": "string" },
+							"duration_in_periods": { "type": "integer" },
+							"environment_id": { "type": "string" },
+							"id": { "type": "string" },
+							"max_redemptions": { "type": "integer" },
+							"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+							"name": { "type": "string" },
+							"percentage_off": { "type": "string" },
+							"redeem_after": { "type": "string" },
+							"redeem_before": { "type": "string" },
+							"rules": { "type": "object", "additionalProperties": true },
+							"status": {
+								"type": "string",
+								"enum": ["published", "deleted", "archived"],
+								"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+								"x-speakeasy-name-override": "Status",
+								"x-readme-ref-name": "Status"
+							},
+							"tenant_id": { "type": "string" },
+							"total_redemptions": { "type": "integer" },
+							"type": {
+								"type": "string",
+								"enum": ["fixed", "percentage"],
+								"x-enum-varnames": ["CouponTypeFixed", "CouponTypePercentage"],
+								"x-speakeasy-name-override": "CouponType",
+								"x-readme-ref-name": "CouponType"
+							},
+							"updated_at": { "type": "string", "format": "date-time" },
+							"updated_by": { "type": "string" }
+						},
+						"x-readme-ref-name": "Coupon"
+					},
+					"coupon_id": { "type": "string" },
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"end_date": { "type": "string", "description": "Optional", "format": "date-time" },
+					"environment_id": { "type": "string" },
+					"id": { "type": "string" },
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"start_date": { "type": "string", "format": "date-time" },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"subscription_id": { "type": "string", "description": "Mandatory" },
+					"subscription_line_item_id": { "type": "string", "description": "Optional" },
+					"subscription_phase_id": { "type": "string", "description": "Optional" },
+					"tenant_id": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "CouponAssociationResponse"
+			}
+		},
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"credit_grants": {
+			"type": "array",
+			"description": "Credit grants are the credit grants for this subscription",
+			"items": {
+				"type": "object",
+				"properties": {
+					"cadence": {
+						"type": "string",
+						"enum": ["ONETIME", "RECURRING"],
+						"x-enum-varnames": ["CreditGrantCadenceOneTime", "CreditGrantCadenceRecurring"],
+						"x-speakeasy-name-override": "CreditGrantCadence",
+						"x-readme-ref-name": "CreditGrantCadence"
+					},
+					"conversion_rate": {
+						"type": "string",
+						"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits"
+					},
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"credit_grant_anchor": { "type": "string", "format": "date-time" },
+					"credits": { "type": "string" },
+					"end_date": { "type": "string", "format": "date-time" },
+					"environment_id": { "type": "string" },
+					"expiration_duration": { "type": "integer" },
+					"expiration_duration_unit": {
+						"type": "string",
+						"enum": ["DAY", "WEEK", "MONTH", "YEAR"],
+						"x-enum-varnames": [
+							"CreditGrantExpiryDurationUnitDays",
+							"CreditGrantExpiryDurationUnitWeeks",
+							"CreditGrantExpiryDurationUnitMonths",
+							"CreditGrantExpiryDurationUnitYears"
+						],
+						"x-speakeasy-name-override": "CreditGrantExpiryDurationUnit",
+						"x-readme-ref-name": "CreditGrantExpiryDurationUnit"
+					},
+					"expiration_type": {
+						"type": "string",
+						"enum": ["NEVER", "DURATION", "BILLING_CYCLE"],
+						"x-enum-varnames": ["CreditGrantExpiryTypeNever", "CreditGrantExpiryTypeDuration", "CreditGrantExpiryTypeBillingCycle"],
+						"x-speakeasy-name-override": "CreditGrantExpiryType",
+						"x-readme-ref-name": "CreditGrantExpiryType"
+					},
+					"id": { "type": "string" },
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"name": { "type": "string" },
+					"period": {
+						"type": "string",
+						"enum": ["DAILY", "WEEKLY", "MONTHLY", "ANNUAL", "QUARTERLY", "HALF_YEARLY"],
+						"x-enum-varnames": [
+							"CREDIT_GRANT_PERIOD_DAILY",
+							"CREDIT_GRANT_PERIOD_WEEKLY",
+							"CREDIT_GRANT_PERIOD_MONTHLY",
+							"CREDIT_GRANT_PERIOD_ANNUAL",
+							"CREDIT_GRANT_PERIOD_QUARTER",
+							"CREDIT_GRANT_PERIOD_HALF_YEARLY"
+						],
+						"x-speakeasy-name-override": "CreditGrantPeriod",
+						"x-readme-ref-name": "CreditGrantPeriod"
+					},
+					"period_count": { "type": "integer" },
+					"plan_id": { "type": "string" },
+					"priority": { "type": "integer" },
+					"scope": {
+						"type": "string",
+						"enum": ["PLAN", "SUBSCRIPTION"],
+						"x-enum-varnames": ["CreditGrantScopePlan", "CreditGrantScopeSubscription"],
+						"x-speakeasy-name-override": "CreditGrantScope",
+						"x-readme-ref-name": "CreditGrantScope"
+					},
+					"start_date": { "type": "string", "format": "date-time" },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"subscription_id": { "type": "string" },
+					"tenant_id": { "type": "string" },
+					"topup_conversion_rate": {
+						"type": "string",
+						"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+					},
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "CreditGrantResponse"
+			}
+		},
+		"currency": { "type": "string", "description": "Currency is the currency of the subscription in lowercase 3 digit ISO codes" },
+		"current_period_end": {
+			"type": "string",
+			"description": "CurrentPeriodEnd is the end of the current period that the subscription has been invoiced for.\nAt the end of this period, a new invoice will be created.",
+			"format": "date-time"
+		},
+		"current_period_start": {
+			"type": "string",
+			"description": "CurrentPeriodStart is the end of the current period that the subscription has been invoiced for.\nAt the end of this period, a new invoice will be created.",
+			"format": "date-time"
+		},
+		"customer": {
+			"type": "object",
+			"properties": {
+				"address_city": { "type": "string", "description": "AddressCity is the city of the customer's address" },
+				"address_country": {
+					"type": "string",
+					"description": "AddressCountry is the country of the customer's address (ISO 3166-1 alpha-2)"
+				},
+				"address_line1": { "type": "string", "description": "AddressLine1 is the first line of the customer's address" },
+				"address_line2": { "type": "string", "description": "AddressLine2 is the second line of the customer's address" },
+				"address_postal_code": { "type": "string", "description": "AddressPostalCode is the postal code of the customer's address" },
+				"address_state": { "type": "string", "description": "AddressState is the state of the customer's address" },
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"email": { "type": "string", "description": "Email is the email of the customer" },
+				"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the customer" },
+				"external_id": { "type": "string", "description": "ExternalID is the external identifier for the customer" },
+				"id": { "type": "string", "description": "ID is the unique identifier for the customer" },
+				"integrations": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"created_at": { "type": "string", "format": "date-time" },
+							"created_by": { "type": "string" },
+							"entity_id": { "type": "string" },
+							"entity_type": {
+								"type": "string",
+								"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+								"x-enum-varnames": [
+									"IntegrationEntityTypeCustomer",
+									"IntegrationEntityTypePlan",
+									"IntegrationEntityTypeInvoice",
+									"IntegrationEntityTypeSubscription",
+									"IntegrationEntityTypePayment",
+									"IntegrationEntityTypeCreditNote",
+									"IntegrationEntityTypeAddon",
+									"IntegrationEntityTypeItem",
+									"IntegrationEntityTypeItemPrice",
+									"IntegrationEntityTypePrice"
+								],
+								"x-speakeasy-name-override": "IntegrationEntityType",
+								"x-readme-ref-name": "IntegrationEntityType"
+							},
+							"environment_id": { "type": "string" },
+							"id": { "type": "string" },
+							"metadata": { "type": "object", "additionalProperties": true },
+							"provider_entity_id": { "type": "string" },
+							"provider_type": { "type": "string" },
+							"status": {
+								"type": "string",
+								"enum": ["published", "deleted", "archived"],
+								"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+								"x-speakeasy-name-override": "Status",
+								"x-readme-ref-name": "Status"
+							},
+							"tenant_id": { "type": "string" },
+							"updated_at": { "type": "string", "format": "date-time" },
+							"updated_by": { "type": "string" }
+						},
+						"x-readme-ref-name": "EntityIntegrationMappingResponse"
+					}
+				},
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata" },
+				"name": { "type": "string", "description": "Name is the name of the customer" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"description": "Customer response object containing all customer information",
+			"x-readme-ref-name": "CustomerResponse"
+		},
+		"customer_id": { "type": "string", "description": "CustomerID is the identifier for the customer in our system" },
+		"customer_timezone": { "type": "string" },
+		"enable_true_up": { "type": "boolean" },
+		"end_date": { "type": "string", "description": "EndDate is the end date of the subscription", "format": "date-time" },
+		"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the subscription" },
+		"gateway_payment_method_id": {
+			"type": "string",
+			"description": "GatewayPaymentMethodID is the gateway payment method ID for this subscription"
+		},
+		"id": { "type": "string", "description": "ID is the unique identifier for the subscription" },
+		"invoicing_customer_id": {
+			"type": "string",
+			"description": "InvoicingCustomerID is the customer ID to use for invoicing\nThis can differ from the subscription customer (e.g., parent company invoicing for child company)"
+		},
+		"latest_invoice": { "$ref": "#/components/schemas/InvoiceResponse" },
+		"line_items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"addon_association_id": { "type": "string" },
+					"billing_period": {
+						"type": "string",
+						"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+						"x-enum-varnames": [
+							"BILLING_PERIOD_MONTHLY",
+							"BILLING_PERIOD_ANNUAL",
+							"BILLING_PERIOD_WEEKLY",
+							"BILLING_PERIOD_DAILY",
+							"BILLING_PERIOD_QUARTER",
+							"BILLING_PERIOD_HALF_YEAR",
+							"BILLING_PERIOD_ONETIME"
+						],
+						"x-speakeasy-name-override": "BillingPeriod",
+						"x-readme-ref-name": "BillingPeriod"
+					},
+					"billing_period_count": { "type": "integer", "description": "from price at create; default 1" },
+					"commitment_amount": { "type": "string", "description": "Commitment fields" },
+					"commitment_duration": {
+						"type": "string",
+						"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+						"x-enum-varnames": [
+							"BILLING_PERIOD_MONTHLY",
+							"BILLING_PERIOD_ANNUAL",
+							"BILLING_PERIOD_WEEKLY",
+							"BILLING_PERIOD_DAILY",
+							"BILLING_PERIOD_QUARTER",
+							"BILLING_PERIOD_HALF_YEAR",
+							"BILLING_PERIOD_ONETIME"
+						],
+						"x-speakeasy-name-override": "BillingPeriod",
+						"x-readme-ref-name": "BillingPeriod"
+					},
+					"commitment_overage_factor": { "type": "string" },
+					"commitment_quantity": { "type": "string" },
+					"commitment_true_up_enabled": { "type": "boolean" },
+					"commitment_type": {
+						"type": "string",
+						"enum": ["amount", "quantity"],
+						"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+						"x-speakeasy-name-override": "CommitmentType",
+						"x-readme-ref-name": "CommitmentType"
+					},
+					"commitment_windowed": { "type": "boolean" },
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"currency": { "type": "string" },
+					"customer_id": { "type": "string" },
+					"display_name": { "type": "string" },
+					"end_date": { "type": "string", "format": "date-time" },
+					"entity_id": { "type": "string" },
+					"entity_type": {
+						"type": "string",
+						"enum": ["plan", "addon", "subscription"],
+						"x-enum-varnames": [
+							"SubscriptionLineItemEntityTypePlan",
+							"SubscriptionLineItemEntityTypeAddon",
+							"SubscriptionLineItemEntityTypeSubscription"
+						],
+						"x-speakeasy-name-override": "SubscriptionLineItemEntityType",
+						"x-readme-ref-name": "SubscriptionLineItemEntityType"
+					},
+					"environment_id": { "type": "string" },
+					"id": { "type": "string" },
+					"invoice_cadence": {
+						"type": "string",
+						"enum": ["ARREAR", "ADVANCE"],
+						"x-enum-varnames": ["InvoiceCadenceArrear", "InvoiceCadenceAdvance"],
+						"x-speakeasy-name-override": "InvoiceCadence",
+						"x-readme-ref-name": "InvoiceCadence"
+					},
+					"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+					"meter_display_name": { "type": "string" },
+					"meter_id": { "type": "string" },
+					"plan_display_name": { "type": "string" },
+					"price": {
+						"type": "object",
+						"properties": {
+							"amount": {
+								"type": "string",
+								"description": "Amount stored in main currency units (e.g., dollars, not cents)\nFor USD: 12.50 means $12.50"
+							},
+							"billing_cadence": {
+								"type": "string",
+								"enum": ["RECURRING"],
+								"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+								"x-speakeasy-name-override": "BillingCadence",
+								"x-readme-ref-name": "BillingCadence"
+							},
+							"billing_model": {
+								"type": "string",
+								"enum": ["FLAT_FEE", "PACKAGE", "TIERED"],
+								"x-enum-varnames": ["BILLING_MODEL_FLAT_FEE", "BILLING_MODEL_PACKAGE", "BILLING_MODEL_TIERED"],
+								"x-speakeasy-name-override": "BillingModel",
+								"x-readme-ref-name": "BillingModel"
+							},
+							"billing_period": {
+								"type": "string",
+								"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+								"x-enum-varnames": [
+									"BILLING_PERIOD_MONTHLY",
+									"BILLING_PERIOD_ANNUAL",
+									"BILLING_PERIOD_WEEKLY",
+									"BILLING_PERIOD_DAILY",
+									"BILLING_PERIOD_QUARTER",
+									"BILLING_PERIOD_HALF_YEAR",
+									"BILLING_PERIOD_ONETIME"
+								],
+								"x-speakeasy-name-override": "BillingPeriod",
+								"x-readme-ref-name": "BillingPeriod"
+							},
+							"billing_period_count": {
+								"type": "integer",
+								"description": "BillingPeriodCount is the count of the billing period ex 1, 3, 6, 12"
+							},
+							"conversion_rate": {
+								"type": "string",
+								"description": "ConversionRate is the conversion rate of the price unit to the fiat currency"
+							},
+							"created_at": { "type": "string", "format": "date-time" },
+							"created_by": { "type": "string" },
+							"currency": { "type": "string", "description": "Currency 3 digit ISO currency code in lowercase ex usd, eur, gbp" },
+							"description": { "type": "string", "description": "Description of the price" },
+							"display_amount": {
+								"type": "string",
+								"description": "DisplayAmount is the formatted amount with currency symbol\nFor USD: $12.50"
+							},
+							"display_name": { "type": "string", "description": "DisplayName is the name of the price" },
+							"display_price_unit_amount": {
+								"type": "string",
+								"description": "DisplayPriceUnitAmount is the formatted amount of the price unit"
+							},
+							"end_date": { "type": "string", "description": "EndDate is the end date of the price", "format": "date-time" },
+							"entity_id": { "type": "string", "description": "EntityID holds the value of the \"entity_id\" field." },
+							"entity_type": {
+								"type": "string",
+								"enum": ["PLAN", "SUBSCRIPTION", "ADDON", "PRICE", "COSTSHEET"],
+								"x-enum-varnames": [
+									"PRICE_ENTITY_TYPE_PLAN",
+									"PRICE_ENTITY_TYPE_SUBSCRIPTION",
+									"PRICE_ENTITY_TYPE_ADDON",
+									"PRICE_ENTITY_TYPE_PRICE",
+									"PRICE_ENTITY_TYPE_COSTSHEET"
+								],
+								"x-speakeasy-name-override": "PriceEntityType",
+								"x-readme-ref-name": "PriceEntityType"
+							},
+							"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the price" },
+							"group_id": { "type": "string", "description": "GroupID references the group this price belongs to" },
+							"id": { "type": "string", "description": "ID uuid identifier for the price" },
+							"invoice_cadence": {
+								"type": "string",
+								"enum": ["ARREAR", "ADVANCE"],
+								"x-enum-varnames": ["InvoiceCadenceArrear", "InvoiceCadenceAdvance"],
+								"x-speakeasy-name-override": "InvoiceCadence",
+								"x-readme-ref-name": "InvoiceCadence"
+							},
+							"lookup_key": { "type": "string", "description": "LookupKey used for looking up the price in the database" },
+							"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "x-readme-ref-name": "price.JSONBMetadata" },
+							"meter_id": { "type": "string", "description": "MeterID is the id of the meter for usage based pricing" },
+							"min_quantity": { "type": "string", "description": "MinQuantity is the minimum quantity of the price", "nullable": true },
+							"parent_price_id": {
+								"type": "string",
+								"description": "ParentPriceID references the root price (always set for price lineage tracking)"
+							},
+							"price_unit": { "type": "string", "description": "PriceUnit is the code of the price unit (e.g., 'btc', 'eth')" },
+							"price_unit_amount": { "type": "string", "description": "PriceUnitAmount is the amount of the price unit" },
+							"price_unit_id": { "type": "string", "description": "PriceUnitID is the id of the price unit (for CUSTOM type)" },
+							"price_unit_tiers": {
+								"type": "array",
+								"description": "PriceUnitTiers are the tiers for the price unit when BillingModel is TIERED",
+								"items": {
+									"type": "object",
+									"properties": {
+										"flat_amount": {
+											"type": "string",
+											"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+										},
+										"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+										"up_to": {
+											"type": "integer",
+											"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+										}
+									},
+									"x-readme-ref-name": "price.PriceTier"
+								}
+							},
+							"price_unit_type": {
+								"type": "string",
+								"enum": ["FIAT", "CUSTOM"],
+								"x-enum-varnames": ["PRICE_UNIT_TYPE_FIAT", "PRICE_UNIT_TYPE_CUSTOM"],
+								"x-speakeasy-name-override": "PriceUnitType",
+								"x-readme-ref-name": "PriceUnitType"
+							},
+							"sequence": {
+								"type": "integer",
+								"description": "Sequence is the monotonic stamp bumped on every state change that\nsubscription line items need to react to. Read by the plan-price sync;\nset by the database (DEFAULT nextval) on create and by the price\nrepository on termination / compatibility-affecting edits."
+							},
+							"start_date": { "type": "string", "description": "StartDate is the start date of the price", "format": "date-time" },
+							"status": {
+								"type": "string",
+								"enum": ["published", "deleted", "archived"],
+								"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+								"x-speakeasy-name-override": "Status",
+								"x-readme-ref-name": "Status"
+							},
+							"tenant_id": { "type": "string" },
+							"tier_mode": {
+								"type": "string",
+								"enum": ["VOLUME", "SLAB"],
+								"x-enum-varnames": ["BILLING_TIER_VOLUME", "BILLING_TIER_SLAB"],
+								"x-speakeasy-name-override": "BillingTier",
+								"x-readme-ref-name": "BillingTier"
+							},
+							"tiers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"flat_amount": {
+											"type": "string",
+											"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+										},
+										"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+										"up_to": {
+											"type": "integer",
+											"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+										}
+									},
+									"x-readme-ref-name": "price.PriceTier"
+								}
+							},
+							"transform_quantity": {
+								"type": "object",
+								"properties": {
+									"divide_by": { "type": "integer", "description": "Divide quantity by this number" },
+									"round": {
+										"type": "string",
+										"enum": ["up", "down"],
+										"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+										"x-speakeasy-name-override": "RoundType",
+										"x-readme-ref-name": "RoundType"
+									}
+								},
+								"x-readme-ref-name": "price.JSONBTransformQuantity"
+							},
+							"trial_period_days": {
+								"type": "integer",
+								"description": "TrialPeriodDays is the number of days for the trial period\nNote: This is only applicable for recurring prices (BILLING_CADENCE_RECURRING)"
+							},
+							"type": {
+								"type": "string",
+								"enum": ["USAGE", "FIXED"],
+								"x-enum-varnames": ["PRICE_TYPE_USAGE", "PRICE_TYPE_FIXED"],
+								"x-speakeasy-name-override": "PriceType",
+								"x-readme-ref-name": "PriceType"
+							},
+							"updated_at": { "type": "string", "format": "date-time" },
+							"updated_by": { "type": "string" }
+						},
+						"x-readme-ref-name": "price.Price"
+					},
+					"price_id": { "type": "string" },
+					"price_type": {
+						"type": "string",
+						"enum": ["USAGE", "FIXED"],
+						"x-enum-varnames": ["PRICE_TYPE_USAGE", "PRICE_TYPE_FIXED"],
+						"x-speakeasy-name-override": "PriceType",
+						"x-readme-ref-name": "PriceType"
+					},
+					"price_unit": { "type": "string" },
+					"price_unit_id": { "type": "string" },
+					"quantity": { "type": "string" },
+					"start_date": { "type": "string", "format": "date-time" },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"subscription_id": { "type": "string" },
+					"subscription_phase_id": { "type": "string" },
+					"tenant_id": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "subscription.SubscriptionLineItem"
+			}
+		},
+		"lookup_key": { "type": "string", "description": "LookupKey is the key used to lookup the subscription in our system" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"overage_factor": { "type": "string", "description": "OverageFactor is a multiplier applied to usage beyond the commitment amount" },
+		"parent_subscription_id": {
+			"type": "string",
+			"description": "ParentSubscriptionID is the parent subscription ID for hierarchy (e.g. child subscription under a parent)"
+		},
+		"pause_status": {
+			"type": "string",
+			"enum": ["none", "active", "scheduled", "completed", "cancelled"],
+			"x-enum-varnames": ["PauseStatusNone", "PauseStatusActive", "PauseStatusScheduled", "PauseStatusCompleted", "PauseStatusCancelled"],
+			"x-speakeasy-name-override": "PauseStatus",
+			"x-readme-ref-name": "PauseStatus"
+		},
+		"pauses": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the pause" },
+					"id": { "type": "string", "description": "ID is the unique identifier for the subscription pause" },
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"original_period_end": {
+						"type": "string",
+						"description": "OriginalPeriodEnd is the end of the billing period when the pause was created",
+						"format": "date-time"
+					},
+					"original_period_start": {
+						"type": "string",
+						"description": "OriginalPeriodStart is the start of the billing period when the pause was created",
+						"format": "date-time"
+					},
+					"pause_end": {
+						"type": "string",
+						"description": "PauseEnd is when the pause will end (null for indefinite)",
+						"format": "date-time"
+					},
+					"pause_mode": {
+						"type": "string",
+						"enum": ["immediate", "scheduled", "period_end"],
+						"x-enum-varnames": ["PauseModeImmediate", "PauseModeScheduled", "PauseModePeriodEnd"],
+						"x-speakeasy-name-override": "PauseMode",
+						"x-readme-ref-name": "PauseMode"
+					},
+					"pause_start": { "type": "string", "description": "PauseStart is when the pause actually started", "format": "date-time" },
+					"pause_status": {
+						"type": "string",
+						"enum": ["none", "active", "scheduled", "completed", "cancelled"],
+						"x-enum-varnames": [
+							"PauseStatusNone",
+							"PauseStatusActive",
+							"PauseStatusScheduled",
+							"PauseStatusCompleted",
+							"PauseStatusCancelled"
+						],
+						"x-speakeasy-name-override": "PauseStatus",
+						"x-readme-ref-name": "PauseStatus"
+					},
+					"reason": { "type": "string", "description": "Reason is the reason for pausing" },
+					"resume_mode": {
+						"type": "string",
+						"enum": ["immediate", "scheduled", "auto"],
+						"x-enum-varnames": ["ResumeModeImmediate", "ResumeModeScheduled", "ResumeModeAuto"],
+						"x-speakeasy-name-override": "ResumeMode",
+						"x-readme-ref-name": "ResumeMode"
+					},
+					"resumed_at": {
+						"type": "string",
+						"description": "ResumedAt is when the pause was actually ended (if manually resumed)",
+						"format": "date-time"
+					},
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"subscription_id": { "type": "string", "description": "SubscriptionID is the identifier for the subscription" },
+					"tenant_id": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "subscription.SubscriptionPause"
+			}
+		},
+		"payment_behavior": { "type": "string", "description": "PaymentBehavior determines how subscription payments are handled" },
+		"payment_terms": {
+			"type": "string",
+			"enum": ["15 NET", "30 NET", "45 NET", "60 NET", "75 NET", "90 NET"],
+			"x-enum-varnames": [
+				"PaymentTerms15Net",
+				"PaymentTerms30Net",
+				"PaymentTerms45Net",
+				"PaymentTerms60Net",
+				"PaymentTerms75Net",
+				"PaymentTerms90Net"
+			],
+			"x-speakeasy-name-override": "PaymentTerms",
+			"x-readme-ref-name": "PaymentTerms"
+		},
+		"phases": {
+			"type": "array",
+			"description": "Phases are the subscription phases for this subscription",
+			"items": {
+				"type": "object",
+				"properties": {
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"end_date": {
+						"type": "string",
+						"description": "EndDate is when the phase ends (nil if phase is still active or indefinite)",
+						"format": "date-time"
+					},
+					"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the phase" },
+					"id": { "type": "string", "description": "ID is the unique identifier for the subscription phase" },
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"start_date": { "type": "string", "description": "StartDate is when the phase starts", "format": "date-time" },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"subscription_id": { "type": "string", "description": "SubscriptionID is the identifier for the subscription" },
+					"tenant_id": { "type": "string" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "SubscriptionPhaseResponse"
+			}
+		},
+		"plan": { "$ref": "#/components/schemas/PlanResponse" },
+		"plan_id": { "type": "string", "description": "PlanID is the identifier for the plan in our system" },
+		"proration_behavior": {
+			"type": "string",
+			"enum": ["create_prorations", "none"],
+			"x-enum-comments": {
+				"ProrationBehaviorCreateProrations": "Default: Create credits/charges on invoice",
+				"ProrationBehaviorNone": "Calculate but don't apply (e.g., for previews)"
+			},
+			"x-enum-varnames": ["ProrationBehaviorCreateProrations", "ProrationBehaviorNone"],
+			"x-speakeasy-name-override": "ProrationBehavior",
+			"x-readme-ref-name": "ProrationBehavior"
+		},
+		"start_date": { "type": "string", "description": "StartDate is the start date of the subscription", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_status": {
+			"type": "string",
+			"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+			"x-enum-varnames": [
+				"SubscriptionStatusActive",
+				"SubscriptionStatusPaused",
+				"SubscriptionStatusCancelled",
+				"SubscriptionStatusIncomplete",
+				"SubscriptionStatusTrialing",
+				"SubscriptionStatusDraft"
+			],
+			"x-speakeasy-name-override": "SubscriptionStatus",
+			"x-readme-ref-name": "SubscriptionStatus"
+		},
+		"subscription_type": {
+			"type": "string",
+			"enum": ["standalone", "delegated_invoicing", "parent", "inherited", "grouped_invoicing"],
+			"x-enum-varnames": [
+				"SubscriptionTypeStandalone",
+				"SubscriptionTypeDelegatedInvoicing",
+				"SubscriptionTypeParent",
+				"SubscriptionTypeInherited",
+				"SubscriptionTypeGroupedInvoicing"
+			],
+			"x-speakeasy-name-override": "SubscriptionType",
+			"x-readme-ref-name": "SubscriptionType"
+		},
+		"synced_price_sequence": {
+			"type": "integer",
+			"description": "SyncedPriceSequence is the plan-price sequence up to which this\nsubscription's line items have been reconciled. Bumped by the\nplan-price sync after a successful pass."
+		},
+		"tenant_id": { "type": "string" },
+		"trial_end": { "type": "string", "description": "TrialEnd is the end date of the trial period", "format": "date-time" },
+		"trial_start": { "type": "string", "description": "TrialStart is the start date of the trial period", "format": "date-time" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" },
+		"version": { "type": "integer", "description": "Version is used for optimistic locking" }
+	},
+	"x-readme-ref-name": "SubscriptionResponse"
+}

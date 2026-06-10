@@ -1,0 +1,21 @@
+{
+	"type": "object",
+	"properties": {
+		"address": {
+			"type": "object",
+			"properties": {
+				"address_city": { "maxLength": 100, "type": "string" },
+				"address_country": { "type": "string" },
+				"address_line1": { "maxLength": 255, "type": "string" },
+				"address_line2": { "maxLength": 255, "type": "string" },
+				"address_postal_code": { "maxLength": 20, "type": "string" },
+				"address_state": { "maxLength": 100, "type": "string" }
+			},
+			"x-readme-ref-name": "Address"
+		},
+		"email": { "type": "string" },
+		"help_email": { "type": "string" },
+		"phone": { "type": "string" }
+	},
+	"x-readme-ref-name": "TenantBillingDetails"
+}

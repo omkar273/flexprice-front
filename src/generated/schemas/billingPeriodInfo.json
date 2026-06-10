@@ -1,0 +1,9 @@
+{
+	"type": "object",
+	"properties": {
+		"end_time": { "type": "string", "format": "date-time" },
+		"period": { "type": "string", "description": "e.g., \"monthly\", \"yearly\"" },
+		"start_time": { "type": "string", "format": "date-time" }
+	},
+	"x-readme-ref-name": "BillingPeriodInfo"
+}

@@ -1,0 +1,13 @@
+{
+	"type": "string",
+	"enum": ["applied", "failed", "pending", "skipped", "cancelled"],
+	"x-enum-varnames": [
+		"ApplicationStatusApplied",
+		"ApplicationStatusFailed",
+		"ApplicationStatusPending",
+		"ApplicationStatusSkipped",
+		"ApplicationStatusCancelled"
+	],
+	"x-speakeasy-name-override": "ApplicationStatus",
+	"x-readme-ref-name": "ApplicationStatus"
+}

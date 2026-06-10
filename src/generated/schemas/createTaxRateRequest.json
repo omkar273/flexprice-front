@@ -1,0 +1,34 @@
+{
+	"required": ["code", "name"],
+	"type": "object",
+	"properties": {
+		"code": { "type": "string", "description": "code is the unique alphanumeric case sensitive identifier for the tax rate (required)" },
+		"description": { "type": "string", "description": "description is an optional text description providing details about the tax rate" },
+		"fixed_value": { "type": "string", "description": "fixed_value is the fixed monetary amount when tax_rate_type is \"fixed\"" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "metadata contains additional key-value pairs for storing extra information"
+		},
+		"name": { "type": "string", "description": "name is the human-readable name for the tax rate (required)" },
+		"percentage_value": {
+			"type": "string",
+			"description": "percentage_value is the percentage value (0-100) when tax_rate_type is \"percentage\""
+		},
+		"scope": {
+			"type": "string",
+			"enum": ["INTERNAL", "EXTERNAL", "ONETIME"],
+			"x-enum-varnames": ["TaxRateScopeInternal", "TaxRateScopeExternal", "TaxRateScopeOneTime"],
+			"x-speakeasy-name-override": "TaxRateScope",
+			"x-readme-ref-name": "TaxRateScope"
+		},
+		"tax_rate_type": {
+			"type": "string",
+			"enum": ["percentage", "fixed"],
+			"x-enum-varnames": ["TaxRateTypePercentage", "TaxRateTypeFixed"],
+			"x-speakeasy-name-override": "TaxRateType",
+			"x-readme-ref-name": "TaxRateType"
+		}
+	},
+	"x-readme-ref-name": "CreateTaxRateRequest"
+}

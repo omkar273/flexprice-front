@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["IMPORT", "EXPORT"],
+	"x-enum-varnames": ["TaskTypeImport", "TaskTypeExport"],
+	"x-speakeasy-name-override": "TaskType",
+	"x-readme-ref-name": "TaskType"
+}

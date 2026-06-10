@@ -1,0 +1,13 @@
+{
+	"type": "string",
+	"enum": ["events", "invoice", "credit_topups", "credit_usage", "usage_analytics"],
+	"x-enum-varnames": [
+		"ScheduledTaskEntityTypeEvents",
+		"ScheduledTaskEntityTypeInvoice",
+		"ScheduledTaskEntityTypeCreditTopups",
+		"ScheduledTaskEntityTypeCreditUsage",
+		"ScheduledTaskEntityTypeUsageAnalytics"
+	],
+	"x-speakeasy-name-override": "ScheduledTaskEntityType",
+	"x-readme-ref-name": "ScheduledTaskEntityType"
+}

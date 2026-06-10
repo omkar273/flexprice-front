@@ -1,0 +1,17 @@
+{
+	"required": ["entity_type", "field_key"],
+	"type": "object",
+	"properties": {
+		"column_name": { "type": "string", "description": "CSV column header to be shown in the exported file" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["customer", "wallet"],
+			"x-enum-varnames": ["ExportMetadataEntityTypeCustomer", "ExportMetadataEntityTypeWallet"],
+			"x-speakeasy-name-override": "ExportMetadataEntityType",
+			"x-readme-ref-name": "ExportMetadataEntityType"
+		},
+		"field_key": { "type": "string", "description": "metadata key to look up" }
+	},
+	"x-speakeasy-name-override": "ExportMetadataField",
+	"x-readme-ref-name": "ExportMetadataField"
+}

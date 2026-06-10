@@ -1,0 +1,15 @@
+{
+	"type": "object",
+	"properties": {
+		"cost": { "type": "string", "description": "cost is the cost attributed to this group for the line item" },
+		"event_count": { "type": "integer", "description": "event_count is the number of events from this group (optional)" },
+		"grouped_by": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "grouped_by contains the grouping field values (e.g., {\"source\": \"api\", \"org_id\": \"org123\"})"
+		},
+		"percentage": { "type": "string", "description": "percentage is the percentage of total line item cost from this group (optional)" },
+		"usage": { "type": "string", "description": "usage is the total usage amount from this group (optional, for additional context)" }
+	},
+	"x-readme-ref-name": "UsageBreakdownItem"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["metered", "boolean", "static"],
+	"x-enum-varnames": ["FeatureTypeMetered", "FeatureTypeBoolean", "FeatureTypeStatic"],
+	"x-speakeasy-name-override": "FeatureType",
+	"x-readme-ref-name": "FeatureType"
+}

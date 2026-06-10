@@ -1,0 +1,1 @@
+{ "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } }, "x-readme-ref-name": "price.JSONBFilters" }

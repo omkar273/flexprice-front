@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["pending", "completed", "failed"],
+	"x-enum-varnames": ["TransactionStatusPending", "TransactionStatusCompleted", "TransactionStatusFailed"],
+	"x-speakeasy-name-override": "TransactionStatus",
+	"x-readme-ref-name": "TransactionStatus"
+}

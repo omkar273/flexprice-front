@@ -1,0 +1,29 @@
+{
+	"type": "object",
+	"properties": {
+		"charge_amount": { "type": "string", "description": "charge_amount is the charge amount for the new subscription" },
+		"charge_description": { "type": "string", "description": "charge_description describes what the charge is for" },
+		"credit_amount": { "type": "string", "description": "credit_amount is the credit amount from the old subscription" },
+		"credit_description": { "type": "string", "description": "credit_description describes what the credit is for" },
+		"currency": { "type": "string", "description": "currency is the currency for all amounts" },
+		"current_period_end": {
+			"type": "string",
+			"description": "current_period_end is the end of the current billing period",
+			"format": "date-time"
+		},
+		"current_period_start": {
+			"type": "string",
+			"description": "current_period_start is the start of the current billing period",
+			"format": "date-time"
+		},
+		"days_remaining": { "type": "integer", "description": "days_remaining is the number of days remaining in the current period" },
+		"days_used": { "type": "integer", "description": "days_used is the number of days used in the current period" },
+		"net_amount": { "type": "string", "description": "net_amount is the net amount (charge - credit)" },
+		"proration_date": {
+			"type": "string",
+			"description": "proration_date is the date used for proration calculations",
+			"format": "date-time"
+		}
+	},
+	"x-readme-ref-name": "ProrationDetails"
+}

@@ -1,0 +1,40 @@
+{
+	"type": "object",
+	"properties": {
+		"applied_at": { "type": "string", "format": "date-time" },
+		"coupon_association_id": { "type": "string" },
+		"coupon_id": { "type": "string" },
+		"coupon_snapshot": { "type": "object", "additionalProperties": true },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"currency": { "type": "string" },
+		"discount_percentage": { "type": "string" },
+		"discount_type": {
+			"type": "string",
+			"enum": ["fixed", "percentage"],
+			"x-enum-varnames": ["CouponTypeFixed", "CouponTypePercentage"],
+			"x-speakeasy-name-override": "CouponType",
+			"x-readme-ref-name": "CouponType"
+		},
+		"discounted_amount": { "type": "string" },
+		"environment_id": { "type": "string" },
+		"final_price": { "type": "string" },
+		"id": { "type": "string" },
+		"invoice_id": { "type": "string" },
+		"invoice_line_item_id": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+		"original_price": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_id": { "type": "string" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "coupon_application.CouponApplication"
+}

@@ -17,7 +17,8 @@
     "test:coverage": "vitest --coverage",
     "test:ui": "vitest --ui",
     "lint": "eslint src vite.config.ts vitest.config.ts .storybook",
-    "generate": "kubb generate"
+    "preprocess-spec": "node scripts/preprocess-openapi.js",
+    "generate": "npm run preprocess-spec && kubb generate"
   },
   "dependencies": {
     "@csvbox/react": "^1.1.11",

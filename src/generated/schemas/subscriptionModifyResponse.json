@@ -1,0 +1,8 @@
+{
+	"type": "object",
+	"properties": {
+		"changed_resources": { "$ref": "#/components/schemas/ChangedResources" },
+		"subscription": { "$ref": "#/components/schemas/SubscriptionResponse" }
+	},
+	"x-readme-ref-name": "SubscriptionModifyResponse"
+}

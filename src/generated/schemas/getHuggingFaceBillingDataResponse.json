@@ -1,0 +1,14 @@
+{
+	"type": "object",
+	"properties": {
+		"requests": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": { "costNanoUsd": { "type": "string" }, "requestId": { "type": "string" } },
+				"x-readme-ref-name": "EventCostInfo"
+			}
+		}
+	},
+	"x-readme-ref-name": "GetHuggingFaceBillingDataResponse"
+}

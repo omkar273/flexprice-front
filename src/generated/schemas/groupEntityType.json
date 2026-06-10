@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["price", "feature"],
+	"x-enum-varnames": ["GroupEntityTypePrice", "GroupEntityTypeFeature"],
+	"x-speakeasy-name-override": "GroupEntityType",
+	"x-readme-ref-name": "GroupEntityType"
+}

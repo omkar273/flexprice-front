@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["AES256", "aws:kms", "aws:kms:dsse"],
+	"x-enum-varnames": ["S3EncryptionTypeAES256", "S3EncryptionTypeAwsKms", "S3EncryptionTypeAwsKmsDsse"],
+	"x-speakeasy-name-override": "S3EncryptionType",
+	"x-readme-ref-name": "S3EncryptionType"
+}

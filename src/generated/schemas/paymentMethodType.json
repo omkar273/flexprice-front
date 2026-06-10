@@ -1,0 +1,13 @@
+{
+	"type": "string",
+	"enum": ["CARD", "ACH", "OFFLINE", "CREDITS", "PAYMENT_LINK"],
+	"x-enum-varnames": [
+		"PaymentMethodTypeCard",
+		"PaymentMethodTypeACH",
+		"PaymentMethodTypeOffline",
+		"PaymentMethodTypeCredits",
+		"PaymentMethodTypePaymentLink"
+	],
+	"x-speakeasy-name-override": "PaymentMethodType",
+	"x-readme-ref-name": "PaymentMethodType"
+}

@@ -1,0 +1,18 @@
+{
+	"type": "object",
+	"properties": {
+		"allowed_price_types": {
+			"type": "array",
+			"description": "AllowedPriceTypes is a list of price types that are allowed for the wallet\nnil means all price types are allowed",
+			"items": {
+				"type": "string",
+				"enum": ["ALL", "USAGE", "FIXED"],
+				"x-enum-varnames": ["WalletConfigPriceTypeAll", "WalletConfigPriceTypeUsage", "WalletConfigPriceTypeFixed"],
+				"x-speakeasy-name-override": "WalletConfigPriceType",
+				"x-readme-ref-name": "WalletConfigPriceType"
+			}
+		}
+	},
+	"x-speakeasy-name-override": "WalletConfig",
+	"x-readme-ref-name": "WalletConfig"
+}

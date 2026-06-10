@@ -1,0 +1,101 @@
+{
+	"type": "object",
+	"properties": {
+		"alert_settings": {
+			"type": "object",
+			"properties": {
+				"alert_enabled": { "type": "boolean" },
+				"critical": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"info": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"warning": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				}
+			},
+			"x-speakeasy-name-override": "AlertSettings",
+			"x-readme-ref-name": "AlertSettings"
+		},
+		"description": { "type": "string" },
+		"filters": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"key": {
+						"type": "string",
+						"description": "Key is the key for the filter from $event.properties\nCurrently we support only first level keys in the properties and not nested keys"
+					},
+					"values": {
+						"type": "array",
+						"description": "Values are the possible values for the filter to be considered for the meter\nFor ex \"model_name\" could have values \"o1-mini\", \"gpt-4o\" etc",
+						"items": { "type": "string" }
+					}
+				},
+				"x-readme-ref-name": "meter.Filter"
+			}
+		},
+		"group_id": { "type": "string", "description": "GroupID is the id of the group to assign the feature to. Pass empty string to clear." },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" },
+		"reporting_unit": {
+			"type": "object",
+			"properties": {
+				"conversion_rate": {
+					"type": "number",
+					"description": "Multiplier: reporting_unit_value = unit_value * conversion_rate; must be > 0"
+				},
+				"unit_plural": { "type": "string", "description": "Display unit label, plural (e.g. \"seconds\")" },
+				"unit_singular": { "type": "string", "description": "Display unit label, singular (e.g. \"second\")" }
+			},
+			"x-speakeasy-name-override": "ReportingUnit",
+			"x-readme-ref-name": "ReportingUnit"
+		},
+		"unit_plural": { "type": "string" },
+		"unit_singular": { "type": "string" }
+	},
+	"x-readme-ref-name": "UpdateFeatureRequest"
+}

@@ -1,0 +1,33 @@
+{
+	"type": "object",
+	"properties": {
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"end_date": {
+			"type": "string",
+			"description": "EndDate is when the phase ends (nil if phase is still active or indefinite)",
+			"format": "date-time"
+		},
+		"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the phase" },
+		"id": { "type": "string", "description": "ID is the unique identifier for the subscription phase" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"start_date": { "type": "string", "description": "StartDate is when the phase starts", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_id": { "type": "string", "description": "SubscriptionID is the identifier for the subscription" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "subscription.SubscriptionPhase"
+}

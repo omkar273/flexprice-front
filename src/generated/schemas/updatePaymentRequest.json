@@ -1,0 +1,19 @@
+{
+	"type": "object",
+	"properties": {
+		"error_message": { "type": "string" },
+		"failed_at": { "type": "string", "format": "date-time" },
+		"gateway_payment_id": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"payment_gateway": { "type": "string" },
+		"payment_method_id": { "type": "string" },
+		"payment_status": { "type": "string" },
+		"succeeded_at": { "type": "string", "format": "date-time" }
+	},
+	"x-readme-ref-name": "UpdatePaymentRequest"
+}

@@ -1,0 +1,12 @@
+{
+	"type": "string",
+	"enum": ["DAY", "WEEK", "MONTH", "YEAR"],
+	"x-enum-varnames": [
+		"CreditGrantExpiryDurationUnitDays",
+		"CreditGrantExpiryDurationUnitWeeks",
+		"CreditGrantExpiryDurationUnitMonths",
+		"CreditGrantExpiryDurationUnitYears"
+	],
+	"x-speakeasy-name-override": "CreditGrantExpiryDurationUnit",
+	"x-readme-ref-name": "CreditGrantExpiryDurationUnit"
+}

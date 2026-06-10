@@ -1,0 +1,18 @@
+{
+	"type": "object",
+	"properties": {
+		"name": { "type": "string", "description": "Name of the new environment (required when target_environment_id is not provided)" },
+		"target_environment_id": {
+			"type": "string",
+			"description": "TargetEnvironmentID is the ID of an existing environment to clone into (optional).\nWhen provided, Name and Type are ignored. When omitted, Name and Type are required."
+		},
+		"type": {
+			"type": "string",
+			"enum": ["development", "production"],
+			"x-enum-varnames": ["EnvironmentDevelopment", "EnvironmentProduction"],
+			"x-speakeasy-name-override": "EnvironmentType",
+			"x-readme-ref-name": "EnvironmentType"
+		}
+	},
+	"x-readme-ref-name": "CloneEnvironmentRequest"
+}

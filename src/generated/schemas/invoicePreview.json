@@ -1,0 +1,28 @@
+{
+	"type": "object",
+	"properties": {
+		"currency": { "type": "string", "description": "currency is the currency for all amounts" },
+		"due_date": { "type": "string", "description": "due_date is when the invoice would be due", "format": "date-time" },
+		"line_items": {
+			"type": "array",
+			"description": "line_items contains preview of line items",
+			"items": {
+				"type": "object",
+				"properties": {
+					"amount": { "type": "string", "description": "amount for this line item" },
+					"description": { "type": "string", "description": "description of the line item" },
+					"is_proration": { "type": "boolean", "description": "is_proration indicates if this line item is a proration" },
+					"period_end": { "type": "string", "description": "period_end for this line item (if applicable)", "format": "date-time" },
+					"period_start": { "type": "string", "description": "period_start for this line item (if applicable)", "format": "date-time" },
+					"quantity": { "type": "string", "description": "quantity for this line item" },
+					"unit_price": { "type": "string", "description": "unit_price for this line item" }
+				},
+				"x-readme-ref-name": "InvoiceLineItemPreview"
+			}
+		},
+		"subtotal": { "type": "string", "description": "subtotal is the subtotal amount before taxes" },
+		"tax_amount": { "type": "string", "description": "tax_amount is the total tax amount" },
+		"total": { "type": "string", "description": "total is the total amount including taxes" }
+	},
+	"x-readme-ref-name": "InvoicePreview"
+}

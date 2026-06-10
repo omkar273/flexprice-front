@@ -1,0 +1,17 @@
+{
+	"type": "string",
+	"enum": ["COUNT", "SUM", "AVG", "COUNT_UNIQUE", "LATEST", "SUM_WITH_MULTIPLIER", "MAX", "WEIGHTED_SUM"],
+	"x-enum-comments": { "AggregationSumWithMultiplier": "Sum with a multiplier - [sum(value) * multiplier]" },
+	"x-enum-varnames": [
+		"AggregationCount",
+		"AggregationSum",
+		"AggregationAvg",
+		"AggregationCountUnique",
+		"AggregationLatest",
+		"AggregationSumWithMultiplier",
+		"AggregationMax",
+		"AggregationWeightedSum"
+	],
+	"x-speakeasy-name-override": "AggregationType",
+	"x-readme-ref-name": "AggregationType"
+}

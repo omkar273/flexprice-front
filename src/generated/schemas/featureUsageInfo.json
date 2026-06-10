@@ -1,0 +1,14 @@
+{
+	"type": "object",
+	"properties": {
+		"customer_id": { "type": "string" },
+		"feature_id": { "type": "string" },
+		"meter_id": { "type": "string" },
+		"price_id": { "type": "string" },
+		"processed_at": { "type": "string", "format": "date-time" },
+		"qty_total": { "type": "string" },
+		"sub_line_item_id": { "type": "string" },
+		"subscription_id": { "type": "string" }
+	},
+	"x-readme-ref-name": "FeatureUsageInfo"
+}

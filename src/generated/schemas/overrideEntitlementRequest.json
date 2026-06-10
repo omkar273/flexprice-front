@@ -1,0 +1,14 @@
+{
+	"required": ["entitlement_id"],
+	"type": "object",
+	"properties": {
+		"entitlement_id": { "type": "string", "description": "EntitlementID references the plan/addon entitlement to override" },
+		"is_enabled": { "type": "boolean", "description": "IsEnabled determines if the entitlement is enabled or disabled" },
+		"static_value": { "type": "string", "description": "StaticValue is the static value for static features" },
+		"usage_limit": {
+			"type": "integer",
+			"description": "UsageLimit is the new usage limit (only these 3 fields can be overridden)\nFor metered features, nil means unlimited usage"
+		}
+	},
+	"x-readme-ref-name": "OverrideEntitlementRequest"
+}

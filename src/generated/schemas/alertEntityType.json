@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["wallet", "feature"],
+	"x-enum-varnames": ["AlertEntityTypeWallet", "AlertEntityTypeFeature"],
+	"x-speakeasy-name-override": "AlertEntityType",
+	"x-readme-ref-name": "AlertEntityType"
+}

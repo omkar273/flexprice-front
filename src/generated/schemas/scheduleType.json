@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["immediate", "end_of_period"],
+	"x-enum-varnames": ["ScheduleTypeImmediate", "ScheduleTypePeriodEnd"],
+	"x-speakeasy-name-override": "ScheduleType",
+	"x-readme-ref-name": "ScheduleType"
+}

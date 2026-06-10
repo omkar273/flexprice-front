@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["immediate", "scheduled", "auto"],
+	"x-enum-varnames": ["ResumeModeImmediate", "ResumeModeScheduled", "ResumeModeAuto"],
+	"x-speakeasy-name-override": "ResumeMode",
+	"x-readme-ref-name": "ResumeMode"
+}

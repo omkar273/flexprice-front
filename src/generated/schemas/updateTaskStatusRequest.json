@@ -1,0 +1,14 @@
+{
+	"required": ["task_status"],
+	"type": "object",
+	"properties": {
+		"task_status": {
+			"type": "string",
+			"enum": ["PENDING", "PROCESSING", "COMPLETED", "FAILED"],
+			"x-enum-varnames": ["TaskStatusPending", "TaskStatusProcessing", "TaskStatusCompleted", "TaskStatusFailed"],
+			"x-speakeasy-name-override": "TaskStatus",
+			"x-readme-ref-name": "TaskStatus"
+		}
+	},
+	"x-readme-ref-name": "UpdateTaskStatusRequest"
+}

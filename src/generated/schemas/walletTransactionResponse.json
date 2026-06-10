@@ -1,0 +1,384 @@
+{
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string" },
+		"conversion_rate": { "type": "string", "description": "conversion_rate is the conversion rate for the transaction to the currency" },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"created_by_user": {
+			"type": "object",
+			"properties": {
+				"email": { "type": "string", "description": "Empty for service accounts" },
+				"id": { "type": "string" },
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+				"roles": { "type": "array", "items": { "type": "string" } },
+				"tenant": {
+					"type": "object",
+					"properties": {
+						"billing_details": {
+							"type": "object",
+							"properties": {
+								"address": {
+									"type": "object",
+									"properties": {
+										"address_city": { "maxLength": 100, "type": "string" },
+										"address_country": { "type": "string" },
+										"address_line1": { "maxLength": 255, "type": "string" },
+										"address_line2": { "maxLength": 255, "type": "string" },
+										"address_postal_code": { "maxLength": 20, "type": "string" },
+										"address_state": { "maxLength": 100, "type": "string" }
+									},
+									"x-readme-ref-name": "Address"
+								},
+								"email": { "type": "string" },
+								"help_email": { "type": "string" },
+								"phone": { "type": "string" }
+							},
+							"x-readme-ref-name": "TenantBillingDetails"
+						},
+						"created_at": { "type": "string", "format": "date-time" },
+						"id": { "type": "string" },
+						"metadata": {
+							"type": "object",
+							"additionalProperties": { "type": "string" },
+							"x-speakeasy-name-override": "Metadata",
+							"x-readme-ref-name": "Metadata"
+						},
+						"name": { "type": "string" },
+						"status": { "type": "string" },
+						"updated_at": { "type": "string", "format": "date-time" }
+					},
+					"x-readme-ref-name": "TenantResponse"
+				},
+				"type": {
+					"type": "string",
+					"enum": ["user", "service_account"],
+					"x-enum-varnames": ["UserTypeUser", "UserTypeServiceAccount"],
+					"x-speakeasy-name-override": "UserType",
+					"x-readme-ref-name": "UserType"
+				}
+			},
+			"x-readme-ref-name": "UserResponse"
+		},
+		"credit_amount": { "type": "string" },
+		"credit_balance_after": { "type": "string" },
+		"credit_balance_before": { "type": "string" },
+		"credits_available": { "type": "string" },
+		"currency": { "type": "string" },
+		"customer": {
+			"type": "object",
+			"properties": {
+				"address_city": { "type": "string", "description": "AddressCity is the city of the customer's address" },
+				"address_country": {
+					"type": "string",
+					"description": "AddressCountry is the country of the customer's address (ISO 3166-1 alpha-2)"
+				},
+				"address_line1": { "type": "string", "description": "AddressLine1 is the first line of the customer's address" },
+				"address_line2": { "type": "string", "description": "AddressLine2 is the second line of the customer's address" },
+				"address_postal_code": { "type": "string", "description": "AddressPostalCode is the postal code of the customer's address" },
+				"address_state": { "type": "string", "description": "AddressState is the state of the customer's address" },
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"email": { "type": "string", "description": "Email is the email of the customer" },
+				"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the customer" },
+				"external_id": { "type": "string", "description": "ExternalID is the external identifier for the customer" },
+				"id": { "type": "string", "description": "ID is the unique identifier for the customer" },
+				"integrations": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"created_at": { "type": "string", "format": "date-time" },
+							"created_by": { "type": "string" },
+							"entity_id": { "type": "string" },
+							"entity_type": {
+								"type": "string",
+								"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+								"x-enum-varnames": [
+									"IntegrationEntityTypeCustomer",
+									"IntegrationEntityTypePlan",
+									"IntegrationEntityTypeInvoice",
+									"IntegrationEntityTypeSubscription",
+									"IntegrationEntityTypePayment",
+									"IntegrationEntityTypeCreditNote",
+									"IntegrationEntityTypeAddon",
+									"IntegrationEntityTypeItem",
+									"IntegrationEntityTypeItemPrice",
+									"IntegrationEntityTypePrice"
+								],
+								"x-speakeasy-name-override": "IntegrationEntityType",
+								"x-readme-ref-name": "IntegrationEntityType"
+							},
+							"environment_id": { "type": "string" },
+							"id": { "type": "string" },
+							"metadata": { "type": "object", "additionalProperties": true },
+							"provider_entity_id": { "type": "string" },
+							"provider_type": { "type": "string" },
+							"status": {
+								"type": "string",
+								"enum": ["published", "deleted", "archived"],
+								"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+								"x-speakeasy-name-override": "Status",
+								"x-readme-ref-name": "Status"
+							},
+							"tenant_id": { "type": "string" },
+							"updated_at": { "type": "string", "format": "date-time" },
+							"updated_by": { "type": "string" }
+						},
+						"x-readme-ref-name": "EntityIntegrationMappingResponse"
+					}
+				},
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata" },
+				"name": { "type": "string", "description": "Name is the name of the customer" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"description": "Customer response object containing all customer information",
+			"x-readme-ref-name": "CustomerResponse"
+		},
+		"customer_id": { "type": "string" },
+		"description": { "type": "string" },
+		"environment_id": { "type": "string" },
+		"expiry_date": { "type": "string", "format": "date-time" },
+		"id": { "type": "string" },
+		"idempotency_key": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"priority": { "type": "integer" },
+		"reference_id": { "type": "string" },
+		"reference_type": {
+			"type": "string",
+			"enum": ["PAYMENT", "EXTERNAL", "REQUEST", "INVOICE"],
+			"x-enum-varnames": [
+				"WalletTxReferenceTypePayment",
+				"WalletTxReferenceTypeExternal",
+				"WalletTxReferenceTypeRequest",
+				"WalletTxReferenceTypeInvoice"
+			],
+			"x-speakeasy-name-override": "WalletTxReferenceType",
+			"x-readme-ref-name": "WalletTxReferenceType"
+		},
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"tenant_id": { "type": "string" },
+		"topup_conversion_rate": {
+			"type": "string",
+			"description": "topup_conversion_rate is the conversion rate for the topup to the currency"
+		},
+		"transaction_reason": {
+			"type": "string",
+			"enum": [
+				"INVOICE_PAYMENT",
+				"FREE_CREDIT_GRANT",
+				"SUBSCRIPTION_CREDIT_GRANT",
+				"PURCHASED_CREDIT_INVOICED",
+				"PURCHASED_CREDIT_DIRECT",
+				"CREDIT_NOTE",
+				"CREDIT_EXPIRED",
+				"WALLET_TERMINATION",
+				"MANUAL_BALANCE_DEBIT",
+				"CREDIT_ADJUSTMENT",
+				"INVOICE_VOID_REFUND"
+			],
+			"x-enum-varnames": [
+				"TransactionReasonInvoicePayment",
+				"TransactionReasonFreeCredit",
+				"TransactionReasonSubscriptionCredit",
+				"TransactionReasonPurchasedCreditInvoiced",
+				"TransactionReasonPurchasedCreditDirect",
+				"TransactionReasonCreditNote",
+				"TransactionReasonCreditExpired",
+				"TransactionReasonWalletTermination",
+				"TransactionReasonManualBalanceDebit",
+				"TransactionReasonCreditAdjustment",
+				"TransactionReasonInvoiceVoidRefund"
+			],
+			"x-speakeasy-name-override": "TransactionReason",
+			"x-readme-ref-name": "TransactionReason"
+		},
+		"transaction_status": {
+			"type": "string",
+			"enum": ["pending", "completed", "failed"],
+			"x-enum-varnames": ["TransactionStatusPending", "TransactionStatusCompleted", "TransactionStatusFailed"],
+			"x-speakeasy-name-override": "TransactionStatus",
+			"x-readme-ref-name": "TransactionStatus"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["credit", "debit"],
+			"x-enum-varnames": ["TransactionTypeCredit", "TransactionTypeDebit"],
+			"x-speakeasy-name-override": "TransactionType",
+			"x-readme-ref-name": "TransactionType"
+		},
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" },
+		"wallet": {
+			"type": "object",
+			"properties": {
+				"alert_settings": {
+					"type": "object",
+					"properties": {
+						"alert_enabled": { "type": "boolean" },
+						"critical": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						},
+						"warning": {
+							"type": "object",
+							"properties": {
+								"condition": {
+									"type": "string",
+									"enum": ["above", "below"],
+									"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+									"x-speakeasy-name-override": "AlertCondition",
+									"x-readme-ref-name": "AlertCondition"
+								},
+								"threshold": { "type": "number" }
+							},
+							"x-speakeasy-name-override": "AlertThreshold",
+							"x-readme-ref-name": "AlertThreshold"
+						}
+					},
+					"x-speakeasy-name-override": "AlertSettings",
+					"x-readme-ref-name": "AlertSettings"
+				},
+				"alert_state": {
+					"type": "string",
+					"enum": ["ok", "info", "warning", "in_alarm"],
+					"x-enum-varnames": ["AlertStateOk", "AlertStateInfo", "AlertStateWarning", "AlertStateInAlarm"],
+					"x-speakeasy-name-override": "AlertState",
+					"x-readme-ref-name": "AlertState"
+				},
+				"auto_topup": {
+					"type": "object",
+					"properties": {
+						"amount": { "type": "number" },
+						"enabled": { "type": "boolean" },
+						"invoicing": { "type": "boolean" },
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AutoTopup",
+					"x-readme-ref-name": "AutoTopup"
+				},
+				"balance": { "type": "string" },
+				"config": {
+					"type": "object",
+					"properties": {
+						"allowed_price_types": {
+							"type": "array",
+							"description": "AllowedPriceTypes is a list of price types that are allowed for the wallet\nnil means all price types are allowed",
+							"items": {
+								"type": "string",
+								"enum": ["ALL", "USAGE", "FIXED"],
+								"x-enum-varnames": ["WalletConfigPriceTypeAll", "WalletConfigPriceTypeUsage", "WalletConfigPriceTypeFixed"],
+								"x-speakeasy-name-override": "WalletConfigPriceType",
+								"x-readme-ref-name": "WalletConfigPriceType"
+							}
+						}
+					},
+					"x-speakeasy-name-override": "WalletConfig",
+					"x-readme-ref-name": "WalletConfig"
+				},
+				"conversion_rate": {
+					"type": "string",
+					"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits"
+				},
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"credit_balance": { "type": "string" },
+				"credits_available_breakdown": {
+					"type": "object",
+					"properties": { "free": { "type": "string" }, "purchased": { "type": "string" } },
+					"x-speakeasy-name-override": "CreditBreakdown",
+					"x-readme-ref-name": "CreditBreakdown"
+				},
+				"currency": { "type": "string" },
+				"customer_id": { "type": "string" },
+				"description": { "type": "string" },
+				"environment_id": { "type": "string" },
+				"id": { "type": "string" },
+				"metadata": {
+					"type": "object",
+					"additionalProperties": { "type": "string" },
+					"x-speakeasy-name-override": "Metadata",
+					"x-readme-ref-name": "Metadata"
+				},
+				"name": { "type": "string" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"topup_conversion_rate": {
+					"type": "string",
+					"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+				},
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" },
+				"wallet_status": {
+					"type": "string",
+					"enum": ["active", "frozen", "closed"],
+					"x-enum-varnames": ["WalletStatusActive", "WalletStatusFrozen", "WalletStatusClosed"],
+					"x-speakeasy-name-override": "WalletStatus",
+					"x-readme-ref-name": "WalletStatus"
+				},
+				"wallet_type": {
+					"type": "string",
+					"enum": ["PRE_PAID", "POST_PAID"],
+					"x-enum-varnames": ["WalletTypePrePaid", "WalletTypePostPaid"],
+					"x-speakeasy-name-override": "WalletType",
+					"x-readme-ref-name": "WalletType"
+				}
+			},
+			"x-readme-ref-name": "WalletResponse"
+		},
+		"wallet_id": { "type": "string" }
+	},
+	"x-readme-ref-name": "WalletTransactionResponse"
+}

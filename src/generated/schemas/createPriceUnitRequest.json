@@ -1,0 +1,21 @@
+{
+	"required": ["base_currency", "code", "conversion_rate", "name", "symbol"],
+	"type": "object",
+	"properties": {
+		"base_currency": { "type": "string", "description": "base_currency  is the currency that the price unit is based on" },
+		"code": { "type": "string" },
+		"conversion_rate": {
+			"type": "string",
+			"description": "ConversionRate defines the exchange rate from this price unit to the base currency.\nThis rate is used to convert amounts in the custom price unit to the base currency for storage and billing.\n\nConversion formula:\n  price_unit_amount * conversion_rate = base_currency_amount\n\nExample:\n  If conversion_rate = \"0.01\" and base_currency = \"usd\":\n  100 price_unit tokens * 0.01 = 1.00 USD\n\nNote: Rounding precision is determined by the base currency (e.g., USD uses 2 decimal places, JPY uses 0)."
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" },
+		"symbol": { "type": "string" }
+	},
+	"x-readme-ref-name": "CreatePriceUnitRequest"
+}

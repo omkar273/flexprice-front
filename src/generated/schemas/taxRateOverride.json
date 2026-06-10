@@ -1,0 +1,12 @@
+{
+	"required": ["currency", "tax_rate_code"],
+	"type": "object",
+	"properties": {
+		"auto_apply": { "type": "boolean", "default": true },
+		"currency": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+		"priority": { "type": "integer" },
+		"tax_rate_code": { "type": "string" }
+	},
+	"x-readme-ref-name": "TaxRateOverride"
+}

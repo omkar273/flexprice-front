@@ -1,0 +1,11 @@
+{
+	"type": "object",
+	"properties": {
+		"effective_date": {
+			"type": "string",
+			"description": "EffectiveDate is optional; when set (subscription scope) the grant end date is set to this time.",
+			"format": "date-time"
+		}
+	},
+	"x-readme-ref-name": "DeleteCreditGrantRequest"
+}

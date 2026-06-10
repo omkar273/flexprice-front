@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["VOLUME", "SLAB"],
+	"x-enum-varnames": ["BILLING_TIER_VOLUME", "BILLING_TIER_SLAB"],
+	"x-speakeasy-name-override": "BillingTier",
+	"x-readme-ref-name": "BillingTier"
+}

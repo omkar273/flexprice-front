@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["DRAFT", "FINALIZED", "VOIDED", "SKIPPED"],
+	"x-enum-varnames": ["InvoiceStatusDraft", "InvoiceStatusFinalized", "InvoiceStatusVoided", "InvoiceStatusSkipped"],
+	"x-speakeasy-name-override": "InvoiceStatus",
+	"x-readme-ref-name": "InvoiceStatus"
+}

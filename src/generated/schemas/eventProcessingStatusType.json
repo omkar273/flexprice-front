@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["processed", "processing", "failed"],
+	"x-enum-varnames": ["EventProcessingStatusTypeProcessed", "EventProcessingStatusTypeProcessing", "EventProcessingStatusTypeFailed"],
+	"x-speakeasy-name-override": "EventProcessingStatusType",
+	"x-readme-ref-name": "EventProcessingStatusType"
+}

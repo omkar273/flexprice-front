@@ -1,0 +1,148 @@
+{
+	"type": "object",
+	"properties": {
+		"adjusted_entitlement_quantity": {
+			"type": "string",
+			"description": "adjusted_entitlement_quantity is the entitlement-covered portion deducted from raw usage.\nNil when no entitlement was applied. Raw usage = Quantity + AdjustedEntitlementQuantity."
+		},
+		"amount": { "type": "string" },
+		"commitment_info": {
+			"type": "object",
+			"properties": {
+				"amount": { "type": "string" },
+				"computed_commitment_utilized_amount": { "type": "string" },
+				"computed_overage_amount": { "type": "string" },
+				"computed_true_up_amount": {
+					"type": "string",
+					"description": "total_cost = computed_commitment_utilized_amount + computed_overage_amount + computed_true_up_amount"
+				},
+				"duration": {
+					"type": "string",
+					"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+					"x-enum-varnames": [
+						"BILLING_PERIOD_MONTHLY",
+						"BILLING_PERIOD_ANNUAL",
+						"BILLING_PERIOD_WEEKLY",
+						"BILLING_PERIOD_DAILY",
+						"BILLING_PERIOD_QUARTER",
+						"BILLING_PERIOD_HALF_YEAR",
+						"BILLING_PERIOD_ONETIME"
+					],
+					"x-speakeasy-name-override": "BillingPeriod",
+					"x-readme-ref-name": "BillingPeriod"
+				},
+				"is_windowed": { "type": "boolean" },
+				"overage_factor": { "type": "string" },
+				"quantity": { "type": "string", "description": "Only used for quantity-based commitments" },
+				"true_up_enabled": { "type": "boolean" },
+				"type": {
+					"type": "string",
+					"enum": ["amount", "quantity"],
+					"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+					"x-speakeasy-name-override": "CommitmentType",
+					"x-readme-ref-name": "CommitmentType"
+				}
+			},
+			"x-speakeasy-name-override": "CommitmentInfo",
+			"x-readme-ref-name": "CommitmentInfo"
+		},
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"currency": { "type": "string" },
+		"customer_id": { "type": "string" },
+		"display_name": { "type": "string" },
+		"entity_id": { "type": "string" },
+		"entity_type": { "type": "string" },
+		"environment_id": { "type": "string" },
+		"id": { "type": "string" },
+		"invoice_id": { "type": "string" },
+		"invoice_level_discount": {
+			"type": "string",
+			"description": "invoice_level_discount is the discount amount in invoice currency applied to all line items on the invoice."
+		},
+		"line_item_discount": {
+			"type": "string",
+			"description": "line_item_discount is the discount amount in invoice currency applied directly to this line item."
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"meter_display_name": { "type": "string" },
+		"meter_id": { "type": "string" },
+		"period_end": { "type": "string", "format": "date-time" },
+		"period_start": { "type": "string", "format": "date-time" },
+		"plan_display_name": { "type": "string" },
+		"prepaid_credits_applied": {
+			"type": "string",
+			"description": "prepaid_credits_applied is the amount in invoice currency reduced from this line item due to prepaid credits application."
+		},
+		"price_id": { "type": "string" },
+		"price_type": { "type": "string" },
+		"price_unit": { "type": "string" },
+		"price_unit_amount": { "type": "string" },
+		"price_unit_id": { "type": "string" },
+		"quantity": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_id": { "type": "string" },
+		"subscription_line_item_id": {
+			"type": "string",
+			"description": "sub_line_item_id links this invoice line item to the subscription_line_item that generated it."
+		},
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" },
+		"usage_analytics": {
+			"type": "array",
+			"description": "usage_analytics contains usage analytics for this line item (legacy - grouped by source)",
+			"items": {
+				"type": "object",
+				"properties": {
+					"cost": { "type": "string", "description": "cost is the cost attributed to this source for the line item" },
+					"event_count": { "type": "integer", "description": "event_count is the number of events from this source (optional)" },
+					"percentage": {
+						"type": "string",
+						"description": "percentage is the percentage of total line item cost from this source (optional)"
+					},
+					"source": { "type": "string", "description": "source is the name of the event source" },
+					"usage": {
+						"type": "string",
+						"description": "usage is the total usage amount from this source (optional, for additional context)"
+					}
+				},
+				"x-readme-ref-name": "SourceUsageItem"
+			}
+		},
+		"usage_breakdown": {
+			"type": "array",
+			"description": "usage_breakdown contains flexible usage breakdown for this line item (supports any grouping)",
+			"items": {
+				"type": "object",
+				"properties": {
+					"cost": { "type": "string", "description": "cost is the cost attributed to this group for the line item" },
+					"event_count": { "type": "integer", "description": "event_count is the number of events from this group (optional)" },
+					"grouped_by": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"description": "grouped_by contains the grouping field values (e.g., {\"source\": \"api\", \"org_id\": \"org123\"})"
+					},
+					"percentage": {
+						"type": "string",
+						"description": "percentage is the percentage of total line item cost from this group (optional)"
+					},
+					"usage": { "type": "string", "description": "usage is the total usage amount from this group (optional, for additional context)" }
+				},
+				"x-readme-ref-name": "UsageBreakdownItem"
+			}
+		}
+	},
+	"x-readme-ref-name": "InvoiceLineItemResponse"
+}

@@ -1,0 +1,202 @@
+{
+	"type": "object",
+	"properties": {
+		"change_type": {
+			"type": "string",
+			"enum": ["upgrade", "downgrade", "lateral"],
+			"x-enum-varnames": ["SubscriptionChangeTypeUpgrade", "SubscriptionChangeTypeDowngrade", "SubscriptionChangeTypeLateral"],
+			"x-speakeasy-name-override": "SubscriptionChangeType",
+			"x-readme-ref-name": "SubscriptionChangeType"
+		},
+		"credit_grants": {
+			"type": "array",
+			"description": "credit_grants contains any credit grants created for proration credits",
+			"items": {
+				"type": "object",
+				"properties": {
+					"cadence": {
+						"type": "string",
+						"enum": ["ONETIME", "RECURRING"],
+						"x-enum-varnames": ["CreditGrantCadenceOneTime", "CreditGrantCadenceRecurring"],
+						"x-speakeasy-name-override": "CreditGrantCadence",
+						"x-readme-ref-name": "CreditGrantCadence"
+					},
+					"conversion_rate": {
+						"type": "string",
+						"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits"
+					},
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"credit_grant_anchor": { "type": "string", "format": "date-time" },
+					"credits": { "type": "string" },
+					"end_date": { "type": "string", "format": "date-time" },
+					"environment_id": { "type": "string" },
+					"expiration_duration": { "type": "integer" },
+					"expiration_duration_unit": {
+						"type": "string",
+						"enum": ["DAY", "WEEK", "MONTH", "YEAR"],
+						"x-enum-varnames": [
+							"CreditGrantExpiryDurationUnitDays",
+							"CreditGrantExpiryDurationUnitWeeks",
+							"CreditGrantExpiryDurationUnitMonths",
+							"CreditGrantExpiryDurationUnitYears"
+						],
+						"x-speakeasy-name-override": "CreditGrantExpiryDurationUnit",
+						"x-readme-ref-name": "CreditGrantExpiryDurationUnit"
+					},
+					"expiration_type": {
+						"type": "string",
+						"enum": ["NEVER", "DURATION", "BILLING_CYCLE"],
+						"x-enum-varnames": ["CreditGrantExpiryTypeNever", "CreditGrantExpiryTypeDuration", "CreditGrantExpiryTypeBillingCycle"],
+						"x-speakeasy-name-override": "CreditGrantExpiryType",
+						"x-readme-ref-name": "CreditGrantExpiryType"
+					},
+					"id": { "type": "string" },
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"name": { "type": "string" },
+					"period": {
+						"type": "string",
+						"enum": ["DAILY", "WEEKLY", "MONTHLY", "ANNUAL", "QUARTERLY", "HALF_YEARLY"],
+						"x-enum-varnames": [
+							"CREDIT_GRANT_PERIOD_DAILY",
+							"CREDIT_GRANT_PERIOD_WEEKLY",
+							"CREDIT_GRANT_PERIOD_MONTHLY",
+							"CREDIT_GRANT_PERIOD_ANNUAL",
+							"CREDIT_GRANT_PERIOD_QUARTER",
+							"CREDIT_GRANT_PERIOD_HALF_YEARLY"
+						],
+						"x-speakeasy-name-override": "CreditGrantPeriod",
+						"x-readme-ref-name": "CreditGrantPeriod"
+					},
+					"period_count": { "type": "integer" },
+					"plan_id": { "type": "string" },
+					"priority": { "type": "integer" },
+					"scope": {
+						"type": "string",
+						"enum": ["PLAN", "SUBSCRIPTION"],
+						"x-enum-varnames": ["CreditGrantScopePlan", "CreditGrantScopeSubscription"],
+						"x-speakeasy-name-override": "CreditGrantScope",
+						"x-readme-ref-name": "CreditGrantScope"
+					},
+					"start_date": { "type": "string", "format": "date-time" },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"subscription_id": { "type": "string" },
+					"tenant_id": { "type": "string" },
+					"topup_conversion_rate": {
+						"type": "string",
+						"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+					},
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" }
+				},
+				"x-readme-ref-name": "CreditGrantResponse"
+			}
+		},
+		"effective_date": { "type": "string", "description": "effective_date is when the change took effect", "format": "date-time" },
+		"invoice": { "$ref": "#/components/schemas/InvoiceResponse" },
+		"is_scheduled": { "type": "boolean", "description": "is_scheduled indicates if the change was scheduled or executed immediately" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "metadata from the request" },
+		"new_subscription": {
+			"type": "object",
+			"properties": {
+				"archived_at": { "type": "string", "description": "archived_at timestamp (for old subscriptions)", "format": "date-time" },
+				"billing_anchor": { "type": "string", "description": "billing_anchor of the subscription", "format": "date-time" },
+				"created_at": { "type": "string", "description": "created_at timestamp", "format": "date-time" },
+				"current_period_end": { "type": "string", "description": "current_period_end of the subscription", "format": "date-time" },
+				"current_period_start": { "type": "string", "description": "current_period_start of the subscription", "format": "date-time" },
+				"id": { "type": "string", "description": "id of the subscription" },
+				"plan_id": { "type": "string", "description": "plan_id of the subscription" },
+				"status": {
+					"type": "string",
+					"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+					"x-enum-varnames": [
+						"SubscriptionStatusActive",
+						"SubscriptionStatusPaused",
+						"SubscriptionStatusCancelled",
+						"SubscriptionStatusIncomplete",
+						"SubscriptionStatusTrialing",
+						"SubscriptionStatusDraft"
+					],
+					"x-speakeasy-name-override": "SubscriptionStatus",
+					"x-readme-ref-name": "SubscriptionStatus"
+				}
+			},
+			"x-readme-ref-name": "SubscriptionSummary"
+		},
+		"old_subscription": {
+			"type": "object",
+			"properties": {
+				"archived_at": { "type": "string", "description": "archived_at timestamp (for old subscriptions)", "format": "date-time" },
+				"billing_anchor": { "type": "string", "description": "billing_anchor of the subscription", "format": "date-time" },
+				"created_at": { "type": "string", "description": "created_at timestamp", "format": "date-time" },
+				"current_period_end": { "type": "string", "description": "current_period_end of the subscription", "format": "date-time" },
+				"current_period_start": { "type": "string", "description": "current_period_start of the subscription", "format": "date-time" },
+				"id": { "type": "string", "description": "id of the subscription" },
+				"plan_id": { "type": "string", "description": "plan_id of the subscription" },
+				"status": {
+					"type": "string",
+					"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+					"x-enum-varnames": [
+						"SubscriptionStatusActive",
+						"SubscriptionStatusPaused",
+						"SubscriptionStatusCancelled",
+						"SubscriptionStatusIncomplete",
+						"SubscriptionStatusTrialing",
+						"SubscriptionStatusDraft"
+					],
+					"x-speakeasy-name-override": "SubscriptionStatus",
+					"x-readme-ref-name": "SubscriptionStatus"
+				}
+			},
+			"x-readme-ref-name": "SubscriptionSummary"
+		},
+		"proration_applied": {
+			"type": "object",
+			"properties": {
+				"charge_amount": { "type": "string", "description": "charge_amount is the charge amount for the new subscription" },
+				"charge_description": { "type": "string", "description": "charge_description describes what the charge is for" },
+				"credit_amount": { "type": "string", "description": "credit_amount is the credit amount from the old subscription" },
+				"credit_description": { "type": "string", "description": "credit_description describes what the credit is for" },
+				"currency": { "type": "string", "description": "currency is the currency for all amounts" },
+				"current_period_end": {
+					"type": "string",
+					"description": "current_period_end is the end of the current billing period",
+					"format": "date-time"
+				},
+				"current_period_start": {
+					"type": "string",
+					"description": "current_period_start is the start of the current billing period",
+					"format": "date-time"
+				},
+				"days_remaining": { "type": "integer", "description": "days_remaining is the number of days remaining in the current period" },
+				"days_used": { "type": "integer", "description": "days_used is the number of days used in the current period" },
+				"net_amount": { "type": "string", "description": "net_amount is the net amount (charge - credit)" },
+				"proration_date": {
+					"type": "string",
+					"description": "proration_date is the date used for proration calculations",
+					"format": "date-time"
+				}
+			},
+			"x-readme-ref-name": "ProrationDetails"
+		},
+		"schedule_id": { "type": "string", "description": "schedule_id is the ID of the created schedule (only if is_scheduled=true)" },
+		"scheduled_at": {
+			"type": "string",
+			"description": "scheduled_at is when the change will execute (only if is_scheduled=true)",
+			"format": "date-time"
+		}
+	},
+	"description": "Response after successfully executing a subscription plan change",
+	"x-readme-ref-name": "SubscriptionChangeExecuteResponse"
+}

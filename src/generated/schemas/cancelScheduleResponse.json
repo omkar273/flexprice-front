@@ -1,0 +1,21 @@
+{
+	"type": "object",
+	"properties": {
+		"message": { "type": "string", "description": "message is a confirmation message" },
+		"status": {
+			"type": "string",
+			"enum": ["pending", "executing", "executed", "cancelled", "failed"],
+			"x-enum-varnames": [
+				"ScheduleStatusPending",
+				"ScheduleStatusExecuting",
+				"ScheduleStatusExecuted",
+				"ScheduleStatusCancelled",
+				"ScheduleStatusFailed"
+			],
+			"x-speakeasy-name-override": "ScheduleStatus",
+			"x-readme-ref-name": "ScheduleStatus"
+		}
+	},
+	"description": "Confirmation of schedule cancellation",
+	"x-readme-ref-name": "CancelScheduleResponse"
+}

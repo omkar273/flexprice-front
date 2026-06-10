@@ -1,0 +1,24 @@
+{
+	"type": "object",
+	"properties": {
+		"external_customer_ids_to_inherit_subscription": {
+			"type": "array",
+			"description": "ExternalCustomerIDsToInheritSubscription: child customer external IDs for which\ninherited skeleton subscriptions will be created. Only valid for parent behavior.",
+			"items": { "type": "string" }
+		},
+		"invoicing_customer_external_id": {
+			"type": "string",
+			"description": "InvoicingCustomerExternalID sets a different billing recipient (external ID).\nRequired for delegated; rejected for inherited; optional for others."
+		},
+		"parent_subscription_id": {
+			"type": "string",
+			"description": "ParentSubscriptionID links this subscription to an existing parent.\nRequired for inherited and grouped_invoicing; rejected for standalone, delegated, parent."
+		},
+		"subscriptions_ids_for_grouped_invoicing": {
+			"type": "array",
+			"description": "SubscriptionsIDsForGroupedInvoicing: existing standalone subscription IDs to convert to\ngrouped_invoicing under this parent at creation time. Only valid for parent behavior.",
+			"items": { "type": "string" }
+		}
+	},
+	"x-readme-ref-name": "SubscriptionInheritanceConfig"
+}

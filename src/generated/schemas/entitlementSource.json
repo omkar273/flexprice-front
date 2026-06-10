@@ -1,0 +1,35 @@
+{
+	"type": "object",
+	"properties": {
+		"entitlement_id": { "type": "string" },
+		"entity_id": { "type": "string" },
+		"entity_name": { "type": "string" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["plan", "addon", "subscription"],
+			"x-enum-varnames": ["EntitlementSourceEntityTypePlan", "EntitlementSourceEntityTypeAddon", "EntitlementSourceEntityTypeSubscription"],
+			"x-readme-ref-name": "EntitlementSourceEntityType"
+		},
+		"is_enabled": { "type": "boolean" },
+		"quantity": { "type": "integer" },
+		"static_value": { "type": "string" },
+		"subscription_id": { "type": "string" },
+		"usage_limit": { "type": "integer" },
+		"usage_reset_period": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		}
+	},
+	"x-readme-ref-name": "EntitlementSource"
+}

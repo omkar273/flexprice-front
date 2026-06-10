@@ -1,0 +1,9 @@
+{
+	"type": "object",
+	"properties": {
+		"auto_apply": { "type": "boolean" },
+		"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+		"priority": { "type": "integer" }
+	},
+	"x-readme-ref-name": "TaxAssociationUpdateRequest"
+}

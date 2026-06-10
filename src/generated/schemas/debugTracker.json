@@ -1,0 +1,979 @@
+{
+	"type": "object",
+	"properties": {
+		"customer_lookup": {
+			"type": "object",
+			"properties": {
+				"customer": {
+					"type": "object",
+					"properties": {
+						"address_city": { "type": "string", "description": "AddressCity is the city of the customer's address" },
+						"address_country": {
+							"type": "string",
+							"description": "AddressCountry is the country of the customer's address (ISO 3166-1 alpha-2)"
+						},
+						"address_line1": { "type": "string", "description": "AddressLine1 is the first line of the customer's address" },
+						"address_line2": { "type": "string", "description": "AddressLine2 is the second line of the customer's address" },
+						"address_postal_code": { "type": "string", "description": "AddressPostalCode is the postal code of the customer's address" },
+						"address_state": { "type": "string", "description": "AddressState is the state of the customer's address" },
+						"created_at": { "type": "string", "format": "date-time" },
+						"created_by": { "type": "string" },
+						"email": { "type": "string", "description": "Email is the email of the customer" },
+						"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the customer" },
+						"external_id": { "type": "string", "description": "ExternalID is the external identifier for the customer" },
+						"id": { "type": "string", "description": "ID is the unique identifier for the customer" },
+						"metadata": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Metadata" },
+						"name": { "type": "string", "description": "Name is the name of the customer" },
+						"status": {
+							"type": "string",
+							"enum": ["published", "deleted", "archived"],
+							"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+							"x-speakeasy-name-override": "Status",
+							"x-readme-ref-name": "Status"
+						},
+						"tenant_id": { "type": "string" },
+						"updated_at": { "type": "string", "format": "date-time" },
+						"updated_by": { "type": "string" }
+					},
+					"x-readme-ref-name": "Customer"
+				},
+				"error": {
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string",
+							"enum": [
+								"http_client_error",
+								"system_error",
+								"internal_error",
+								"not_found",
+								"already_exists",
+								"version_conflict",
+								"validation_error",
+								"invalid_operation",
+								"permission_denied",
+								"database_error",
+								"service_unavailable",
+								"too_many_requests"
+							],
+							"x-enum-varnames": [
+								"ErrCodeHTTPClient",
+								"ErrCodeSystemError",
+								"ErrCodeInternalError",
+								"ErrCodeNotFound",
+								"ErrCodeAlreadyExists",
+								"ErrCodeVersionConflict",
+								"ErrCodeValidation",
+								"ErrCodeInvalidOperation",
+								"ErrCodePermissionDenied",
+								"ErrCodeDatabase",
+								"ErrCodeServiceUnavailable",
+								"ErrCodeTooManyRequests"
+							],
+							"x-speakeasy-name-override": "ErrorCode",
+							"x-readme-ref-name": "ErrorCode"
+						},
+						"http_status_code": { "type": "integer" },
+						"message": { "type": "string" }
+					},
+					"x-speakeasy-name-override": "ErrorResponse",
+					"x-readme-ref-name": "ErrorResponse"
+				},
+				"status": {
+					"type": "string",
+					"enum": ["unprocessed", "not_found", "found", "error"],
+					"x-enum-varnames": [
+						"DebugTrackerStatusUnprocessed",
+						"DebugTrackerStatusNotFound",
+						"DebugTrackerStatusFound",
+						"DebugTrackerStatusError"
+					],
+					"x-speakeasy-name-override": "DebugTrackerStatus",
+					"x-readme-ref-name": "DebugTrackerStatus"
+				}
+			},
+			"x-readme-ref-name": "CustomerLookupResult"
+		},
+		"failure_point": {
+			"type": "object",
+			"properties": {
+				"error": {
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string",
+							"enum": [
+								"http_client_error",
+								"system_error",
+								"internal_error",
+								"not_found",
+								"already_exists",
+								"version_conflict",
+								"validation_error",
+								"invalid_operation",
+								"permission_denied",
+								"database_error",
+								"service_unavailable",
+								"too_many_requests"
+							],
+							"x-enum-varnames": [
+								"ErrCodeHTTPClient",
+								"ErrCodeSystemError",
+								"ErrCodeInternalError",
+								"ErrCodeNotFound",
+								"ErrCodeAlreadyExists",
+								"ErrCodeVersionConflict",
+								"ErrCodeValidation",
+								"ErrCodeInvalidOperation",
+								"ErrCodePermissionDenied",
+								"ErrCodeDatabase",
+								"ErrCodeServiceUnavailable",
+								"ErrCodeTooManyRequests"
+							],
+							"x-speakeasy-name-override": "ErrorCode",
+							"x-readme-ref-name": "ErrorCode"
+						},
+						"http_status_code": { "type": "integer" },
+						"message": { "type": "string" }
+					},
+					"x-speakeasy-name-override": "ErrorResponse",
+					"x-readme-ref-name": "ErrorResponse"
+				},
+				"failure_point_type": {
+					"type": "string",
+					"enum": ["customer_lookup", "meter_lookup", "price_lookup", "subscription_line_item_lookup"],
+					"x-enum-varnames": [
+						"FailurePointTypeCustomerLookup",
+						"FailurePointTypeMeterLookup",
+						"FailurePointTypePriceLookup",
+						"FailurePointTypeSubscriptionLineItemLookup"
+					],
+					"x-speakeasy-name-override": "FailurePointType",
+					"x-readme-ref-name": "FailurePointType"
+				}
+			},
+			"x-speakeasy-name-override": "FailurePoint",
+			"x-readme-ref-name": "FailurePoint"
+		},
+		"meter_matching": {
+			"type": "object",
+			"properties": {
+				"error": {
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string",
+							"enum": [
+								"http_client_error",
+								"system_error",
+								"internal_error",
+								"not_found",
+								"already_exists",
+								"version_conflict",
+								"validation_error",
+								"invalid_operation",
+								"permission_denied",
+								"database_error",
+								"service_unavailable",
+								"too_many_requests"
+							],
+							"x-enum-varnames": [
+								"ErrCodeHTTPClient",
+								"ErrCodeSystemError",
+								"ErrCodeInternalError",
+								"ErrCodeNotFound",
+								"ErrCodeAlreadyExists",
+								"ErrCodeVersionConflict",
+								"ErrCodeValidation",
+								"ErrCodeInvalidOperation",
+								"ErrCodePermissionDenied",
+								"ErrCodeDatabase",
+								"ErrCodeServiceUnavailable",
+								"ErrCodeTooManyRequests"
+							],
+							"x-speakeasy-name-override": "ErrorCode",
+							"x-readme-ref-name": "ErrorCode"
+						},
+						"http_status_code": { "type": "integer" },
+						"message": { "type": "string" }
+					},
+					"x-speakeasy-name-override": "ErrorResponse",
+					"x-readme-ref-name": "ErrorResponse"
+				},
+				"matched_meters": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"event_name": { "type": "string" },
+							"meter": {
+								"type": "object",
+								"properties": {
+									"aggregation": {
+										"type": "object",
+										"properties": {
+											"bucket_size": {
+												"type": "string",
+												"enum": ["MINUTE", "15MIN", "30MIN", "HOUR", "3HOUR", "6HOUR", "12HOUR", "DAY", "WEEK", "MONTH", "MONTH"],
+												"x-enum-varnames": [
+													"WindowSizeMinute",
+													"WindowSize15Min",
+													"WindowSize30Min",
+													"WindowSizeHour",
+													"WindowSize3Hour",
+													"WindowSize6Hour",
+													"WindowSize12Hour",
+													"WindowSizeDay",
+													"WindowSizeWeek",
+													"WindowSizeMonth",
+													"DefaultWindowSize"
+												],
+												"x-speakeasy-name-override": "WindowSize",
+												"x-readme-ref-name": "WindowSize"
+											},
+											"expression": {
+												"type": "string",
+												"description": "Expression is an optional CEL expression to compute per-event quantity from event.properties.\nWhen set, it replaces Field-based extraction. Property names are used directly (e.g., token * duration * pixel)."
+											},
+											"field": {
+												"type": "string",
+												"description": "Field is the key in $event.properties on which the aggregation is to be applied\nFor ex if the aggregation type is sum for API usage, the field could be \"duration_ms\"\nIgnored when Expression is set."
+											},
+											"group_by": {
+												"type": "string",
+												"description": "GroupBy is the property name in event.properties to group by before aggregating.\nCurrently only supported for MAX aggregation with bucket_size.\nWhen set, aggregation is applied per unique value of this property within each bucket,\nthen the per-group results are summed to produce the bucket total."
+											},
+											"multiplier": {
+												"type": "string",
+												"description": "Multiplier is the multiplier for the aggregation\nFor ex if the aggregation type is sum_with_multiplier for API usage, the multiplier could be 1000\nto scale up by a factor of 1000. If not provided, it will be null."
+											},
+											"type": {
+												"type": "string",
+												"enum": ["COUNT", "SUM", "AVG", "COUNT_UNIQUE", "LATEST", "SUM_WITH_MULTIPLIER", "MAX", "WEIGHTED_SUM"],
+												"x-enum-comments": { "AggregationSumWithMultiplier": "Sum with a multiplier - [sum(value) * multiplier]" },
+												"x-enum-varnames": [
+													"AggregationCount",
+													"AggregationSum",
+													"AggregationAvg",
+													"AggregationCountUnique",
+													"AggregationLatest",
+													"AggregationSumWithMultiplier",
+													"AggregationMax",
+													"AggregationWeightedSum"
+												],
+												"x-speakeasy-name-override": "AggregationType",
+												"x-readme-ref-name": "AggregationType"
+											}
+										},
+										"x-readme-ref-name": "meter.Aggregation"
+									},
+									"created_at": { "type": "string", "format": "date-time" },
+									"created_by": { "type": "string" },
+									"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the meter" },
+									"event_name": {
+										"type": "string",
+										"description": "EventName is the unique identifier for the event that this meter is tracking\nIt is a mandatory field in the events table and hence being used as the primary matching field\nWe can have multiple meters tracking the same event but with different filters and aggregation"
+									},
+									"filters": {
+										"type": "array",
+										"description": "Filters define the criteria for the meter to be applied on the events before aggregation\nIt also defines the possible values on which later the charges will be applied",
+										"items": {
+											"type": "object",
+											"properties": {
+												"key": {
+													"type": "string",
+													"description": "Key is the key for the filter from $event.properties\nCurrently we support only first level keys in the properties and not nested keys"
+												},
+												"values": {
+													"type": "array",
+													"description": "Values are the possible values for the filter to be considered for the meter\nFor ex \"model_name\" could have values \"o1-mini\", \"gpt-4o\" etc",
+													"items": { "type": "string" }
+												}
+											},
+											"x-readme-ref-name": "meter.Filter"
+										}
+									},
+									"id": { "type": "string", "description": "ID is the unique identifier for the meter" },
+									"name": { "type": "string", "description": "Name is the display name of the meter" },
+									"reset_usage": {
+										"type": "string",
+										"enum": ["BILLING_PERIOD", "NEVER"],
+										"x-enum-varnames": ["ResetUsageBillingPeriod", "ResetUsageNever"],
+										"x-speakeasy-name-override": "ResetUsage",
+										"x-readme-ref-name": "ResetUsage"
+									},
+									"status": {
+										"type": "string",
+										"enum": ["published", "deleted", "archived"],
+										"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+										"x-speakeasy-name-override": "Status",
+										"x-readme-ref-name": "Status"
+									},
+									"tenant_id": { "type": "string" },
+									"updated_at": { "type": "string", "format": "date-time" },
+									"updated_by": { "type": "string" }
+								},
+								"x-readme-ref-name": "meter.Meter"
+							},
+							"meter_id": { "type": "string" }
+						},
+						"x-readme-ref-name": "MatchedMeter"
+					}
+				},
+				"status": {
+					"type": "string",
+					"enum": ["unprocessed", "not_found", "found", "error"],
+					"x-enum-varnames": [
+						"DebugTrackerStatusUnprocessed",
+						"DebugTrackerStatusNotFound",
+						"DebugTrackerStatusFound",
+						"DebugTrackerStatusError"
+					],
+					"x-speakeasy-name-override": "DebugTrackerStatus",
+					"x-readme-ref-name": "DebugTrackerStatus"
+				}
+			},
+			"x-readme-ref-name": "MeterMatchingResult"
+		},
+		"price_lookup": {
+			"type": "object",
+			"properties": {
+				"error": {
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string",
+							"enum": [
+								"http_client_error",
+								"system_error",
+								"internal_error",
+								"not_found",
+								"already_exists",
+								"version_conflict",
+								"validation_error",
+								"invalid_operation",
+								"permission_denied",
+								"database_error",
+								"service_unavailable",
+								"too_many_requests"
+							],
+							"x-enum-varnames": [
+								"ErrCodeHTTPClient",
+								"ErrCodeSystemError",
+								"ErrCodeInternalError",
+								"ErrCodeNotFound",
+								"ErrCodeAlreadyExists",
+								"ErrCodeVersionConflict",
+								"ErrCodeValidation",
+								"ErrCodeInvalidOperation",
+								"ErrCodePermissionDenied",
+								"ErrCodeDatabase",
+								"ErrCodeServiceUnavailable",
+								"ErrCodeTooManyRequests"
+							],
+							"x-speakeasy-name-override": "ErrorCode",
+							"x-readme-ref-name": "ErrorCode"
+						},
+						"http_status_code": { "type": "integer" },
+						"message": { "type": "string" }
+					},
+					"x-speakeasy-name-override": "ErrorResponse",
+					"x-readme-ref-name": "ErrorResponse"
+				},
+				"matched_prices": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"meter_id": { "type": "string" },
+							"price": {
+								"type": "object",
+								"properties": {
+									"amount": {
+										"type": "string",
+										"description": "Amount stored in main currency units (e.g., dollars, not cents)\nFor USD: 12.50 means $12.50"
+									},
+									"billing_cadence": {
+										"type": "string",
+										"enum": ["RECURRING"],
+										"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+										"x-speakeasy-name-override": "BillingCadence",
+										"x-readme-ref-name": "BillingCadence"
+									},
+									"billing_model": {
+										"type": "string",
+										"enum": ["FLAT_FEE", "PACKAGE", "TIERED"],
+										"x-enum-varnames": ["BILLING_MODEL_FLAT_FEE", "BILLING_MODEL_PACKAGE", "BILLING_MODEL_TIERED"],
+										"x-speakeasy-name-override": "BillingModel",
+										"x-readme-ref-name": "BillingModel"
+									},
+									"billing_period": {
+										"type": "string",
+										"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+										"x-enum-varnames": [
+											"BILLING_PERIOD_MONTHLY",
+											"BILLING_PERIOD_ANNUAL",
+											"BILLING_PERIOD_WEEKLY",
+											"BILLING_PERIOD_DAILY",
+											"BILLING_PERIOD_QUARTER",
+											"BILLING_PERIOD_HALF_YEAR",
+											"BILLING_PERIOD_ONETIME"
+										],
+										"x-speakeasy-name-override": "BillingPeriod",
+										"x-readme-ref-name": "BillingPeriod"
+									},
+									"billing_period_count": {
+										"type": "integer",
+										"description": "BillingPeriodCount is the count of the billing period ex 1, 3, 6, 12"
+									},
+									"conversion_rate": {
+										"type": "string",
+										"description": "ConversionRate is the conversion rate of the price unit to the fiat currency"
+									},
+									"created_at": { "type": "string", "format": "date-time" },
+									"created_by": { "type": "string" },
+									"currency": { "type": "string", "description": "Currency 3 digit ISO currency code in lowercase ex usd, eur, gbp" },
+									"description": { "type": "string", "description": "Description of the price" },
+									"display_amount": {
+										"type": "string",
+										"description": "DisplayAmount is the formatted amount with currency symbol\nFor USD: $12.50"
+									},
+									"display_name": { "type": "string", "description": "DisplayName is the name of the price" },
+									"display_price_unit_amount": {
+										"type": "string",
+										"description": "DisplayPriceUnitAmount is the formatted amount of the price unit"
+									},
+									"end_date": { "type": "string", "description": "EndDate is the end date of the price", "format": "date-time" },
+									"entity_id": { "type": "string", "description": "EntityID holds the value of the \"entity_id\" field." },
+									"entity_type": {
+										"type": "string",
+										"enum": ["PLAN", "SUBSCRIPTION", "ADDON", "PRICE", "COSTSHEET"],
+										"x-enum-varnames": [
+											"PRICE_ENTITY_TYPE_PLAN",
+											"PRICE_ENTITY_TYPE_SUBSCRIPTION",
+											"PRICE_ENTITY_TYPE_ADDON",
+											"PRICE_ENTITY_TYPE_PRICE",
+											"PRICE_ENTITY_TYPE_COSTSHEET"
+										],
+										"x-speakeasy-name-override": "PriceEntityType",
+										"x-readme-ref-name": "PriceEntityType"
+									},
+									"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the price" },
+									"group_id": { "type": "string", "description": "GroupID references the group this price belongs to" },
+									"id": { "type": "string", "description": "ID uuid identifier for the price" },
+									"invoice_cadence": {
+										"type": "string",
+										"enum": ["ARREAR", "ADVANCE"],
+										"x-enum-varnames": ["InvoiceCadenceArrear", "InvoiceCadenceAdvance"],
+										"x-speakeasy-name-override": "InvoiceCadence",
+										"x-readme-ref-name": "InvoiceCadence"
+									},
+									"lookup_key": { "type": "string", "description": "LookupKey used for looking up the price in the database" },
+									"metadata": {
+										"type": "object",
+										"additionalProperties": { "type": "string" },
+										"x-readme-ref-name": "price.JSONBMetadata"
+									},
+									"meter_id": { "type": "string", "description": "MeterID is the id of the meter for usage based pricing" },
+									"min_quantity": { "type": "string", "description": "MinQuantity is the minimum quantity of the price", "nullable": true },
+									"parent_price_id": {
+										"type": "string",
+										"description": "ParentPriceID references the root price (always set for price lineage tracking)"
+									},
+									"price_unit": { "type": "string", "description": "PriceUnit is the code of the price unit (e.g., 'btc', 'eth')" },
+									"price_unit_amount": { "type": "string", "description": "PriceUnitAmount is the amount of the price unit" },
+									"price_unit_id": { "type": "string", "description": "PriceUnitID is the id of the price unit (for CUSTOM type)" },
+									"price_unit_tiers": {
+										"type": "array",
+										"description": "PriceUnitTiers are the tiers for the price unit when BillingModel is TIERED",
+										"items": {
+											"type": "object",
+											"properties": {
+												"flat_amount": {
+													"type": "string",
+													"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+												},
+												"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+												"up_to": {
+													"type": "integer",
+													"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+												}
+											},
+											"x-readme-ref-name": "price.PriceTier"
+										}
+									},
+									"price_unit_type": {
+										"type": "string",
+										"enum": ["FIAT", "CUSTOM"],
+										"x-enum-varnames": ["PRICE_UNIT_TYPE_FIAT", "PRICE_UNIT_TYPE_CUSTOM"],
+										"x-speakeasy-name-override": "PriceUnitType",
+										"x-readme-ref-name": "PriceUnitType"
+									},
+									"sequence": {
+										"type": "integer",
+										"description": "Sequence is the monotonic stamp bumped on every state change that\nsubscription line items need to react to. Read by the plan-price sync;\nset by the database (DEFAULT nextval) on create and by the price\nrepository on termination / compatibility-affecting edits."
+									},
+									"start_date": { "type": "string", "description": "StartDate is the start date of the price", "format": "date-time" },
+									"status": {
+										"type": "string",
+										"enum": ["published", "deleted", "archived"],
+										"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+										"x-speakeasy-name-override": "Status",
+										"x-readme-ref-name": "Status"
+									},
+									"tenant_id": { "type": "string" },
+									"tier_mode": {
+										"type": "string",
+										"enum": ["VOLUME", "SLAB"],
+										"x-enum-varnames": ["BILLING_TIER_VOLUME", "BILLING_TIER_SLAB"],
+										"x-speakeasy-name-override": "BillingTier",
+										"x-readme-ref-name": "BillingTier"
+									},
+									"tiers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"flat_amount": {
+													"type": "string",
+													"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+												},
+												"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+												"up_to": {
+													"type": "integer",
+													"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+												}
+											},
+											"x-readme-ref-name": "price.PriceTier"
+										}
+									},
+									"transform_quantity": {
+										"type": "object",
+										"properties": {
+											"divide_by": { "type": "integer", "description": "Divide quantity by this number" },
+											"round": {
+												"type": "string",
+												"enum": ["up", "down"],
+												"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+												"x-speakeasy-name-override": "RoundType",
+												"x-readme-ref-name": "RoundType"
+											}
+										},
+										"x-readme-ref-name": "price.JSONBTransformQuantity"
+									},
+									"trial_period_days": {
+										"type": "integer",
+										"description": "TrialPeriodDays is the number of days for the trial period\nNote: This is only applicable for recurring prices (BILLING_CADENCE_RECURRING)"
+									},
+									"type": {
+										"type": "string",
+										"enum": ["USAGE", "FIXED"],
+										"x-enum-varnames": ["PRICE_TYPE_USAGE", "PRICE_TYPE_FIXED"],
+										"x-speakeasy-name-override": "PriceType",
+										"x-readme-ref-name": "PriceType"
+									},
+									"updated_at": { "type": "string", "format": "date-time" },
+									"updated_by": { "type": "string" }
+								},
+								"x-readme-ref-name": "price.Price"
+							},
+							"price_id": { "type": "string" },
+							"status": { "type": "string" }
+						},
+						"x-readme-ref-name": "MatchedPrice"
+					}
+				},
+				"status": {
+					"type": "string",
+					"enum": ["unprocessed", "not_found", "found", "error"],
+					"x-enum-varnames": [
+						"DebugTrackerStatusUnprocessed",
+						"DebugTrackerStatusNotFound",
+						"DebugTrackerStatusFound",
+						"DebugTrackerStatusError"
+					],
+					"x-speakeasy-name-override": "DebugTrackerStatus",
+					"x-readme-ref-name": "DebugTrackerStatus"
+				}
+			},
+			"x-readme-ref-name": "PriceLookupResult"
+		},
+		"subscription_line_item_lookup": {
+			"type": "object",
+			"properties": {
+				"error": {
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string",
+							"enum": [
+								"http_client_error",
+								"system_error",
+								"internal_error",
+								"not_found",
+								"already_exists",
+								"version_conflict",
+								"validation_error",
+								"invalid_operation",
+								"permission_denied",
+								"database_error",
+								"service_unavailable",
+								"too_many_requests"
+							],
+							"x-enum-varnames": [
+								"ErrCodeHTTPClient",
+								"ErrCodeSystemError",
+								"ErrCodeInternalError",
+								"ErrCodeNotFound",
+								"ErrCodeAlreadyExists",
+								"ErrCodeVersionConflict",
+								"ErrCodeValidation",
+								"ErrCodeInvalidOperation",
+								"ErrCodePermissionDenied",
+								"ErrCodeDatabase",
+								"ErrCodeServiceUnavailable",
+								"ErrCodeTooManyRequests"
+							],
+							"x-speakeasy-name-override": "ErrorCode",
+							"x-readme-ref-name": "ErrorCode"
+						},
+						"http_status_code": { "type": "integer" },
+						"message": { "type": "string" }
+					},
+					"x-speakeasy-name-override": "ErrorResponse",
+					"x-readme-ref-name": "ErrorResponse"
+				},
+				"matched_line_items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"end_date": { "type": "string", "format": "date-time" },
+							"is_active_for_event": { "type": "boolean" },
+							"price_id": { "type": "string" },
+							"start_date": { "type": "string", "format": "date-time" },
+							"sub_line_item_id": { "type": "string" },
+							"subscription_id": { "type": "string" },
+							"subscription_line_item": {
+								"type": "object",
+								"properties": {
+									"addon_association_id": { "type": "string" },
+									"billing_period": {
+										"type": "string",
+										"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+										"x-enum-varnames": [
+											"BILLING_PERIOD_MONTHLY",
+											"BILLING_PERIOD_ANNUAL",
+											"BILLING_PERIOD_WEEKLY",
+											"BILLING_PERIOD_DAILY",
+											"BILLING_PERIOD_QUARTER",
+											"BILLING_PERIOD_HALF_YEAR",
+											"BILLING_PERIOD_ONETIME"
+										],
+										"x-speakeasy-name-override": "BillingPeriod",
+										"x-readme-ref-name": "BillingPeriod"
+									},
+									"billing_period_count": { "type": "integer", "description": "from price at create; default 1" },
+									"commitment_amount": { "type": "string", "description": "Commitment fields" },
+									"commitment_duration": {
+										"type": "string",
+										"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+										"x-enum-varnames": [
+											"BILLING_PERIOD_MONTHLY",
+											"BILLING_PERIOD_ANNUAL",
+											"BILLING_PERIOD_WEEKLY",
+											"BILLING_PERIOD_DAILY",
+											"BILLING_PERIOD_QUARTER",
+											"BILLING_PERIOD_HALF_YEAR",
+											"BILLING_PERIOD_ONETIME"
+										],
+										"x-speakeasy-name-override": "BillingPeriod",
+										"x-readme-ref-name": "BillingPeriod"
+									},
+									"commitment_overage_factor": { "type": "string" },
+									"commitment_quantity": { "type": "string" },
+									"commitment_true_up_enabled": { "type": "boolean" },
+									"commitment_type": {
+										"type": "string",
+										"enum": ["amount", "quantity"],
+										"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+										"x-speakeasy-name-override": "CommitmentType",
+										"x-readme-ref-name": "CommitmentType"
+									},
+									"commitment_windowed": { "type": "boolean" },
+									"created_at": { "type": "string", "format": "date-time" },
+									"created_by": { "type": "string" },
+									"currency": { "type": "string" },
+									"customer_id": { "type": "string" },
+									"display_name": { "type": "string" },
+									"end_date": { "type": "string", "format": "date-time" },
+									"entity_id": { "type": "string" },
+									"entity_type": {
+										"type": "string",
+										"enum": ["plan", "addon", "subscription"],
+										"x-enum-varnames": [
+											"SubscriptionLineItemEntityTypePlan",
+											"SubscriptionLineItemEntityTypeAddon",
+											"SubscriptionLineItemEntityTypeSubscription"
+										],
+										"x-speakeasy-name-override": "SubscriptionLineItemEntityType",
+										"x-readme-ref-name": "SubscriptionLineItemEntityType"
+									},
+									"environment_id": { "type": "string" },
+									"id": { "type": "string" },
+									"invoice_cadence": {
+										"type": "string",
+										"enum": ["ARREAR", "ADVANCE"],
+										"x-enum-varnames": ["InvoiceCadenceArrear", "InvoiceCadenceAdvance"],
+										"x-speakeasy-name-override": "InvoiceCadence",
+										"x-readme-ref-name": "InvoiceCadence"
+									},
+									"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+									"meter_display_name": { "type": "string" },
+									"meter_id": { "type": "string" },
+									"plan_display_name": { "type": "string" },
+									"price": {
+										"type": "object",
+										"properties": {
+											"amount": {
+												"type": "string",
+												"description": "Amount stored in main currency units (e.g., dollars, not cents)\nFor USD: 12.50 means $12.50"
+											},
+											"billing_cadence": {
+												"type": "string",
+												"enum": ["RECURRING"],
+												"x-enum-varnames": ["BILLING_CADENCE_RECURRING"],
+												"x-speakeasy-name-override": "BillingCadence",
+												"x-readme-ref-name": "BillingCadence"
+											},
+											"billing_model": {
+												"type": "string",
+												"enum": ["FLAT_FEE", "PACKAGE", "TIERED"],
+												"x-enum-varnames": ["BILLING_MODEL_FLAT_FEE", "BILLING_MODEL_PACKAGE", "BILLING_MODEL_TIERED"],
+												"x-speakeasy-name-override": "BillingModel",
+												"x-readme-ref-name": "BillingModel"
+											},
+											"billing_period": {
+												"type": "string",
+												"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+												"x-enum-varnames": [
+													"BILLING_PERIOD_MONTHLY",
+													"BILLING_PERIOD_ANNUAL",
+													"BILLING_PERIOD_WEEKLY",
+													"BILLING_PERIOD_DAILY",
+													"BILLING_PERIOD_QUARTER",
+													"BILLING_PERIOD_HALF_YEAR",
+													"BILLING_PERIOD_ONETIME"
+												],
+												"x-speakeasy-name-override": "BillingPeriod",
+												"x-readme-ref-name": "BillingPeriod"
+											},
+											"billing_period_count": {
+												"type": "integer",
+												"description": "BillingPeriodCount is the count of the billing period ex 1, 3, 6, 12"
+											},
+											"conversion_rate": {
+												"type": "string",
+												"description": "ConversionRate is the conversion rate of the price unit to the fiat currency"
+											},
+											"created_at": { "type": "string", "format": "date-time" },
+											"created_by": { "type": "string" },
+											"currency": { "type": "string", "description": "Currency 3 digit ISO currency code in lowercase ex usd, eur, gbp" },
+											"description": { "type": "string", "description": "Description of the price" },
+											"display_amount": {
+												"type": "string",
+												"description": "DisplayAmount is the formatted amount with currency symbol\nFor USD: $12.50"
+											},
+											"display_name": { "type": "string", "description": "DisplayName is the name of the price" },
+											"display_price_unit_amount": {
+												"type": "string",
+												"description": "DisplayPriceUnitAmount is the formatted amount of the price unit"
+											},
+											"end_date": { "type": "string", "description": "EndDate is the end date of the price", "format": "date-time" },
+											"entity_id": { "type": "string", "description": "EntityID holds the value of the \"entity_id\" field." },
+											"entity_type": {
+												"type": "string",
+												"enum": ["PLAN", "SUBSCRIPTION", "ADDON", "PRICE", "COSTSHEET"],
+												"x-enum-varnames": [
+													"PRICE_ENTITY_TYPE_PLAN",
+													"PRICE_ENTITY_TYPE_SUBSCRIPTION",
+													"PRICE_ENTITY_TYPE_ADDON",
+													"PRICE_ENTITY_TYPE_PRICE",
+													"PRICE_ENTITY_TYPE_COSTSHEET"
+												],
+												"x-speakeasy-name-override": "PriceEntityType",
+												"x-readme-ref-name": "PriceEntityType"
+											},
+											"environment_id": { "type": "string", "description": "EnvironmentID is the environment identifier for the price" },
+											"group_id": { "type": "string", "description": "GroupID references the group this price belongs to" },
+											"id": { "type": "string", "description": "ID uuid identifier for the price" },
+											"invoice_cadence": {
+												"type": "string",
+												"enum": ["ARREAR", "ADVANCE"],
+												"x-enum-varnames": ["InvoiceCadenceArrear", "InvoiceCadenceAdvance"],
+												"x-speakeasy-name-override": "InvoiceCadence",
+												"x-readme-ref-name": "InvoiceCadence"
+											},
+											"lookup_key": { "type": "string", "description": "LookupKey used for looking up the price in the database" },
+											"metadata": {
+												"type": "object",
+												"additionalProperties": { "type": "string" },
+												"x-readme-ref-name": "price.JSONBMetadata"
+											},
+											"meter_id": { "type": "string", "description": "MeterID is the id of the meter for usage based pricing" },
+											"min_quantity": {
+												"type": "string",
+												"description": "MinQuantity is the minimum quantity of the price",
+												"nullable": true
+											},
+											"parent_price_id": {
+												"type": "string",
+												"description": "ParentPriceID references the root price (always set for price lineage tracking)"
+											},
+											"price_unit": { "type": "string", "description": "PriceUnit is the code of the price unit (e.g., 'btc', 'eth')" },
+											"price_unit_amount": { "type": "string", "description": "PriceUnitAmount is the amount of the price unit" },
+											"price_unit_id": { "type": "string", "description": "PriceUnitID is the id of the price unit (for CUSTOM type)" },
+											"price_unit_tiers": {
+												"type": "array",
+												"description": "PriceUnitTiers are the tiers for the price unit when BillingModel is TIERED",
+												"items": {
+													"type": "object",
+													"properties": {
+														"flat_amount": {
+															"type": "string",
+															"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+														},
+														"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+														"up_to": {
+															"type": "integer",
+															"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+														}
+													},
+													"x-readme-ref-name": "price.PriceTier"
+												}
+											},
+											"price_unit_type": {
+												"type": "string",
+												"enum": ["FIAT", "CUSTOM"],
+												"x-enum-varnames": ["PRICE_UNIT_TYPE_FIAT", "PRICE_UNIT_TYPE_CUSTOM"],
+												"x-speakeasy-name-override": "PriceUnitType",
+												"x-readme-ref-name": "PriceUnitType"
+											},
+											"sequence": {
+												"type": "integer",
+												"description": "Sequence is the monotonic stamp bumped on every state change that\nsubscription line items need to react to. Read by the plan-price sync;\nset by the database (DEFAULT nextval) on create and by the price\nrepository on termination / compatibility-affecting edits."
+											},
+											"start_date": { "type": "string", "description": "StartDate is the start date of the price", "format": "date-time" },
+											"status": {
+												"type": "string",
+												"enum": ["published", "deleted", "archived"],
+												"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+												"x-speakeasy-name-override": "Status",
+												"x-readme-ref-name": "Status"
+											},
+											"tenant_id": { "type": "string" },
+											"tier_mode": {
+												"type": "string",
+												"enum": ["VOLUME", "SLAB"],
+												"x-enum-varnames": ["BILLING_TIER_VOLUME", "BILLING_TIER_SLAB"],
+												"x-speakeasy-name-override": "BillingTier",
+												"x-readme-ref-name": "BillingTier"
+											},
+											"tiers": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"flat_amount": {
+															"type": "string",
+															"description": "flat_amount is the flat amount for the given tier (optional)\nApplied on top of unit_amount*quantity. Useful for cases like \"2.7$ + 5c\""
+														},
+														"unit_amount": { "type": "string", "description": "unit_amount is the amount per unit for the given tier" },
+														"up_to": {
+															"type": "integer",
+															"description": "up_to is the quantity up to which this tier applies. It is null for the last tier.\nIMPORTANT: Tier boundaries are INCLUSIVE.\n- If up_to is 1000, then quantity less than or equal to 1000 belongs to this tier\n- This behavior is consistent across both VOLUME and SLAB tier modes"
+														}
+													},
+													"x-readme-ref-name": "price.PriceTier"
+												}
+											},
+											"transform_quantity": {
+												"type": "object",
+												"properties": {
+													"divide_by": { "type": "integer", "description": "Divide quantity by this number" },
+													"round": {
+														"type": "string",
+														"enum": ["up", "down"],
+														"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+														"x-speakeasy-name-override": "RoundType",
+														"x-readme-ref-name": "RoundType"
+													}
+												},
+												"x-readme-ref-name": "price.JSONBTransformQuantity"
+											},
+											"trial_period_days": {
+												"type": "integer",
+												"description": "TrialPeriodDays is the number of days for the trial period\nNote: This is only applicable for recurring prices (BILLING_CADENCE_RECURRING)"
+											},
+											"type": {
+												"type": "string",
+												"enum": ["USAGE", "FIXED"],
+												"x-enum-varnames": ["PRICE_TYPE_USAGE", "PRICE_TYPE_FIXED"],
+												"x-speakeasy-name-override": "PriceType",
+												"x-readme-ref-name": "PriceType"
+											},
+											"updated_at": { "type": "string", "format": "date-time" },
+											"updated_by": { "type": "string" }
+										},
+										"x-readme-ref-name": "price.Price"
+									},
+									"price_id": { "type": "string" },
+									"price_type": {
+										"type": "string",
+										"enum": ["USAGE", "FIXED"],
+										"x-enum-varnames": ["PRICE_TYPE_USAGE", "PRICE_TYPE_FIXED"],
+										"x-speakeasy-name-override": "PriceType",
+										"x-readme-ref-name": "PriceType"
+									},
+									"price_unit": { "type": "string" },
+									"price_unit_id": { "type": "string" },
+									"quantity": { "type": "string" },
+									"start_date": { "type": "string", "format": "date-time" },
+									"status": {
+										"type": "string",
+										"enum": ["published", "deleted", "archived"],
+										"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+										"x-speakeasy-name-override": "Status",
+										"x-readme-ref-name": "Status"
+									},
+									"subscription_id": { "type": "string" },
+									"subscription_phase_id": { "type": "string" },
+									"tenant_id": { "type": "string" },
+									"updated_at": { "type": "string", "format": "date-time" },
+									"updated_by": { "type": "string" }
+								},
+								"x-readme-ref-name": "subscription.SubscriptionLineItem"
+							},
+							"timestamp_within_range": { "type": "boolean" }
+						},
+						"x-readme-ref-name": "MatchedSubscriptionLineItem"
+					}
+				},
+				"status": {
+					"type": "string",
+					"enum": ["unprocessed", "not_found", "found", "error"],
+					"x-enum-varnames": [
+						"DebugTrackerStatusUnprocessed",
+						"DebugTrackerStatusNotFound",
+						"DebugTrackerStatusFound",
+						"DebugTrackerStatusError"
+					],
+					"x-speakeasy-name-override": "DebugTrackerStatus",
+					"x-readme-ref-name": "DebugTrackerStatus"
+				}
+			},
+			"x-readme-ref-name": "SubscriptionLineItemLookupResult"
+		}
+	},
+	"x-readme-ref-name": "DebugTracker"
+}

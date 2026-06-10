@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"description": "preview | issued | INITIATED | PENDING | PROCESSING | SUCCEEDED | OVERPAID | FAILED | REFUNDED | PARTIALLY_REFUNDED",
+	"enum": ["preview", "issued"],
+	"x-enum-varnames": ["ChangedInvoiceStatusPreview", "ChangedInvoiceStatusWalletIssued"],
+	"x-readme-ref-name": "ChangedInvoiceStatus"
+}

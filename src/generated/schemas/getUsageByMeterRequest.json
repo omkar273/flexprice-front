@@ -1,0 +1,57 @@
+{
+	"required": ["meter_id"],
+	"type": "object",
+	"properties": {
+		"billing_anchor": {
+			"type": "string",
+			"description": "BillingAnchor enables custom monthly billing periods for meter usage aggregation.\n\nUsage guidelines:\n- Only effective when WindowSize = \"MONTH\"\n- For other window sizes (DAY, HOUR, WEEK), this field is ignored\n- When nil, uses standard calendar months (1st to 1st)\n- When provided, creates custom monthly periods (e.g., 5th to 5th)\n\nCommon use cases:\n- Subscription billing periods that don't align with calendar months\n- Customer-specific billing cycles (e.g., signed up on 15th)\n- Multi-tenant systems with different billing anchor dates\n\nExample: If BillingAnchor = \"2024-03-05T14:30:45Z\" and WindowSize = \"MONTH\":\n  - March period: 2024-03-05 14:30:45 to 2024-04-05 14:30:45\n  - April period: 2024-04-05 14:30:45 to 2024-05-05 14:30:45",
+			"example": "2024-03-05T14:30:45Z",
+			"format": "date-time"
+		},
+		"bucket_size": {
+			"type": "string",
+			"enum": ["MINUTE", "15MIN", "30MIN", "HOUR", "3HOUR", "6HOUR", "12HOUR", "DAY", "WEEK", "MONTH", "MONTH"],
+			"x-enum-varnames": [
+				"WindowSizeMinute",
+				"WindowSize15Min",
+				"WindowSize30Min",
+				"WindowSizeHour",
+				"WindowSize3Hour",
+				"WindowSize6Hour",
+				"WindowSize12Hour",
+				"WindowSizeDay",
+				"WindowSizeWeek",
+				"WindowSizeMonth",
+				"DefaultWindowSize"
+			],
+			"x-speakeasy-name-override": "WindowSize",
+			"x-readme-ref-name": "WindowSize"
+		},
+		"customer_id": { "type": "string", "example": "customer456" },
+		"end_time": { "type": "string", "example": "2024-12-09T00:00:00Z", "format": "date-time" },
+		"external_customer_id": { "type": "string", "example": "user_5" },
+		"filters": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } },
+		"meter_id": { "type": "string", "example": "123" },
+		"start_time": { "type": "string", "example": "2024-11-09T00:00:00Z", "format": "date-time" },
+		"window_size": {
+			"type": "string",
+			"enum": ["MINUTE", "15MIN", "30MIN", "HOUR", "3HOUR", "6HOUR", "12HOUR", "DAY", "WEEK", "MONTH", "MONTH"],
+			"x-enum-varnames": [
+				"WindowSizeMinute",
+				"WindowSize15Min",
+				"WindowSize30Min",
+				"WindowSizeHour",
+				"WindowSize3Hour",
+				"WindowSize6Hour",
+				"WindowSize12Hour",
+				"WindowSizeDay",
+				"WindowSizeWeek",
+				"WindowSizeMonth",
+				"DefaultWindowSize"
+			],
+			"x-speakeasy-name-override": "WindowSize",
+			"x-readme-ref-name": "WindowSize"
+		}
+	},
+	"x-readme-ref-name": "GetUsageByMeterRequest"
+}

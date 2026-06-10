@@ -1,0 +1,14 @@
+{
+	"type": "object",
+	"properties": {
+		"charge_amount": { "type": "string" },
+		"credit_amount": { "type": "string" },
+		"description": { "type": "string" },
+		"line_item_id": { "type": "string" },
+		"original_amount": { "type": "string" },
+		"plan_name": { "type": "string" },
+		"price_id": { "type": "string" },
+		"proration_days": { "type": "integer" }
+	},
+	"x-readme-ref-name": "ProrationDetail"
+}

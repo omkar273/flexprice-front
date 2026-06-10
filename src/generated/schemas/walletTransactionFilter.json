@@ -1,0 +1,129 @@
+{
+	"type": "object",
+	"properties": {
+		"created_by": { "type": "string" },
+		"credits_available_gt": { "type": "number" },
+		"end_time": { "type": "string", "format": "date-time" },
+		"expand": { "type": "string" },
+		"expiry_date_after": { "type": "string" },
+		"expiry_date_before": { "type": "string" },
+		"filters": {
+			"type": "array",
+			"description": "filters allows complex filtering based on multiple fields",
+			"items": {
+				"type": "object",
+				"properties": {
+					"data_type": {
+						"type": "string",
+						"enum": ["string", "number", "date", "array"],
+						"x-enum-varnames": ["DataTypeString", "DataTypeNumber", "DataTypeDate", "DataTypeArray"],
+						"x-speakeasy-name-override": "DataType",
+						"x-readme-ref-name": "DataType"
+					},
+					"field": { "type": "string" },
+					"operator": {
+						"type": "string",
+						"enum": ["eq", "contains", "not_contains", "gt", "lt", "in", "not_in", "before", "after"],
+						"x-enum-varnames": ["EQUAL", "CONTAINS", "NOT_CONTAINS", "GREATER_THAN", "LESS_THAN", "IN", "NOT_IN", "BEFORE", "AFTER"],
+						"x-speakeasy-name-override": "FilterOperatorType",
+						"x-readme-ref-name": "FilterOperatorType"
+					},
+					"value": {
+						"type": "object",
+						"properties": {
+							"array": { "type": "array", "items": { "type": "string" } },
+							"boolean": { "type": "boolean" },
+							"date": { "type": "string" },
+							"number": { "type": "number" },
+							"string": { "type": "string" }
+						},
+						"x-speakeasy-name-override": "Value",
+						"x-readme-ref-name": "Value"
+					}
+				},
+				"x-speakeasy-name-override": "FilterCondition",
+				"x-readme-ref-name": "FilterCondition"
+			}
+		},
+		"id": { "type": "string" },
+		"limit": { "maximum": 1000, "minimum": 1, "type": "integer" },
+		"offset": { "minimum": 0, "type": "integer" },
+		"order": { "type": "string", "enum": ["asc", "desc"] },
+		"priority": { "type": "integer" },
+		"reference_id": { "type": "string" },
+		"reference_type": { "type": "string" },
+		"sort": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"direction": {
+						"type": "string",
+						"enum": ["asc", "desc"],
+						"x-enum-varnames": ["SortDirectionAsc", "SortDirectionDesc"],
+						"x-speakeasy-name-override": "SortDirection",
+						"x-readme-ref-name": "SortDirection"
+					},
+					"field": { "type": "string" }
+				},
+				"x-speakeasy-name-override": "SortCondition",
+				"x-readme-ref-name": "SortCondition"
+			}
+		},
+		"start_time": { "type": "string", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"transaction_reason": {
+			"type": "string",
+			"enum": [
+				"INVOICE_PAYMENT",
+				"FREE_CREDIT_GRANT",
+				"SUBSCRIPTION_CREDIT_GRANT",
+				"PURCHASED_CREDIT_INVOICED",
+				"PURCHASED_CREDIT_DIRECT",
+				"CREDIT_NOTE",
+				"CREDIT_EXPIRED",
+				"WALLET_TERMINATION",
+				"MANUAL_BALANCE_DEBIT",
+				"CREDIT_ADJUSTMENT",
+				"INVOICE_VOID_REFUND"
+			],
+			"x-enum-varnames": [
+				"TransactionReasonInvoicePayment",
+				"TransactionReasonFreeCredit",
+				"TransactionReasonSubscriptionCredit",
+				"TransactionReasonPurchasedCreditInvoiced",
+				"TransactionReasonPurchasedCreditDirect",
+				"TransactionReasonCreditNote",
+				"TransactionReasonCreditExpired",
+				"TransactionReasonWalletTermination",
+				"TransactionReasonManualBalanceDebit",
+				"TransactionReasonCreditAdjustment",
+				"TransactionReasonInvoiceVoidRefund"
+			],
+			"x-speakeasy-name-override": "TransactionReason",
+			"x-readme-ref-name": "TransactionReason"
+		},
+		"transaction_status": {
+			"type": "string",
+			"enum": ["pending", "completed", "failed"],
+			"x-enum-varnames": ["TransactionStatusPending", "TransactionStatusCompleted", "TransactionStatusFailed"],
+			"x-speakeasy-name-override": "TransactionStatus",
+			"x-readme-ref-name": "TransactionStatus"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["credit", "debit"],
+			"x-enum-varnames": ["TransactionTypeCredit", "TransactionTypeDebit"],
+			"x-speakeasy-name-override": "TransactionType",
+			"x-readme-ref-name": "TransactionType"
+		}
+	},
+	"x-speakeasy-name-override": "WalletTransactionFilter",
+	"x-readme-ref-name": "WalletTransactionFilter"
+}

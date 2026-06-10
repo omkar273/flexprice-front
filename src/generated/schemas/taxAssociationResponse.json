@@ -1,0 +1,89 @@
+{
+	"type": "object",
+	"properties": {
+		"auto_apply": { "type": "boolean", "description": "Whether this tax should be automatically applied" },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"currency": { "type": "string", "description": "Currency" },
+		"entity_id": { "type": "string", "description": "ID of the entity this tax rate applies to" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["customer", "subscription", "invoice", "tenant"],
+			"x-enum-varnames": [
+				"TaxRateEntityTypeCustomer",
+				"TaxRateEntityTypeSubscription",
+				"TaxRateEntityTypeInvoice",
+				"TaxRateEntityTypeTenant"
+			],
+			"x-speakeasy-name-override": "TaxRateEntityType",
+			"x-readme-ref-name": "TaxRateEntityType"
+		},
+		"environment_id": { "type": "string", "description": "EnvironmentID is the ID of the environment this tax rate config belongs to" },
+		"id": { "type": "string", "description": "ID of the ent." },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "Metadata holds the value of the \"metadata\" field."
+		},
+		"priority": { "type": "integer", "description": "Priority for tax resolution (lower number = higher priority)" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"tax_rate": {
+			"type": "object",
+			"properties": {
+				"code": { "type": "string" },
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"description": { "type": "string" },
+				"environment_id": { "type": "string" },
+				"fixed_value": { "type": "string" },
+				"id": { "type": "string" },
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+				"name": { "type": "string" },
+				"percentage_value": { "type": "string" },
+				"scope": {
+					"type": "string",
+					"enum": ["INTERNAL", "EXTERNAL", "ONETIME"],
+					"x-enum-varnames": ["TaxRateScopeInternal", "TaxRateScopeExternal", "TaxRateScopeOneTime"],
+					"x-speakeasy-name-override": "TaxRateScope",
+					"x-readme-ref-name": "TaxRateScope"
+				},
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tax_rate_status": {
+					"type": "string",
+					"enum": ["ACTIVE", "INACTIVE"],
+					"x-enum-varnames": ["TaxRateStatusActive", "TaxRateStatusInactive"],
+					"x-speakeasy-name-override": "TaxRateStatus",
+					"x-readme-ref-name": "TaxRateStatus"
+				},
+				"tax_rate_type": {
+					"type": "string",
+					"enum": ["percentage", "fixed"],
+					"x-enum-varnames": ["TaxRateTypePercentage", "TaxRateTypeFixed"],
+					"x-speakeasy-name-override": "TaxRateType",
+					"x-readme-ref-name": "TaxRateType"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"x-readme-ref-name": "TaxRateResponse"
+		},
+		"tax_rate_id": { "type": "string", "description": "Reference to the TaxRate entity" },
+		"tenant_id": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "TaxAssociationResponse"
+}

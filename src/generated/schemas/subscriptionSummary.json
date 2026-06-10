@@ -1,0 +1,27 @@
+{
+	"type": "object",
+	"properties": {
+		"archived_at": { "type": "string", "description": "archived_at timestamp (for old subscriptions)", "format": "date-time" },
+		"billing_anchor": { "type": "string", "description": "billing_anchor of the subscription", "format": "date-time" },
+		"created_at": { "type": "string", "description": "created_at timestamp", "format": "date-time" },
+		"current_period_end": { "type": "string", "description": "current_period_end of the subscription", "format": "date-time" },
+		"current_period_start": { "type": "string", "description": "current_period_start of the subscription", "format": "date-time" },
+		"id": { "type": "string", "description": "id of the subscription" },
+		"plan_id": { "type": "string", "description": "plan_id of the subscription" },
+		"status": {
+			"type": "string",
+			"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+			"x-enum-varnames": [
+				"SubscriptionStatusActive",
+				"SubscriptionStatusPaused",
+				"SubscriptionStatusCancelled",
+				"SubscriptionStatusIncomplete",
+				"SubscriptionStatusTrialing",
+				"SubscriptionStatusDraft"
+			],
+			"x-speakeasy-name-override": "SubscriptionStatus",
+			"x-readme-ref-name": "SubscriptionStatus"
+		}
+	},
+	"x-readme-ref-name": "SubscriptionSummary"
+}

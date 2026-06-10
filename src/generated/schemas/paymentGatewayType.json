@@ -1,0 +1,14 @@
+{
+	"type": "string",
+	"enum": ["stripe", "razorpay", "nomod", "moyasar", "paddle", "whop"],
+	"x-enum-varnames": [
+		"PaymentGatewayTypeStripe",
+		"PaymentGatewayTypeRazorpay",
+		"PaymentGatewayTypeNomod",
+		"PaymentGatewayTypeMoyasar",
+		"PaymentGatewayTypePaddle",
+		"PaymentGatewayTypeWhop"
+	],
+	"x-speakeasy-name-override": "PaymentGatewayType",
+	"x-readme-ref-name": "PaymentGatewayType"
+}

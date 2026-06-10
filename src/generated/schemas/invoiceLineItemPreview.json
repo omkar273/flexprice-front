@@ -1,0 +1,13 @@
+{
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string", "description": "amount for this line item" },
+		"description": { "type": "string", "description": "description of the line item" },
+		"is_proration": { "type": "boolean", "description": "is_proration indicates if this line item is a proration" },
+		"period_end": { "type": "string", "description": "period_end for this line item (if applicable)", "format": "date-time" },
+		"period_start": { "type": "string", "description": "period_start for this line item (if applicable)", "format": "date-time" },
+		"quantity": { "type": "string", "description": "quantity for this line item" },
+		"unit_price": { "type": "string", "description": "unit_price for this line item" }
+	},
+	"x-readme-ref-name": "InvoiceLineItemPreview"
+}

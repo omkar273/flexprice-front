@@ -1,0 +1,96 @@
+{
+	"type": "object",
+	"properties": {
+		"active_filter": { "type": "boolean", "default": true },
+		"addon_association_ids": { "type": "array", "items": { "type": "string" } },
+		"billing_periods": { "type": "array", "items": { "type": "string" } },
+		"currencies": { "type": "array", "items": { "type": "string" } },
+		"current_period_start": { "type": "string", "format": "date-time" },
+		"customer_ids": { "type": "array", "items": { "type": "string" } },
+		"end_time": { "type": "string", "format": "date-time" },
+		"entity_ids": { "type": "array", "items": { "type": "string" } },
+		"entity_type": {
+			"type": "string",
+			"enum": ["plan", "addon", "subscription"],
+			"x-enum-varnames": [
+				"SubscriptionLineItemEntityTypePlan",
+				"SubscriptionLineItemEntityTypeAddon",
+				"SubscriptionLineItemEntityTypeSubscription"
+			],
+			"x-speakeasy-name-override": "SubscriptionLineItemEntityType",
+			"x-readme-ref-name": "SubscriptionLineItemEntityType"
+		},
+		"expand": { "type": "string" },
+		"filters": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"data_type": {
+						"type": "string",
+						"enum": ["string", "number", "date", "array"],
+						"x-enum-varnames": ["DataTypeString", "DataTypeNumber", "DataTypeDate", "DataTypeArray"],
+						"x-speakeasy-name-override": "DataType",
+						"x-readme-ref-name": "DataType"
+					},
+					"field": { "type": "string" },
+					"operator": {
+						"type": "string",
+						"enum": ["eq", "contains", "not_contains", "gt", "lt", "in", "not_in", "before", "after"],
+						"x-enum-varnames": ["EQUAL", "CONTAINS", "NOT_CONTAINS", "GREATER_THAN", "LESS_THAN", "IN", "NOT_IN", "BEFORE", "AFTER"],
+						"x-speakeasy-name-override": "FilterOperatorType",
+						"x-readme-ref-name": "FilterOperatorType"
+					},
+					"value": {
+						"type": "object",
+						"properties": {
+							"array": { "type": "array", "items": { "type": "string" } },
+							"boolean": { "type": "boolean" },
+							"date": { "type": "string" },
+							"number": { "type": "number" },
+							"string": { "type": "string" }
+						},
+						"x-speakeasy-name-override": "Value",
+						"x-readme-ref-name": "Value"
+					}
+				},
+				"x-speakeasy-name-override": "FilterCondition",
+				"x-readme-ref-name": "FilterCondition"
+			}
+		},
+		"limit": { "maximum": 1000, "minimum": 1, "type": "integer" },
+		"meter_ids": { "type": "array", "items": { "type": "string" } },
+		"offset": { "minimum": 0, "type": "integer" },
+		"order": { "type": "string", "enum": ["asc", "desc"] },
+		"price_ids": { "type": "array", "items": { "type": "string" } },
+		"sort": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"direction": {
+						"type": "string",
+						"enum": ["asc", "desc"],
+						"x-enum-varnames": ["SortDirectionAsc", "SortDirectionDesc"],
+						"x-speakeasy-name-override": "SortDirection",
+						"x-readme-ref-name": "SortDirection"
+					},
+					"field": { "type": "string" }
+				},
+				"x-speakeasy-name-override": "SortCondition",
+				"x-readme-ref-name": "SortCondition"
+			}
+		},
+		"start_time": { "type": "string", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"subscription_ids": { "type": "array", "description": "Specific filters", "items": { "type": "string" } }
+	},
+	"x-speakeasy-name-override": "SubscriptionLineItemFilter",
+	"x-readme-ref-name": "SubscriptionLineItemFilter"
+}

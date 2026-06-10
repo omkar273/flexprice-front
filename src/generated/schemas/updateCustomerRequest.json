@@ -1,0 +1,74 @@
+{
+	"type": "object",
+	"properties": {
+		"address_city": {
+			"maxLength": 100,
+			"type": "string",
+			"description": "address_city is the updated city name with maximum 100 characters"
+		},
+		"address_country": { "type": "string", "description": "address_country is the updated two-letter ISO 3166-1 alpha-2 country code" },
+		"address_line1": {
+			"maxLength": 255,
+			"type": "string",
+			"description": "address_line1 is the updated primary address line with maximum 255 characters"
+		},
+		"address_line2": {
+			"maxLength": 255,
+			"type": "string",
+			"description": "address_line2 is the updated secondary address line with maximum 255 characters"
+		},
+		"address_postal_code": {
+			"maxLength": 20,
+			"type": "string",
+			"description": "address_postal_code is the updated postal code with maximum 20 characters"
+		},
+		"address_state": {
+			"maxLength": 100,
+			"type": "string",
+			"description": "address_state is the updated state, province, or region name with maximum 100 characters"
+		},
+		"email": { "type": "string", "description": "email is the updated email address and must be a valid email format if provided" },
+		"external_id": { "type": "string", "description": "external_id is the updated external identifier for the customer" },
+		"integration_entity_mapping": {
+			"type": "array",
+			"description": "integration_entity_mapping contains provider integration mappings for this customer",
+			"items": {
+				"required": ["entity_id", "entity_type", "provider_entity_id", "provider_type"],
+				"type": "object",
+				"properties": {
+					"entity_id": { "maxLength": 255, "type": "string" },
+					"entity_type": {
+						"type": "string",
+						"enum": ["customer", "plan", "invoice", "subscription", "payment", "credit_note", "addon", "item", "item_price", "price"],
+						"x-enum-varnames": [
+							"IntegrationEntityTypeCustomer",
+							"IntegrationEntityTypePlan",
+							"IntegrationEntityTypeInvoice",
+							"IntegrationEntityTypeSubscription",
+							"IntegrationEntityTypePayment",
+							"IntegrationEntityTypeCreditNote",
+							"IntegrationEntityTypeAddon",
+							"IntegrationEntityTypeItem",
+							"IntegrationEntityTypeItemPrice",
+							"IntegrationEntityTypePrice"
+						],
+						"x-speakeasy-name-override": "IntegrationEntityType",
+						"x-readme-ref-name": "IntegrationEntityType"
+					},
+					"metadata": { "type": "object", "additionalProperties": true },
+					"provider_entity_id": { "maxLength": 255, "type": "string" },
+					"provider_type": { "maxLength": 50, "type": "string" }
+				},
+				"x-readme-ref-name": "CreateEntityIntegrationMappingRequest"
+			}
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"description": "metadata contains updated key-value pairs that will replace existing metadata"
+		},
+		"name": { "type": "string", "description": "name is the updated name or company name for the customer" }
+	},
+	"description": "Request object for updating an existing customer. All fields are optional - only provided fields will be updated",
+	"x-readme-ref-name": "UpdateCustomerRequest"
+}

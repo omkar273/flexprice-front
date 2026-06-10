@@ -1,0 +1,165 @@
+{
+	"type": "object",
+	"properties": {
+		"items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"alert_settings": {
+						"type": "object",
+						"properties": {
+							"alert_enabled": { "type": "boolean" },
+							"critical": {
+								"type": "object",
+								"properties": {
+									"condition": {
+										"type": "string",
+										"enum": ["above", "below"],
+										"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+										"x-speakeasy-name-override": "AlertCondition",
+										"x-readme-ref-name": "AlertCondition"
+									},
+									"threshold": { "type": "number" }
+								},
+								"x-speakeasy-name-override": "AlertThreshold",
+								"x-readme-ref-name": "AlertThreshold"
+							},
+							"info": {
+								"type": "object",
+								"properties": {
+									"condition": {
+										"type": "string",
+										"enum": ["above", "below"],
+										"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+										"x-speakeasy-name-override": "AlertCondition",
+										"x-readme-ref-name": "AlertCondition"
+									},
+									"threshold": { "type": "number" }
+								},
+								"x-speakeasy-name-override": "AlertThreshold",
+								"x-readme-ref-name": "AlertThreshold"
+							},
+							"warning": {
+								"type": "object",
+								"properties": {
+									"condition": {
+										"type": "string",
+										"enum": ["above", "below"],
+										"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+										"x-speakeasy-name-override": "AlertCondition",
+										"x-readme-ref-name": "AlertCondition"
+									},
+									"threshold": { "type": "number" }
+								},
+								"x-speakeasy-name-override": "AlertThreshold",
+								"x-readme-ref-name": "AlertThreshold"
+							}
+						},
+						"x-speakeasy-name-override": "AlertSettings",
+						"x-readme-ref-name": "AlertSettings"
+					},
+					"alert_state": {
+						"type": "string",
+						"enum": ["ok", "info", "warning", "in_alarm"],
+						"x-enum-varnames": ["AlertStateOk", "AlertStateInfo", "AlertStateWarning", "AlertStateInAlarm"],
+						"x-speakeasy-name-override": "AlertState",
+						"x-readme-ref-name": "AlertState"
+					},
+					"auto_topup": {
+						"type": "object",
+						"properties": {
+							"amount": { "type": "number" },
+							"enabled": { "type": "boolean" },
+							"invoicing": { "type": "boolean" },
+							"threshold": { "type": "number" }
+						},
+						"x-speakeasy-name-override": "AutoTopup",
+						"x-readme-ref-name": "AutoTopup"
+					},
+					"balance": { "type": "string" },
+					"config": {
+						"type": "object",
+						"properties": {
+							"allowed_price_types": {
+								"type": "array",
+								"description": "AllowedPriceTypes is a list of price types that are allowed for the wallet\nnil means all price types are allowed",
+								"items": {
+									"type": "string",
+									"enum": ["ALL", "USAGE", "FIXED"],
+									"x-enum-varnames": ["WalletConfigPriceTypeAll", "WalletConfigPriceTypeUsage", "WalletConfigPriceTypeFixed"],
+									"x-speakeasy-name-override": "WalletConfigPriceType",
+									"x-readme-ref-name": "WalletConfigPriceType"
+								}
+							}
+						},
+						"x-speakeasy-name-override": "WalletConfig",
+						"x-readme-ref-name": "WalletConfig"
+					},
+					"conversion_rate": {
+						"type": "string",
+						"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits"
+					},
+					"created_at": { "type": "string", "format": "date-time" },
+					"created_by": { "type": "string" },
+					"credit_balance": { "type": "string" },
+					"credits_available_breakdown": {
+						"type": "object",
+						"properties": { "free": { "type": "string" }, "purchased": { "type": "string" } },
+						"x-speakeasy-name-override": "CreditBreakdown",
+						"x-readme-ref-name": "CreditBreakdown"
+					},
+					"currency": { "type": "string" },
+					"customer_id": { "type": "string" },
+					"description": { "type": "string" },
+					"environment_id": { "type": "string" },
+					"id": { "type": "string" },
+					"metadata": {
+						"type": "object",
+						"additionalProperties": { "type": "string" },
+						"x-speakeasy-name-override": "Metadata",
+						"x-readme-ref-name": "Metadata"
+					},
+					"name": { "type": "string" },
+					"status": {
+						"type": "string",
+						"enum": ["published", "deleted", "archived"],
+						"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+						"x-speakeasy-name-override": "Status",
+						"x-readme-ref-name": "Status"
+					},
+					"tenant_id": { "type": "string" },
+					"topup_conversion_rate": {
+						"type": "string",
+						"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+					},
+					"updated_at": { "type": "string", "format": "date-time" },
+					"updated_by": { "type": "string" },
+					"wallet_status": {
+						"type": "string",
+						"enum": ["active", "frozen", "closed"],
+						"x-enum-varnames": ["WalletStatusActive", "WalletStatusFrozen", "WalletStatusClosed"],
+						"x-speakeasy-name-override": "WalletStatus",
+						"x-readme-ref-name": "WalletStatus"
+					},
+					"wallet_type": {
+						"type": "string",
+						"enum": ["PRE_PAID", "POST_PAID"],
+						"x-enum-varnames": ["WalletTypePrePaid", "WalletTypePostPaid"],
+						"x-speakeasy-name-override": "WalletType",
+						"x-readme-ref-name": "WalletType"
+					}
+				},
+				"x-readme-ref-name": "WalletResponse"
+			}
+		},
+		"pagination": {
+			"type": "object",
+			"properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "total": { "type": "integer" } },
+			"x-speakeasy-name-override": "PaginationResponse",
+			"x-readme-ref-name": "PaginationResponse"
+		}
+	},
+	"x-speakeasy-name-override": "ListResponse-dto_WalletResponse",
+	"x-readme-ref-name": "ListResponse-dto_WalletResponse"
+}

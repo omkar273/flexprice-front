@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["PLAN", "SUBSCRIPTION", "ADDON"],
+	"x-enum-varnames": ["ENTITLEMENT_ENTITY_TYPE_PLAN", "ENTITLEMENT_ENTITY_TYPE_SUBSCRIPTION", "ENTITLEMENT_ENTITY_TYPE_ADDON"],
+	"x-speakeasy-name-override": "EntitlementEntityType",
+	"x-readme-ref-name": "EntitlementEntityType"
+}

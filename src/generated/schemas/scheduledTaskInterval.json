@@ -1,0 +1,14 @@
+{
+	"type": "string",
+	"enum": ["15MIN", "30MIN", "custom", "hourly", "daily"],
+	"x-enum-comments": { "ScheduledTaskIntervalCustom": "10 minutes for testing" },
+	"x-enum-varnames": [
+		"ScheduledTaskIntervalEvery15Minutes",
+		"ScheduledTaskIntervalEvery30Minutes",
+		"ScheduledTaskIntervalCustom",
+		"ScheduledTaskIntervalHourly",
+		"ScheduledTaskIntervalDaily"
+	],
+	"x-speakeasy-name-override": "ScheduledTaskInterval",
+	"x-readme-ref-name": "ScheduledTaskInterval"
+}

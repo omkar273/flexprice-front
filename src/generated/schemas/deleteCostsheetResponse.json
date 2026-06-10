@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "id": { "type": "string" }, "message": { "type": "string" } },
+	"x-readme-ref-name": "DeleteCostsheetResponse"
+}

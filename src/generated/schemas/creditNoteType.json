@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["ADJUSTMENT", "REFUND"],
+	"x-enum-varnames": ["CreditNoteTypeAdjustment", "CreditNoteTypeRefund"],
+	"x-speakeasy-name-override": "CreditNoteType",
+	"x-readme-ref-name": "CreditNoteType"
+}

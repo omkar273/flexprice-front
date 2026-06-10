@@ -1,0 +1,58 @@
+{
+	"required": ["items"],
+	"type": "object",
+	"properties": {
+		"items": {
+			"maxItems": 100,
+			"minItems": 1,
+			"type": "array",
+			"items": {
+				"required": ["feature_id", "feature_type"],
+				"type": "object",
+				"properties": {
+					"end_date": { "type": "string", "format": "date-time" },
+					"entity_id": { "type": "string" },
+					"entity_type": {
+						"type": "string",
+						"enum": ["PLAN", "SUBSCRIPTION", "ADDON"],
+						"x-enum-varnames": ["ENTITLEMENT_ENTITY_TYPE_PLAN", "ENTITLEMENT_ENTITY_TYPE_SUBSCRIPTION", "ENTITLEMENT_ENTITY_TYPE_ADDON"],
+						"x-speakeasy-name-override": "EntitlementEntityType",
+						"x-readme-ref-name": "EntitlementEntityType"
+					},
+					"feature_id": { "type": "string" },
+					"feature_type": {
+						"type": "string",
+						"enum": ["metered", "boolean", "static"],
+						"x-enum-varnames": ["FeatureTypeMetered", "FeatureTypeBoolean", "FeatureTypeStatic"],
+						"x-speakeasy-name-override": "FeatureType",
+						"x-readme-ref-name": "FeatureType"
+					},
+					"is_enabled": { "type": "boolean" },
+					"is_soft_limit": { "type": "boolean" },
+					"parent_entitlement_id": { "type": "string" },
+					"plan_id": { "type": "string" },
+					"start_date": { "type": "string", "format": "date-time" },
+					"static_value": { "type": "string" },
+					"usage_limit": { "type": "integer" },
+					"usage_reset_period": {
+						"type": "string",
+						"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "NEVER"],
+						"x-enum-varnames": [
+							"ENTITLEMENT_USAGE_RESET_PERIOD_MONTHLY",
+							"ENTITLEMENT_USAGE_RESET_PERIOD_ANNUAL",
+							"ENTITLEMENT_USAGE_RESET_PERIOD_WEEKLY",
+							"ENTITLEMENT_USAGE_RESET_PERIOD_DAILY",
+							"ENTITLEMENT_USAGE_RESET_PERIOD_QUARTER",
+							"ENTITLEMENT_USAGE_RESET_PERIOD_HALF_YEAR",
+							"ENTITLEMENT_USAGE_RESET_PERIOD_NEVER"
+						],
+						"x-speakeasy-name-override": "EntitlementUsageResetPeriod",
+						"x-readme-ref-name": "EntitlementUsageResetPeriod"
+					}
+				},
+				"x-readme-ref-name": "CreateEntitlementRequest"
+			}
+		}
+	},
+	"x-readme-ref-name": "CreateBulkEntitlementRequest"
+}

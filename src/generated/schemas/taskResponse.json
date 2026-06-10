@@ -1,0 +1,61 @@
+{
+	"type": "object",
+	"properties": {
+		"completed_at": { "type": "string", "format": "date-time" },
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"entity_type": {
+			"type": "string",
+			"enum": ["EVENTS", "PRICES", "CUSTOMERS", "FEATURES"],
+			"x-enum-varnames": ["EntityTypeEvents", "EntityTypePrices", "EntityTypeCustomers", "EntityTypeFeatures"],
+			"x-speakeasy-name-override": "EntityType",
+			"x-readme-ref-name": "EntityType"
+		},
+		"environment_id": { "type": "string" },
+		"error_summary": { "type": "string" },
+		"failed_at": { "type": "string", "format": "date-time" },
+		"failed_records": { "type": "integer" },
+		"file_name": { "type": "string" },
+		"file_type": {
+			"type": "string",
+			"enum": ["CSV", "JSON"],
+			"x-enum-varnames": ["FileTypeCSV", "FileTypeJSON"],
+			"x-speakeasy-name-override": "FileType",
+			"x-readme-ref-name": "FileType"
+		},
+		"file_url": { "type": "string" },
+		"id": { "type": "string" },
+		"metadata": { "type": "object", "additionalProperties": true },
+		"processed_records": { "type": "integer" },
+		"scheduled_task_id": { "type": "string" },
+		"started_at": { "type": "string", "format": "date-time" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"successful_records": { "type": "integer" },
+		"task_status": {
+			"type": "string",
+			"enum": ["PENDING", "PROCESSING", "COMPLETED", "FAILED"],
+			"x-enum-varnames": ["TaskStatusPending", "TaskStatusProcessing", "TaskStatusCompleted", "TaskStatusFailed"],
+			"x-speakeasy-name-override": "TaskStatus",
+			"x-readme-ref-name": "TaskStatus"
+		},
+		"task_type": {
+			"type": "string",
+			"enum": ["IMPORT", "EXPORT"],
+			"x-enum-varnames": ["TaskTypeImport", "TaskTypeExport"],
+			"x-speakeasy-name-override": "TaskType",
+			"x-readme-ref-name": "TaskType"
+		},
+		"tenant_id": { "type": "string" },
+		"total_records": { "type": "integer" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" },
+		"workflow_id": { "type": "string" }
+	},
+	"x-readme-ref-name": "TaskResponse"
+}

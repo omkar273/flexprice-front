@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["ACTIVE", "INACTIVE"],
+	"x-enum-varnames": ["TaxRateStatusActive", "TaxRateStatusInactive"],
+	"x-speakeasy-name-override": "TaxRateStatus",
+	"x-readme-ref-name": "TaxRateStatus"
+}

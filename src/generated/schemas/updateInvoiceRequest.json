@@ -1,0 +1,17 @@
+{
+	"type": "object",
+	"properties": {
+		"due_date": { "type": "string", "format": "date-time" },
+		"invoice_pdf_url": {
+			"type": "string",
+			"description": "invoice_pdf_url is the URL where customers can download the PDF version of this invoice"
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		}
+	},
+	"x-readme-ref-name": "UpdateInvoiceRequest"
+}

@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["active", "cancelled", "pending"],
+	"x-enum-varnames": ["AddonStatusActive", "AddonStatusCancelled", "AddonStatusPending"],
+	"x-speakeasy-name-override": "AddonStatus",
+	"x-readme-ref-name": "AddonStatus"
+}

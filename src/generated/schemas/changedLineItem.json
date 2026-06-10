@@ -1,0 +1,18 @@
+{
+	"type": "object",
+	"properties": {
+		"change_action": {
+			"type": "string",
+			"description": "created | updated | ended",
+			"enum": ["created", "updated", "ended"],
+			"x-enum-varnames": ["ChangedLineItemActionCreated", "ChangedLineItemActionUpdated", "ChangedLineItemActionEnded"],
+			"x-readme-ref-name": "ChangedLineItemAction"
+		},
+		"end_date": { "type": "string", "format": "date-time" },
+		"id": { "type": "string" },
+		"price_id": { "type": "string" },
+		"quantity": { "type": "string" },
+		"start_date": { "type": "string", "format": "date-time" }
+	},
+	"x-readme-ref-name": "ChangedLineItem"
+}

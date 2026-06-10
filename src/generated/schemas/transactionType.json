@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["credit", "debit"],
+	"x-enum-varnames": ["TransactionTypeCredit", "TransactionTypeDebit"],
+	"x-speakeasy-name-override": "TransactionType",
+	"x-readme-ref-name": "TransactionType"
+}

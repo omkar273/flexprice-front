@@ -1,0 +1,24 @@
+{
+	"required": ["payment_status"],
+	"type": "object",
+	"properties": {
+		"amount": { "type": "string", "description": "amount is the optional payment amount to record" },
+		"payment_status": {
+			"type": "string",
+			"enum": ["INITIATED", "PENDING", "PROCESSING", "SUCCEEDED", "OVERPAID", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED"],
+			"x-enum-varnames": [
+				"PaymentStatusInitiated",
+				"PaymentStatusPending",
+				"PaymentStatusProcessing",
+				"PaymentStatusSucceeded",
+				"PaymentStatusOverpaid",
+				"PaymentStatusFailed",
+				"PaymentStatusRefunded",
+				"PaymentStatusPartiallyRefunded"
+			],
+			"x-speakeasy-name-override": "PaymentStatus",
+			"x-readme-ref-name": "PaymentStatus"
+		}
+	},
+	"x-readme-ref-name": "UpdatePaymentStatusRequest"
+}

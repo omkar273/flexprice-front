@@ -1,0 +1,11 @@
+{
+	"type": "string",
+	"enum": ["inheritance", "quantity_change", "grouped_invoicing", "trial_end"],
+	"x-enum-varnames": [
+		"SubscriptionModifyTypeInheritance",
+		"SubscriptionModifyTypeQuantityChange",
+		"SubscriptionModifyTypeGroupedInvoicing",
+		"SubscriptionModifyTypeTrialEnd"
+	],
+	"x-readme-ref-name": "SubscriptionModifyType"
+}

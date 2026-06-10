@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "message": { "type": "string" }, "run_id": { "type": "string" }, "workflow_id": { "type": "string" } },
+	"x-readme-ref-name": "TemporalWorkflowResult"
+}

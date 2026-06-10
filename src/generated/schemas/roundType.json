@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["up", "down"],
+	"x-enum-varnames": ["ROUND_UP", "ROUND_DOWN"],
+	"x-speakeasy-name-override": "RoundType",
+	"x-readme-ref-name": "RoundType"
+}

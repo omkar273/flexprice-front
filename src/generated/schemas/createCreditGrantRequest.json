@@ -1,0 +1,77 @@
+{
+	"required": ["cadence", "credits", "name", "scope"],
+	"type": "object",
+	"properties": {
+		"cadence": {
+			"type": "string",
+			"enum": ["ONETIME", "RECURRING"],
+			"x-enum-varnames": ["CreditGrantCadenceOneTime", "CreditGrantCadenceRecurring"],
+			"x-speakeasy-name-override": "CreditGrantCadence",
+			"x-readme-ref-name": "CreditGrantCadence"
+		},
+		"conversion_rate": {
+			"type": "string",
+			"description": "amount in the currency =  number of credits * conversion_rate\nex if conversion_rate is 1, then 1 USD = 1 credit\nex if conversion_rate is 2, then 1 USD = 0.5 credits\nex if conversion_rate is 0.5, then 1 USD = 2 credits"
+		},
+		"credits": { "type": "string" },
+		"end_date": { "type": "string", "format": "date-time" },
+		"expiration_duration": { "type": "integer" },
+		"expiration_duration_unit": {
+			"type": "string",
+			"enum": ["DAY", "WEEK", "MONTH", "YEAR"],
+			"x-enum-varnames": [
+				"CreditGrantExpiryDurationUnitDays",
+				"CreditGrantExpiryDurationUnitWeeks",
+				"CreditGrantExpiryDurationUnitMonths",
+				"CreditGrantExpiryDurationUnitYears"
+			],
+			"x-speakeasy-name-override": "CreditGrantExpiryDurationUnit",
+			"x-readme-ref-name": "CreditGrantExpiryDurationUnit"
+		},
+		"expiration_type": {
+			"type": "string",
+			"enum": ["NEVER", "DURATION", "BILLING_CYCLE"],
+			"x-enum-varnames": ["CreditGrantExpiryTypeNever", "CreditGrantExpiryTypeDuration", "CreditGrantExpiryTypeBillingCycle"],
+			"x-speakeasy-name-override": "CreditGrantExpiryType",
+			"x-readme-ref-name": "CreditGrantExpiryType"
+		},
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"name": { "type": "string" },
+		"period": {
+			"type": "string",
+			"enum": ["DAILY", "WEEKLY", "MONTHLY", "ANNUAL", "QUARTERLY", "HALF_YEARLY"],
+			"x-enum-varnames": [
+				"CREDIT_GRANT_PERIOD_DAILY",
+				"CREDIT_GRANT_PERIOD_WEEKLY",
+				"CREDIT_GRANT_PERIOD_MONTHLY",
+				"CREDIT_GRANT_PERIOD_ANNUAL",
+				"CREDIT_GRANT_PERIOD_QUARTER",
+				"CREDIT_GRANT_PERIOD_HALF_YEARLY"
+			],
+			"x-speakeasy-name-override": "CreditGrantPeriod",
+			"x-readme-ref-name": "CreditGrantPeriod"
+		},
+		"period_count": { "type": "integer" },
+		"plan_id": { "type": "string" },
+		"priority": { "type": "integer" },
+		"scope": {
+			"type": "string",
+			"enum": ["PLAN", "SUBSCRIPTION"],
+			"x-enum-varnames": ["CreditGrantScopePlan", "CreditGrantScopeSubscription"],
+			"x-speakeasy-name-override": "CreditGrantScope",
+			"x-readme-ref-name": "CreditGrantScope"
+		},
+		"start_date": { "type": "string", "format": "date-time" },
+		"subscription_id": { "type": "string" },
+		"topup_conversion_rate": {
+			"type": "string",
+			"description": "topup_conversion_rate is the conversion rate for the topup to the currency\nex if topup_conversion_rate is 1, then 1 USD = 1 credit\nex if topup_conversion_rate is 2, then 1 USD = 0.5 credits\nex if topup_conversion_rate is 0.5, then 1 USD = 2 credits"
+		}
+	},
+	"x-readme-ref-name": "CreateCreditGrantRequest"
+}

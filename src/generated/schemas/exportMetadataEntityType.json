@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["customer", "wallet"],
+	"x-enum-varnames": ["ExportMetadataEntityTypeCustomer", "ExportMetadataEntityTypeWallet"],
+	"x-speakeasy-name-override": "ExportMetadataEntityType",
+	"x-readme-ref-name": "ExportMetadataEntityType"
+}

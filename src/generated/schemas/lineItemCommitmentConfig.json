@@ -1,0 +1,39 @@
+{
+	"type": "object",
+	"properties": {
+		"commitment_amount": { "type": "number", "description": "CommitmentAmount is the minimum amount committed for this line item" },
+		"commitment_duration": {
+			"type": "string",
+			"enum": ["MONTHLY", "ANNUAL", "WEEKLY", "DAILY", "QUARTERLY", "HALF_YEARLY", "ONETIME"],
+			"x-enum-varnames": [
+				"BILLING_PERIOD_MONTHLY",
+				"BILLING_PERIOD_ANNUAL",
+				"BILLING_PERIOD_WEEKLY",
+				"BILLING_PERIOD_DAILY",
+				"BILLING_PERIOD_QUARTER",
+				"BILLING_PERIOD_HALF_YEAR",
+				"BILLING_PERIOD_ONETIME"
+			],
+			"x-speakeasy-name-override": "BillingPeriod",
+			"x-readme-ref-name": "BillingPeriod"
+		},
+		"commitment_quantity": { "type": "number", "description": "CommitmentQuantity is the minimum quantity committed for this line item" },
+		"commitment_type": {
+			"type": "string",
+			"enum": ["amount", "quantity"],
+			"x-enum-varnames": ["COMMITMENT_TYPE_AMOUNT", "COMMITMENT_TYPE_QUANTITY"],
+			"x-speakeasy-name-override": "CommitmentType",
+			"x-readme-ref-name": "CommitmentType"
+		},
+		"enable_true_up": {
+			"type": "boolean",
+			"description": "EnableTrueUp determines if true-up fee should be applied when usage is below commitment"
+		},
+		"is_window_commitment": {
+			"type": "boolean",
+			"description": "IsWindowCommitment determines if commitment is applied per window (e.g., per day) rather than per billing period"
+		},
+		"overage_factor": { "type": "number", "description": "OverageFactor is a multiplier applied to usage beyond the commitment" }
+	},
+	"x-readme-ref-name": "LineItemCommitmentConfig"
+}

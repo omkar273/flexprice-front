@@ -1,0 +1,14 @@
+{
+	"type": "string",
+	"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+	"x-enum-varnames": [
+		"SubscriptionStatusActive",
+		"SubscriptionStatusPaused",
+		"SubscriptionStatusCancelled",
+		"SubscriptionStatusIncomplete",
+		"SubscriptionStatusTrialing",
+		"SubscriptionStatusDraft"
+	],
+	"x-speakeasy-name-override": "SubscriptionStatus",
+	"x-readme-ref-name": "SubscriptionStatus"
+}

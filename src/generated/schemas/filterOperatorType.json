@@ -1,0 +1,7 @@
+{
+	"type": "string",
+	"enum": ["eq", "contains", "not_contains", "gt", "lt", "in", "not_in", "before", "after"],
+	"x-enum-varnames": ["EQUAL", "CONTAINS", "NOT_CONTAINS", "GREATER_THAN", "LESS_THAN", "IN", "NOT_IN", "BEFORE", "AFTER"],
+	"x-speakeasy-name-override": "FilterOperatorType",
+	"x-readme-ref-name": "FilterOperatorType"
+}

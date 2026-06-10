@@ -1,0 +1,61 @@
+{
+	"type": "object",
+	"properties": {
+		"invoices": { "type": "array", "items": { "$ref": "#/components/schemas/ChangedInvoice" } },
+		"line_items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"change_action": {
+						"type": "string",
+						"description": "created | updated | ended",
+						"enum": ["created", "updated", "ended"],
+						"x-enum-varnames": ["ChangedLineItemActionCreated", "ChangedLineItemActionUpdated", "ChangedLineItemActionEnded"],
+						"x-readme-ref-name": "ChangedLineItemAction"
+					},
+					"end_date": { "type": "string", "format": "date-time" },
+					"id": { "type": "string" },
+					"price_id": { "type": "string" },
+					"quantity": { "type": "string" },
+					"start_date": { "type": "string", "format": "date-time" }
+				},
+				"x-readme-ref-name": "ChangedLineItem"
+			}
+		},
+		"subscriptions": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"action": {
+						"type": "string",
+						"description": "created | updated",
+						"enum": ["created", "updated"],
+						"x-enum-varnames": ["ChangedSubscriptionActionCreated", "ChangedSubscriptionActionUpdated"],
+						"x-readme-ref-name": "ChangedSubscriptionAction"
+					},
+					"current_period_end": { "type": "string", "format": "date-time" },
+					"id": { "type": "string" },
+					"status": {
+						"type": "string",
+						"enum": ["active", "paused", "cancelled", "incomplete", "trialing", "draft"],
+						"x-enum-varnames": [
+							"SubscriptionStatusActive",
+							"SubscriptionStatusPaused",
+							"SubscriptionStatusCancelled",
+							"SubscriptionStatusIncomplete",
+							"SubscriptionStatusTrialing",
+							"SubscriptionStatusDraft"
+						],
+						"x-speakeasy-name-override": "SubscriptionStatus",
+						"x-readme-ref-name": "SubscriptionStatus"
+					},
+					"trial_end": { "type": "string", "format": "date-time" }
+				},
+				"x-readme-ref-name": "ChangedSubscription"
+			}
+		}
+	},
+	"x-readme-ref-name": "ChangedResources"
+}

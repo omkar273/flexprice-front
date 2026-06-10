@@ -1,0 +1,11 @@
+{
+	"type": "object",
+	"properties": {
+		"feature_name": { "type": "string", "description": "Name of the feature this applies to" },
+		"id": { "type": "string" },
+		"name": { "type": "string", "description": "Calculation name (e.g., \"Revenue per Minute\")" },
+		"type": { "type": "string", "description": "\"feature\", \"meter\", \"event_name\"" },
+		"value": { "type": "string" }
+	},
+	"x-readme-ref-name": "CustomAnalyticItem"
+}

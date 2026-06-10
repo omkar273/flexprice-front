@@ -1,0 +1,136 @@
+{
+	"type": "object",
+	"properties": {
+		"alert_settings": {
+			"type": "object",
+			"properties": {
+				"alert_enabled": { "type": "boolean" },
+				"critical": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"info": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				},
+				"warning": {
+					"type": "object",
+					"properties": {
+						"condition": {
+							"type": "string",
+							"enum": ["above", "below"],
+							"x-enum-varnames": ["AlertConditionAbove", "AlertConditionBelow"],
+							"x-speakeasy-name-override": "AlertCondition",
+							"x-readme-ref-name": "AlertCondition"
+						},
+						"threshold": { "type": "number" }
+					},
+					"x-speakeasy-name-override": "AlertThreshold",
+					"x-readme-ref-name": "AlertThreshold"
+				}
+			},
+			"x-speakeasy-name-override": "AlertSettings",
+			"x-readme-ref-name": "AlertSettings"
+		},
+		"created_at": { "type": "string", "format": "date-time" },
+		"created_by": { "type": "string" },
+		"description": { "type": "string" },
+		"environment_id": { "type": "string" },
+		"group": {
+			"type": "object",
+			"properties": {
+				"created_at": { "type": "string", "format": "date-time" },
+				"created_by": { "type": "string" },
+				"entity_type": {
+					"type": "string",
+					"enum": ["price", "feature"],
+					"x-enum-varnames": ["GroupEntityTypePrice", "GroupEntityTypeFeature"],
+					"x-speakeasy-name-override": "GroupEntityType",
+					"x-readme-ref-name": "GroupEntityType"
+				},
+				"environment_id": { "type": "string" },
+				"id": { "type": "string" },
+				"lookup_key": { "type": "string" },
+				"metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+				"name": { "type": "string" },
+				"status": {
+					"type": "string",
+					"enum": ["published", "deleted", "archived"],
+					"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+					"x-speakeasy-name-override": "Status",
+					"x-readme-ref-name": "Status"
+				},
+				"tenant_id": { "type": "string" },
+				"updated_at": { "type": "string", "format": "date-time" },
+				"updated_by": { "type": "string" }
+			},
+			"x-readme-ref-name": "group.Group"
+		},
+		"group_id": { "type": "string" },
+		"id": { "type": "string" },
+		"lookup_key": { "type": "string" },
+		"metadata": {
+			"type": "object",
+			"additionalProperties": { "type": "string" },
+			"x-speakeasy-name-override": "Metadata",
+			"x-readme-ref-name": "Metadata"
+		},
+		"meter_id": { "type": "string" },
+		"name": { "type": "string" },
+		"reporting_unit": {
+			"type": "object",
+			"properties": {
+				"conversion_rate": {
+					"type": "number",
+					"description": "Multiplier: reporting_unit_value = unit_value * conversion_rate; must be > 0"
+				},
+				"unit_plural": { "type": "string", "description": "Display unit label, plural (e.g. \"seconds\")" },
+				"unit_singular": { "type": "string", "description": "Display unit label, singular (e.g. \"second\")" }
+			},
+			"x-speakeasy-name-override": "ReportingUnit",
+			"x-readme-ref-name": "ReportingUnit"
+		},
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		},
+		"tenant_id": { "type": "string" },
+		"type": {
+			"type": "string",
+			"enum": ["metered", "boolean", "static"],
+			"x-enum-varnames": ["FeatureTypeMetered", "FeatureTypeBoolean", "FeatureTypeStatic"],
+			"x-speakeasy-name-override": "FeatureType",
+			"x-readme-ref-name": "FeatureType"
+		},
+		"unit_plural": { "type": "string" },
+		"unit_singular": { "type": "string" },
+		"updated_at": { "type": "string", "format": "date-time" },
+		"updated_by": { "type": "string" }
+	},
+	"x-readme-ref-name": "Feature"
+}

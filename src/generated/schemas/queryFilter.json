@@ -1,0 +1,19 @@
+{
+	"type": "object",
+	"properties": {
+		"expand": { "type": "string" },
+		"limit": { "maximum": 1000, "minimum": 1, "type": "integer" },
+		"offset": { "minimum": 0, "type": "integer" },
+		"order": { "type": "string", "enum": ["asc", "desc"] },
+		"sort": { "type": "string" },
+		"status": {
+			"type": "string",
+			"enum": ["published", "deleted", "archived"],
+			"x-enum-varnames": ["StatusPublished", "StatusDeleted", "StatusArchived"],
+			"x-speakeasy-name-override": "Status",
+			"x-readme-ref-name": "Status"
+		}
+	},
+	"x-speakeasy-name-override": "QueryFilter",
+	"x-readme-ref-name": "QueryFilter"
+}

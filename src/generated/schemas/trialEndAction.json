@@ -1,0 +1,6 @@
+{
+	"type": "string",
+	"enum": ["immediate", "scheduled_date"],
+	"x-enum-varnames": ["TrialEndActionImmediate", "TrialEndActionScheduledDate"],
+	"x-readme-ref-name": "TrialEndAction"
+}

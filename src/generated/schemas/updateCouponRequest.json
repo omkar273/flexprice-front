@@ -1,0 +1,5 @@
+{
+	"type": "object",
+	"properties": { "metadata": { "type": "object", "additionalProperties": { "type": "string" } }, "name": { "type": "string" } },
+	"x-readme-ref-name": "UpdateCouponRequest"
+}

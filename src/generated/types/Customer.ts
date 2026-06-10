@@ -3,13 +3,93 @@
  * Do not edit manually.
  */
 
+import type { Status } from './Status.ts';
+
 export type Customer = {
 	/**
-	 * @type string
+	 * @description AddressCity is the city of the customer\'s address
+	 * @type string | undefined
 	 */
-	id: string;
+	address_city?: string;
 	/**
-	 * @type string
+	 * @description AddressCountry is the country of the customer\'s address (ISO 3166-1 alpha-2)
+	 * @type string | undefined
 	 */
-	name: string;
+	address_country?: string;
+	/**
+	 * @description AddressLine1 is the first line of the customer\'s address
+	 * @type string | undefined
+	 */
+	address_line1?: string;
+	/**
+	 * @description AddressLine2 is the second line of the customer\'s address
+	 * @type string | undefined
+	 */
+	address_line2?: string;
+	/**
+	 * @description AddressPostalCode is the postal code of the customer\'s address
+	 * @type string | undefined
+	 */
+	address_postal_code?: string;
+	/**
+	 * @description AddressState is the state of the customer\'s address
+	 * @type string | undefined
+	 */
+	address_state?: string;
+	/**
+	 * @type string | undefined, date-time
+	 */
+	created_at?: string;
+	/**
+	 * @type string | undefined
+	 */
+	created_by?: string;
+	/**
+	 * @description Email is the email of the customer
+	 * @type string | undefined
+	 */
+	email?: string;
+	/**
+	 * @description EnvironmentID is the environment identifier for the customer
+	 * @type string | undefined
+	 */
+	environment_id?: string;
+	/**
+	 * @description ExternalID is the external identifier for the customer
+	 * @type string | undefined
+	 */
+	external_id?: string;
+	/**
+	 * @description ID is the unique identifier for the customer
+	 * @type string | undefined
+	 */
+	id?: string;
+	/**
+	 * @description Metadata
+	 * @type object | undefined
+	 */
+	metadata?: {
+		[key: string]: string;
+	};
+	/**
+	 * @description Name is the name of the customer
+	 * @type string | undefined
+	 */
+	name?: string;
+	/**
+	 * @type string | undefined
+	 */
+	status?: Status;
+	/**
+	 * @type string | undefined
+	 */
+	tenant_id?: string;
+	/**
+	 * @type string | undefined, date-time
+	 */
+	updated_at?: string;
+	/**
+	 * @type string | undefined
+	 */
+	updated_by?: string;
 };

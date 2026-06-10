@@ -1,0 +1,9 @@
+{
+	"type": "object",
+	"properties": {
+		"inbound": { "type": "boolean", "description": "Inbound from external provider to FlexPrice" },
+		"outbound": { "type": "boolean", "description": "Outbound from FlexPrice to external provider" }
+	},
+	"x-speakeasy-name-override": "EntitySyncConfig",
+	"x-readme-ref-name": "EntitySyncConfig"
+}
