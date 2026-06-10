@@ -11,11 +11,12 @@ export default defineConfig({
 	output: {
 		path: './src/generated',
 		clean: true,
+		barrelType: false,
 	},
 	plugins: [
 		pluginOas(),
 		pluginTs({
-			output: { path: 'types' },
+			output: { path: 'types', barrelType: false },
 		}),
 		pluginClient({
 			output: { path: 'clients' },
