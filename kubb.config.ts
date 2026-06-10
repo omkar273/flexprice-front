@@ -23,6 +23,7 @@ export default defineConfig({
 		}),
 		pluginReactQuery({
 			output: { path: 'hooks' },
+			client: { importPath: '../../api/kubbClient' },
 		}),
 	],
 });

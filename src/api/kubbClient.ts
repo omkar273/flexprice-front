@@ -5,9 +5,6 @@ import { attachAuthInterceptor, attachUnauthorizedHandler } from './interceptors
 
 // Types must match @kubb/plugin-client/clients/axios exactly so that
 // generated client files and generated hook files are structurally compatible.
-type HeaderValue = string | number | boolean | null | undefined | object;
-type HeadersInit = Array<[string, HeaderValue]> | Record<string, HeaderValue>;
-
 export type RequestConfig<TData = unknown> = {
 	baseURL?: string;
 	url?: string;
@@ -17,9 +14,8 @@ export type RequestConfig<TData = unknown> = {
 	responseType?: 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 	signal?: AbortSignal;
 	validateStatus?: (status: number) => boolean;
-	headers?: HeadersInit;
+	headers?: AxiosRequestConfig['headers'];
 	paramsSerializer?: AxiosRequestConfig['paramsSerializer'];
-	contentType?: string;
 };
 
 export type ResponseConfig<TData = unknown> = {
@@ -33,7 +29,6 @@ export type ResponseErrorConfig<TError = unknown> = AxiosError<TError>;
 
 export type Client = <TResponseData, _TError = unknown, TRequestData = unknown>(
 	config: RequestConfig<TRequestData>,
-	request?: unknown,
 ) => Promise<ResponseConfig<TResponseData>>;
 
 export const kubbAxios = createHttpClient();
@@ -50,10 +45,7 @@ const kubbClient: Client = async (config) => {
 		responseType: config.responseType,
 		signal: config.signal,
 		validateStatus: config.validateStatus,
-		headers: {
-			...(config.contentType ? { 'Content-Type': config.contentType } : {}),
-			...(config.headers as Record<string, string>),
-		},
+		headers: config.headers,
 		paramsSerializer: config.paramsSerializer,
 	});
 	return response;
