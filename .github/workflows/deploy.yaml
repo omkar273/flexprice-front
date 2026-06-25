@@ -92,8 +92,11 @@ jobs:
           pass_count=0
           fail_count=0
           skip_count=0
-          console_rows=""
-          md_rows=""
+
+          # Results written incrementally so the summary step has data even on early exit
+          results_file="/tmp/deploy-results.md"
+          counts_file="/tmp/deploy-counts.env"
+          : > "$results_file"
 
           while IFS= read -r deployment; do
             name="$(jq -r '.deployment_name' <<<"$deployment")"
@@ -104,15 +107,13 @@ jobs:
 
             if [ "$enabled" != "true" ]; then
               skip_count=$((skip_count + 1))
-              console_rows="${console_rows}  SKIP  ${name}  (disabled)"$'\n'
-              md_rows="${md_rows}| \`${name}\` | ⏭️ Skipped (disabled) |"$'\n'
+              echo "| \`${name}\` | ⏭️ Skipped (disabled) |" >> "$results_file"
               continue
             fi
 
             if [ "$branch_match" != "yes" ]; then
               skip_count=$((skip_count + 1))
-              console_rows="${console_rows}  SKIP  ${name}  (branch: ${current_branch})"$'\n'
-              md_rows="${md_rows}| \`${name}\` | ⏭️ Skipped (branch: \`${current_branch}\`) |"$'\n'
+              echo "| \`${name}\` | ⏭️ Skipped (branch: \`${current_branch}\`) |" >> "$results_file"
               continue
             fi
 
@@ -146,48 +147,52 @@ jobs:
 
             if [ "$deploy_ok" = "true" ]; then
               pass_count=$((pass_count + 1))
-              console_rows="${console_rows}  PASS  ${name}"$'\n'
-              md_rows="${md_rows}| \`${name}\` | ✅ Deployed |"$'\n'
+              echo "| \`${name}\` | ✅ Deployed |" >> "$results_file"
             else
               fail_count=$((fail_count + 1))
-              console_rows="${console_rows}  FAIL  ${name}"$'\n'
-              md_rows="${md_rows}| \`${name}\` | ❌ Failed |"$'\n'
+              echo "| \`${name}\` | ❌ Failed |" >> "$results_file"
               echo "::error::Deployment ${name} failed"
             fi
 
           done < <(jq -c '.[]' <<<"$normalized")
 
-          total=$((pass_count + fail_count + skip_count))
+          # Persist counts for the summary step
+          printf 'pass_count=%s\nfail_count=%s\nskip_count=%s\nbranch=%s\n' \
+            "$pass_count" "$fail_count" "$skip_count" "$current_branch" > "$counts_file"
 
+          total=$((pass_count + fail_count + skip_count))
           if [ "$total" -eq 0 ]; then
             echo "No deployments defined in DEPLOYMENTS_CONFIG — nothing to do."
-            exit 0
           fi
-
-          # Console summary
-          echo ""
-          echo "================================="
-          echo "  Deployment Summary"
-          echo "  Branch: ${current_branch}"
-          echo "================================="
-          printf '%s' "$console_rows"
-          echo "---------------------------------"
-          echo "  ${pass_count} deployed, ${fail_count} failed, ${skip_count} skipped"
-          echo "================================="
-
-          # GitHub Actions job summary (shown in the Actions UI)
-          {
-            echo "## Deployment Summary"
-            echo ""
-            echo "**Branch:** \`${current_branch}\`"
-            echo ""
-            echo "| Deployment | Status |"
-            echo "|---|---|"
-            printf '%s' "$md_rows"
-            echo ""
-            echo "**${pass_count} deployed, ${fail_count} failed, ${skip_count} skipped**"
-          } >> "$GITHUB_STEP_SUMMARY"
 
           if [ "$fail_count" -gt 0 ]; then
             exit 1
           fi
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          results_file="/tmp/deploy-results.md"
+          counts_file="/tmp/deploy-counts.env"
+
+          if [ ! -f "$counts_file" ]; then
+            echo "## Deployment Summary" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "> Workflow did not reach the deployment step." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          # Load counts written by the deploy step
+          source "$counts_file"
+
+          {
+            echo "## Deployment Summary"
+            echo ""
+            echo "**Branch:** \`${branch}\`"
+            echo ""
+            echo "| Deployment | Status |"
+            echo "|---|---|"
+            [ -f "$results_file" ] && cat "$results_file"
+            echo ""
+            echo "**${pass_count} deployed, ${fail_count} failed, ${skip_count} skipped**"
+          } >> "$GITHUB_STEP_SUMMARY"
